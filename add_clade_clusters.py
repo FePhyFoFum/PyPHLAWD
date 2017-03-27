@@ -8,6 +8,10 @@ from logger import Logger
 import platform
 plat = platform.platform()
 from conf import tempname
+from conf import dosamp
+from conf import nthread
+
+nthread = str(nthread)
 
 mac = False
 if "Darwin" in plat:
@@ -18,7 +22,7 @@ use_merge = True
 def make_blast_db_from_cluster(indir):
     outf = open(tempname,"w")
     for i in os.listdir(indir):
-        if ".fa" not in i:
+        if i[-3:] != ".fa":
             continue
         fn = i
         for j in seq.read_fasta_file_iter(indir+"/"+i):
@@ -28,8 +32,27 @@ def make_blast_db_from_cluster(indir):
     cmd = "makeblastdb -in "+tempname+" -out "+tempname+".db -dbtype nucl > /dev/null 2>&1"
     os.system(cmd)
 
+def make_blast_db_from_cluster_samp(indir):
+    outf = open(tempname,"w")
+    for i in os.listdir(indir):
+        if i[-3:] != ".fa":
+            continue
+        fn = i
+        if os.path.isfile(indir+"/"+i.replace(".fa",".samp")):
+            for j in seq.read_fasta_file_iter(indir+"/"+i.replace(".fa",".samp")):
+                j.name = fn+"___"+j.name
+                outf.write(j.get_fasta())
+        else:
+            for j in seq.read_fasta_file_iter(indir+"/"+i):
+                j.name = fn+"___"+j.name
+                outf.write(j.get_fasta())
+    outf.close()
+    cmd = "makeblastdb -in "+tempname+" -out "+tempname+".db -dbtype nucl > /dev/null 2>&1"
+    os.system(cmd)
+
+
 def blast_file_against_db(indir,filename):
-    cmd = "blastn -db "+tempname+".db -query "+indir+"/"+filename+" -perc_identity 20 -evalue 10e-10 -num_threads 4 -max_target_seqs 10000000 -out "+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+    cmd = "blastn -db "+tempname+".db -query "+indir+"/"+filename+" -perc_identity 20 -evalue 10e-10 -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     os.system(cmd)
 
 def process_blast_out():
@@ -97,7 +120,7 @@ def check_unaligned(infile):
     return True
 
 def merge_alignments(outfile):
-    cmd = "mafft --quiet --adjustdirection --merge subMSAtable temp.mergealn 2>mafft.out > "+outfile
+    cmd = "mafft --thread "+nthread+" --quiet --adjustdirection --merge subMSAtable temp.mergealn 2>mafft.out > "+outfile
     os.system(cmd)
     #for some buggy reason these can be unaligned, so realigning here
     if check_unaligned(outfile) == False:
@@ -141,13 +164,23 @@ if __name__ == "__main__":
                 curcount = x
         curcount += 1
         #make blast dir of the out
-        make_blast_db_from_cluster(diro)
+        if dosamp:
+            make_blast_db_from_cluster_samp(diro)
+        else:
+            make_blast_db_from_cluster(diro)
         count = 1
         G = nx.Graph()
         for i in os.listdir(dir1):
-            if ".fa" not in i:
+            if i[-3:] != ".fa":
                 continue
-            blast_file_against_db(dir1,i)
+            # doing just the sample for speed
+            if dosamp:
+                if os.path.isfile(dir1+"/"+i.replace(".fa",".samp")):
+                    blast_file_against_db(dir1,i.replace(".fa",".samp"))
+                else:
+                    blast_file_against_db(dir1,i)
+            else:
+                blast_file_against_db(dir1,i)
             clus = process_blast_out()
             if len(clus) > 0:
                 for j in clus:
@@ -182,6 +215,9 @@ if __name__ == "__main__":
                             os.remove(j.replace(".fa",".aln"))
                             if os.path.isfile(j.replace(".fa",".tre")):
                                 os.remove(j.replace(".fa",".tre"))
+                            if os.path.isfile(j.replace(".fa",".samp")):
+                                os.remove(j.replace(".fa",".samp"))
+
                 else:
                     tf = open(diro+"/"+"cluster"+str(origcurcount)+".aln","w")
                     for j in i:
@@ -200,6 +236,8 @@ if __name__ == "__main__":
                             os.remove(j.replace(".fa",".aln"))
                             if os.path.isfile(j.replace(".fa",".tre")):
                                 os.remove(j.replace(".fa",".tre"))
+                            if os.path.isfile(j.replace(".fa",".samp")):
+                                os.remove(j.replace(".fa",".samp"))
                     tf.close()
                 origcurcount += 1
     log.c()

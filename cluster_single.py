@@ -32,6 +32,6 @@ if __name__ == "__main__":
     cmd = "python "+DI+"align_tip_clusters.py "+sys.argv[1]+"/clusters "+LOGFILE
     log.wac("RUNNING "+cmd)
     os.system(cmd)
-    cmd = "python "+DI+"choose_one_species_cluster_fa_aln.py "+INFILE+".table "+sys.argv[1]+"/clusters .fa+.aln "+LOGFILE
+    cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+INFILE+".table "+sys.argv[1]+"/clusters .fa+.aln "+LOGFILE
     log.wac("RUNNING "+cmd)
     os.system(cmd)

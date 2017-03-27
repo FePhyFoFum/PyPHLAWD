@@ -32,4 +32,6 @@ if __name__ == "__main__":
                     root = root+"/"
                 cmd = "python "+DI+"cluster_internal.py "+root+ " "+root+tablename+" "+logfile
                 os.system(cmd)
+    cmd = "python "+DI+"annotate_clusters.py "+sys.argv[1]
+    os.system(cmd)
     

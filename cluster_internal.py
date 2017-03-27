@@ -26,7 +26,7 @@ if __name__ == "__main__":
         cur =  c+"/clusters"
         cmd = "python "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE
         os.system(cmd)
-        cmd = "python "+DI+"choose_one_species_cluster_fa_aln.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
+        cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
         os.system(cmd)
         # NEED TO DO SOMETHING ABOUT THE ALIGNMENT FILES
     cmd = "python "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE

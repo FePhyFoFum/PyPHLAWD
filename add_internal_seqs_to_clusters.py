@@ -10,6 +10,7 @@ import seq
 from logger import Logger
 from add_clade_clusters import make_blast_db_from_cluster,merge_alignments,blast_file_against_db
 from conf import tempname
+import math
 
 
 def add_ind_mafft(seq,cl_file):

@@ -3,13 +3,17 @@ import sys
 import seq
 from shutil import copyfile
 from logger import Logger
+from conf import nthread
+
+nthread = str(nthread)
+
 import platform
 plat = platform.platform()
 mac = False
 if "Darwin" in plat:
     mac = True
 
-alc = "mafft --adjustdirection --quiet INFILE 2> mafft.out > OUTFILE "
+alc = "mafft --thread "+nthread+" --adjustdirection --quiet INFILE 2> mafft.out > OUTFILE "
 trf = "FastTree -nt -gtr INFILE 2>fasttree.out > OUTFILE"
 treemake = True
 
