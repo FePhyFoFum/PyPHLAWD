@@ -7,11 +7,12 @@ PyPHLAWD should be easy to setup.
 ### Requirements
 You will need to have 
 - a database created by `PHLAWD` or the `phlawd_db_maker` (_COMING SOON:_ or your own sequences)
-- python
-	- the libraries you need for python are sqlite3 and clint (for text coloring)
-- mafft
-- FastTree (if you have `treemake` on)
-- blast
+- python2 
+	- you will also need python libraries for sqlite3 and clint (for text coloring)
+- mafft : You will need a recent version (>=v7.3 works well) that has threading and merging. 
+- FastTree : (if you have `treemake` on)
+- blast+ : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
+- mcl : Markov clustering for the clustering runs (you won't need this if you only bait)
 
 ### Database
 I would recommend that you use `phlawd_db_maker` to make the necessary sequence database. 
@@ -22,6 +23,8 @@ There are two basic ways to run PyPHLAWD:
 - `python setup_clade_bait.py Dipsacales bait_dir/ PHLAWD_DBS/pln.db OUTDIR/`
 
 ### Clustering runs
+Clustering runs use both `blast` and `mcl` to cluster sequences. They can also break clusters by trees as in Yang and Smith 2014 and Yang et al. 2015 but this hasn't been necessary yet with testing and so it is turned off by default. To run a clustering run you run `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/` where `Dipsacales` is the name in NCBI, `PHLAWD_DBS/pln.db` is where ever the relevant database is that was made with `phlawd_db_maker`, and `OUTDIR/` is where ever you want the resulting directory to be.
+
 
 ### Bait runs
 In addition to the clustering runs (that will look at all the available data, you can also look at only the gene regions you're interest in (as the old PHLAWD).
