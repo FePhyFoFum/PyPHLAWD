@@ -10,6 +10,8 @@ plat = platform.platform()
 from conf import tempname
 from conf import dosamp
 from conf import nthread
+from conf import treemake
+from conf import length_limit,evalue_limit,perc_identity
 
 nthread = str(nthread)
 
@@ -52,7 +54,7 @@ def make_blast_db_from_cluster_samp(indir):
 
 
 def blast_file_against_db(indir,filename):
-    cmd = "blastn -db "+tempname+".db -query "+indir+"/"+filename+" -perc_identity 20 -evalue 10e-10 -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+    cmd = "blastn -db "+tempname+".db -query "+indir+"/"+filename+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     os.system(cmd)
 
 def process_blast_out():
@@ -61,14 +63,14 @@ def process_blast_out():
     for i in inf:
         spls = i.strip().split("\t")
         #get this test from internal_conf
-        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < 0.75:
+        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < length_limit:
             continue
-        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < 0.75:
+        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < length_limit:
             continue
-        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < 0.75:
+        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < length_limit:
             continue
         if float(spls[14]) != 0:
-            if -math.log10(float(spls[14])) < 20:
+            if -math.log10(float(spls[14])) < -math.log(evalue_limit):
                 continue
         clus.add(spls[2].split("___")[0])
     inf.close()
@@ -205,8 +207,9 @@ if __name__ == "__main__":
                     write_merge_table_and_temp_aln_file(x)
                     outfile = diro+"/"+"cluster"+str(origcurcount)+".aln"
                     merge_alignments(outfile)
-                    run_tree(outfile,outfile.replace(".aln",".tre"))
-                    #cut internal branches
+                    if treemake:
+                        run_tree(outfile,outfile.replace(".aln",".tre"))
+                        #cut internal branches
                     log.w(" ".join(["CREATED FROM MERGE",diro+"/cluster"+str(origcurcount)+".aln"]))
                     for j in i:
                         if diro in j:
@@ -227,7 +230,7 @@ if __name__ == "__main__":
                         for k in seq.read_fasta_file_iter(j.replace(".fa",".aln")):
                             tf.write(k.get_fasta())
                             numseq += 1
-                        if numseq > 3:
+                        if numseq > 3 and treemake:
                             #copy over tree
                             copyfile(j.replace(".fa",".tre"),diro+"/"+"cluster"+str(origcurcount)+".tre")
                         if diro in j:

@@ -1,7 +1,7 @@
 import sys,os,sqlite3
 from bad_seqs import gids
 
-def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False):
+def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
     outfile = open(outfilen,"w")
     outfileg = None
     if remove_genomes:
@@ -27,6 +27,8 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False):
         for j in l:
             #catch bad seqs
             if str(j[3]) in gids:
+                continue
+            if limitlist != None and str(j[1]) not in limitlist:
                 continue
             if remove_genomes:
                 if len(str(j[5])) > 10000:

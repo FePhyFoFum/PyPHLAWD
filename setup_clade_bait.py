@@ -5,19 +5,20 @@ from clint.textui import colored
 from conf import DI
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" taxon db dirl [taxalist]"
+    if len(sys.argv) != 5 and len(sys.argv) != 6:
+        print "python "+sys.argv[0]+" taxon baitdir db dirl [taxalist]"
         sys.exit(0)
     
-    dirl = sys.argv[3]
+    dirl = sys.argv[4]
     if dirl[-1] == "/":
         dirl = dirl[:-1]
     taxon = sys.argv[1]
-    db = sys.argv[2]
+    baitdir = sys.argv[2]
+    db = sys.argv[3]
     # This will be used to limit the taxa
     taxalistf = None
-    if len(sys.argv) == 5:
-        taxalistf = sys.argv[4]
+    if len(sys.argv) == 6:
+        taxalistf = sys.argv[5]
         print colored.yellow("LIMITING TO TAXA IN"),sys.argv[4]
 
     tname = dirl+"/"+taxon+".tre"
@@ -36,5 +37,5 @@ if __name__ == "__main__":
     
     if os.path.isfile("log.md"):
         os.remove("log.md")
-    cmd = "python "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ log.md"
+    cmd = "python "+DI+"bait_tree.py "+dirl+"/"+trn+"/ "+baitdir+" log.md"
     os.system(cmd)

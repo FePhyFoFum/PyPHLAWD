@@ -4,6 +4,7 @@ import seq
 from shutil import copyfile
 from logger import Logger
 from conf import nthread
+from conf import treemake
 
 nthread = str(nthread)
 
@@ -15,7 +16,6 @@ if "Darwin" in plat:
 
 alc = "mafft --thread "+nthread+" --adjustdirection --quiet INFILE 2> mafft.out > OUTFILE "
 trf = "FastTree -nt -gtr INFILE 2>fasttree.out > OUTFILE"
-treemake = True
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 and len(sys.argv) != 3:

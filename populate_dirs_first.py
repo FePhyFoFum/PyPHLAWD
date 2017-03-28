@@ -5,8 +5,8 @@ from get_subset_genbank import make_files_with_id as mfid
 from get_subset_genbank import make_files_with_id_justtable as mfid_justtable
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" tree dir DB"
+    if len(sys.argv) != 4 and len(sys.argv) != 5:
+        print "python "+sys.argv[0]+" tree dir DB [limitlist]"
         sys.exit(0)
     
     tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
@@ -15,6 +15,14 @@ if __name__ == "__main__":
         dirl = dirl + "/"
     DB = sys.argv[3]
     
+    taxalist = None
+    if len(sys.argv) == 5:
+        taxalistf = open(sys.argv[4],"r")
+        taxalist = set()
+        for i in taxalistf:
+            taxalist.add(i.strip())
+        taxalistf.close()
+
     for i in tree.iternodes():
         if "unclassified" in i.label:
             continue
@@ -26,6 +34,6 @@ if __name__ == "__main__":
         tid = orig.split("_")[1]
         dirr = i.label
         if len(i.children) == 0:
-            mfid(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True) 
+            mfid(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True,limitlist = taxalist) 
         else:
-            mfid(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True) 
+            mfid(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True,limitlist = taxalist) 

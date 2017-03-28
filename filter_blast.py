@@ -1,5 +1,8 @@
 import sys
 import math
+from conf import length_limit
+from conf import evalue_limit
+
 
 def process_blast_out(infile,outfile):
     inf = open(infile,"r")
@@ -7,14 +10,14 @@ def process_blast_out(infile,outfile):
     clus = set()
     for i in inf:
         spls = i.strip().split("\t")
-        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < 0.75:
+        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < length_limit:
             continue
-        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < 0.75:
+        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < length_limit:
             continue
-        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < 0.75:
+        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < length_limit:
             continue
         if float(spls[14]) != 0:
-            if -math.log10(float(spls[14])) < 20:
+            if -math.log10(float(spls[14])) < -math.log(evalue_limit):
                 continue
         ouf.write(spls[0]+"\t"+spls[2]+"\t"+spls[14]+"\n")
     inf.close()
