@@ -48,7 +48,20 @@ Soon you will be able to add sequences to these runs without completely redoing 
 Coming soon!
 
 ### conf.py
-There is a configuration file that has some basic configuration settings. 
+There is a configuration file that has some basic configuration settings. You will probably need to at least change the `DI` setting. This is the location of the PyPHLAWD scripts that you downloaded. The other settings are described below. 
+
+```
+DI = "~/Dropbox/programming/pyphlawd/src/" #location of the scripts
+tempname = "temp.fas" #the name of a temp file that will be used. This will be created in your current directory
+dosamp = True #do you want to use sampled files when the files get big. If not, set `False`
+sampsize = 20 #if you answered True above, then you will want to set a size - the number of sequences
+nthread = 10 #number of threads for threaded packages
+treemake = False #do you want to build trees for clusters? makes runtime much longer
+length_limit = 0.5 #seqs must match at least this length
+evalue_limit = 10e-10 #evalue limit, must be better
+perc_identity = 20 #at least this identity
+```
+
 
 ## Output
 PyPHLAWD will make a bunch of directories. In each directory, there will be a `clusters` folder that has either the constructed bait files or the clusters. There is also an `info.html` file in each directory. If you open the root one (the one inside the main directory made) you will see the stats for each cluster/bait that has more than 3 taxa. There will be an alignment file (with `.aln` file ending for each file) and a `.tre` if you have treemake on.
