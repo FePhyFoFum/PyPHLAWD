@@ -19,6 +19,10 @@ if __name__ == "__main__":
     if os.path.isfile( INFILE+".fas" ) == False:
         log.wac("NO DATA IN "+INFILE+".fas")
         sys.exit(0)
+    else:
+        if os.stat(INFILE+".fas").st_size == 0:
+            log.wac("NO DATA IN "+INFILE+".fas")
+            sys.exit(0)
     cmd = "makeblastdb -in "+INFILE+".fas -out "+INFILE+".db -dbtype nucl > /dev/null 2>&1"
     log.wac("RUNNING "+cmd)
     os.system(cmd)

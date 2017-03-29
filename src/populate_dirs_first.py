@@ -32,7 +32,7 @@ if __name__ == "__main__":
         orig = i.label
         if i != tree:
             i.label = i.parent.label+"/"+i.label
-        tid = orig.split("_")[1]
+        tid = orig.split("_")[-1]
         dirr = i.label
         if len(i.children) == 0:
             mfid(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True,limitlist = taxalist) 
