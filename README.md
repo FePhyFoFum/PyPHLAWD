@@ -10,7 +10,7 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 	- you will also need python libraries for sqlite3 and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
 - [mafft](http://mafft.cbrc.jp/alignment/software/) : You will need a recent version (>=v7.3 works well) that has threading and merging. 
 - [FastTree](http://www.microbesonline.org/fasttree/) : (if you have `treemake` on)
-- [blast+](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
+- [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
 - [mcl](http://micans.org/mcl/) : Markov clustering for the clustering runs (you won't need this if you only bait)
 
 ### Database
