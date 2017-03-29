@@ -1,21 +1,20 @@
-# pyphlawd
-Python version of PHLAWD
+# PyPHLAWD
+Python version of PHLAWD. This will conduct analyses either clustering or using bait to construct large alignments.
 
 ## Setup
-PyPHLAWD should be easy to setup. 
+PyPHLAWD should be easy to setup (or that is the hope). There are a few programs that it requires (listed below). These need to be in the PATH (so when you type the program, like `mafft`, it just runs). You should use the instructions on these pages to help you install for your machine. If you are running linux, it is significantly simpler because many of these are in your repos (e.g., `sudo apt-get`...). 
 
 ### Requirements
-You will need to have 
-- a database created by `PHLAWD` or the `phlawd_db_maker` (_COMING SOON:_ or your own sequences)
-- python2 
-	- you will also need python libraries for sqlite3 and clint (for text coloring)
-- mafft : You will need a recent version (>=v7.3 works well) that has threading and merging. 
-- FastTree : (if you have `treemake` on)
-- blast+ : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
-- mcl : Markov clustering for the clustering runs (you won't need this if you only bait)
+- a database created by `PHLAWD` or the `phlawd_db_maker` (_COMING SOON:_ or your own sequences). I recommend [phlawd_db_maker](https://github.com/blackrim/phlawd_db_maker) as it is simpler.
+- python : version 2 
+	- you will also need python libraries for sqlite3 and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
+- [mafft](http://mafft.cbrc.jp/alignment/software/) : You will need a recent version (>=v7.3 works well) that has threading and merging. 
+- [FastTree](http://www.microbesonline.org/fasttree/) : (if you have `treemake` on)
+- [blast+](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
+- [mcl](http://micans.org/mcl/) : Markov clustering for the clustering runs (you won't need this if you only bait)
 
 ### Database
-I would recommend that you use `phlawd_db_maker` to make the necessary sequence database. 
+I would recommend that you use `phlawd_db_maker` to make the necessary sequence database. You will want to make a database (e.g., `phlawd_db_maker pln ~/PHLAWD_DBS/pln.db`). This will be used if you are using NCBI sequences (if you are using something else, see that section below). 
 
 ### Using your own sequences
 Coming soon! The idea here is to be able to either supplement the NCBI sequences or to conduct your own analysis entirely of your own sequences. To do this, you will still want to create your own database of the sequences using the table structure already in use with the `phlawd_db_maker`. 
