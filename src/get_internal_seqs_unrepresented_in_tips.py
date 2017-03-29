@@ -18,13 +18,20 @@ if __name__ == "__main__":
             dirs.append(curd+"/"+i+"/"+i+".fas")
 
     seqids = []
+    seqs = {}
     for i in seq.read_fasta_file_iter(curd+"/"+ff):
         seqids.append(i.name)
+        seqs[i.name] = i
 
-    outfile = open(curd+"/notinchildren.fas","w")
     for i in dirs:
         for j in seq.read_fasta_file_iter(i):
-            if len(j.name) > 0 and j.name not in seqids:
-                outfile.write(j.get_fasta())
+            if len(j.name) > 0 and j.name in seqids:
+                del seqs[j.name]
+
+    if len(seqs) > 0:
+        outfile = open(curd+"/notinchildren.fas","w")
+        for i in seqs:
+            outfile.write(seqs[i].get_fasta())
+        outfile.close()
 
 

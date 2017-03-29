@@ -2,6 +2,7 @@ import os
 import sys
 import tree_reader
 from get_subset_genbank import make_files_with_id as mfid
+from get_subset_genbank import make_files_with_id_internal as mfid_in
 from get_subset_genbank import make_files_with_id_justtable as mfid_justtable
 
 if __name__ == "__main__":
@@ -36,4 +37,4 @@ if __name__ == "__main__":
         if len(i.children) == 0:
             mfid(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True,limitlist = taxalist) 
         else:
-            mfid(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True,limitlist = taxalist) 
+            mfid_in(tid,DB,dirl+dirr+"/"+orig+".fas",dirl+dirr+"/"+orig+".table",True,limitlist = taxalist) 

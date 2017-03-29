@@ -10,12 +10,14 @@ import seq
 from logger import Logger
 from add_clade_clusters import make_blast_db_from_cluster,merge_alignments,blast_file_against_db
 from conf import tempname
+from conf import length_limit
+from conf import evalue_limit
 import math
 
 
-def add_ind_mafft(seq,cl_file):
+def add_ind_mafft(inseq,cl_file):
     tf = open(cl_file,"a")
-    tf.write(seq.get_fasta())
+    tf.write(inseq.get_fasta())
     tf.close()
     #make temp
     tf = open("subMSAtable","w")
@@ -25,7 +27,7 @@ def add_ind_mafft(seq,cl_file):
         tf2.write(i.get_fasta())
         tf.write(str(count)+" ")
         count += 1
-    tf2.write(seq.get_fasta())
+    tf2.write(inseq.get_fasta())
     tf.close()
     tf2.close()
     merge_alignments(cl_file.replace(".fa",".aln"))
@@ -37,14 +39,14 @@ def process_blast_ind():
     for i in inf:
         spls = i.strip().split("\t")
         #get this test from internal_conf
-        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < 0.75:
+        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < length_limit:
             continue
-        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < 0.75:
+        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < length_limit:
             continue
-        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < 0.75:
+        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < length_limit:
             continue
         if float(spls[14]) != 0:
-            if -math.log10(float(spls[14])) < 20:
+            if -math.log10(float(spls[14])) < -math.log10(evalue_limit):
                 continue
         clus[spls[0]]=spls[2].split("___")[0]
         reps_clus.add(spls[2].split("___")[0])
@@ -56,6 +58,8 @@ if __name__ == "__main__":
         print "python "+sys.argv[0]+" indir outclu logfile"
         sys.exit(0)
     curfas = sys.argv[1]+"/notinchildren.fas"
+    if os.path.isfile(curfas) == False:
+        sys.exit(0)
     outclu = sys.argv[2]
     LOGFILE = sys.argv[3]
     log = Logger(LOGFILE)

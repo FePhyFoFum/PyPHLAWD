@@ -52,6 +52,68 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
         outfileg.close()
     outfile_tbl.close()
 
+def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
+    outfile = open(outfilen,"w")
+    outfileg = None
+    if remove_genomes:
+        outfileg = open(outfilen+".genomes","w")
+    outfile_tbl = open(outfile_tbln,"w")
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    #only get the ones that are this specific taxon
+    c.execute("select * from sequence where ncbi_id = ?",(str(taxonid),))
+    l = c.fetchall()
+    for j in l:
+        #catch bad seqs
+        if str(j[3]) in gids:
+            continue
+        if limitlist != None and str(j[1]) not in limitlist:
+            continue
+        if remove_genomes:
+            if len(str(j[5])) > 10000:
+                outfileg.write(">"+str(j[3])+"\n")
+                outfileg.write(str(j[5])+"\n")
+            else:
+                outfile.write(">"+str(j[3])+"\n")
+                outfile.write(str(j[5])+"\n")
+        else:
+            outfile.write(">"+str(j[3])+"\n")
+            outfile.write(str(j[5])+"\n")
+    #get everything else for the table
+    species = []
+    stack = []
+    stack.append(str(taxonid))
+    while len(stack) > 0:
+        id = stack.pop()
+        if id in species:
+            continue
+        else:
+            species.append(id)
+        c.execute("select name from taxonomy where ncbi_id = ? and name_class = 'scientific name'",(id,))
+        l = c.fetchall()
+        for j in l:
+            tname = str(j[0])
+        c.execute("select * from sequence where ncbi_id = ?",(id,))
+        l = c.fetchall()
+        #only record everything for the table
+        for j in l:
+            #catch bad seqs
+            if str(j[3]) in gids:
+                continue
+            if limitlist != None and str(j[1]) not in limitlist:
+                continue
+            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\n")
+        c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
+        childs = []
+        l = c.fetchall()
+        for j in l:
+            childs.append(str(j[0]))
+            stack.append(str(j[0]))
+    outfile.close()
+    if remove_genomes:
+        outfileg.close()
+    outfile_tbl.close()
+
 def make_files_with_id_justtable(taxonid, DB,outfile_tbln):
     outfile_tbl = open(outfile_tbln,"w")
     conn = sqlite3.connect(DB)

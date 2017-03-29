@@ -24,7 +24,7 @@ if __name__ == "__main__":
             continue
         print colored.green("  ADDING"),c
         cur =  c+"/clusters"
-        cmd = "python "+DI+"add_clade_cluster.py "+cur+" "+outclu+" "+LOGFILE
+        cmd = "python "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE
         os.system(cmd)
         cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
         os.system(cmd)
