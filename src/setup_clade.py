@@ -37,7 +37,7 @@ if __name__ == "__main__":
     print colored.yellow("POPULATING DIRS"),dirl
     os.system(cmd)
     
-    if os.path.isfile("log.md"):
-        os.remove("log.md")
-    cmd = "python "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ log.md"
+    if os.path.isfile("log.md.gz"):
+        os.remove("log.md.gz")
+    cmd = "python "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ log.md.gz"
     os.system(cmd)

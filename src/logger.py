@@ -1,15 +1,18 @@
 from time import gmtime, strftime
+import gzip
 
 class Logger:
     def __init__(self,filen):
+        if filen[-3:] != ".gz":
+            filen += ".gz"
         self.filename = filen
         self.fl = None
     
     def a(self):
-        self.fl = open(self.filename,"a")
+        self.fl = gzip.open(self.filename,"a")
 
     def whac(self,string):
-        self.fl = open(self.filename,"a")
+        self.fl = gzip.open(self.filename,"a")
         self.fl.write("\n#"+string+"\n")
         self.c()
 
@@ -18,7 +21,7 @@ class Logger:
         self.fl.write(stt+" || "+string+"\n")
 
     def wac(self,string):
-        self.fl = open(self.filename,"a")
+        self.fl = gzip.open(self.filename,"a")
         self.w(string)
         self.c()
 
