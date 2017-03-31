@@ -13,7 +13,7 @@ class Logger:
 
     def whac(self,string):
         self.fl = gzip.open(self.filename,"a")
-        self.fl.write("\n#"+string+"\n")
+        self.fl.write("\n# "+string+"\n")
         self.c()
 
     def w(self,string):

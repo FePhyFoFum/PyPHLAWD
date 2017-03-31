@@ -12,6 +12,6 @@ takeouttaxondups = True
 #build trees
 treemake = False
 #blast bits
-length_limit = 0.25
+length_limit = 0.5
 evalue_limit = 10e-10
 perc_identity = 20

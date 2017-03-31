@@ -114,12 +114,16 @@ def write_merge_table_and_temp_aln_file(filelist):
 
 def check_unaligned(infile):
     clen = None
+    count = 0
     for i in seq.read_fasta_file_iter(infile):
+        count += 1
         if clen == None:
             clen = len(i.seq)
         else:
             if len(i.seq) != clen:
                 return False
+    if count == 0:
+        return False
     return True
 
 def merge_alignments(outfile):
@@ -128,9 +132,11 @@ def merge_alignments(outfile):
     #for some buggy reason these can be unaligned, so realigning here
     if check_unaligned(outfile) == False:
         print colored.red("PROBLEM REDOING ALIGNMENT")
-        cmd = "mafft --quiet "+outfile+" > "+outfile+".temp"
+        #log.w("PROBLEM REDOING ALIGNMENT")
+        copyfile("subMSAtable","problem_subMSAtable")
+        copyfile("temp.mergealn","problem_temp.mergealn")
+        cmd = "mafft --quiet --adjustdirection temp.mergealn > "+outfile
         os.system(cmd)
-        move(outfile+".temp",outfile)
     if mac == False:
         os.system("sed -i 's/_R_//g' "+outfile)
     else:
