@@ -1,6 +1,7 @@
 import sys
 import os
 from conf import DI
+from conf import takeouttaxondups
 from clint.textui import colored
 from logger import Logger
 
@@ -26,8 +27,9 @@ if __name__ == "__main__":
         cur =  c+"/clusters"
         cmd = "python "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE
         os.system(cmd)
-        cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
-        os.system(cmd)
+        if takeouttaxondups:
+            cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
+            os.system(cmd)
         # NEED TO DO SOMETHING ABOUT THE ALIGNMENT FILES
     cmd = "python "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE
     os.system(cmd)

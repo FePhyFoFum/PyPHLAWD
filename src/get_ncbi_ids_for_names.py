@@ -17,6 +17,7 @@ if __name__ == "__main__":
     dbname = sys.argv[2]
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
+    outfile = open("ncbi_notfound.ids","w")
     for i in inf:
         nm = i.strip()
         if len(nm) < 2:
@@ -24,5 +25,8 @@ if __name__ == "__main__":
         tt = get_taxid_for_name(c,nm)
         if tt is not None:
             print tt
+        else:
+            outfile.write(nm+"\n")
+    outfile.close()
     inf.close()
     c.close()

@@ -7,6 +7,8 @@ dosamp = True
 sampsize = 20
 #number of threads for mafft and blast
 nthread = 10
+#take out taxon duplications
+takeouttaxondups = True
 #build trees
 treemake = False
 #blast bits

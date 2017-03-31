@@ -21,7 +21,10 @@ if __name__ == "__main__":
         print colored.yellow("LIMITING TO TAXA IN"),sys.argv[4]
 
     tname = dirl+"/"+taxon+".tre"
-    cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
+    if taxalistf != None:
+        cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" "+taxalistf+" > "+tname
+    else:
+        cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
     print colored.yellow("MAKING TREE"),taxon
     os.system(cmd)
     trn = tree_reader.read_tree_file_iter(tname).next().label

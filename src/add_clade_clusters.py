@@ -3,6 +3,7 @@ import os
 import seq
 import math
 import networkx as nx
+from clint.textui import colored
 from shutil import copyfile,move
 from logger import Logger
 import platform
@@ -126,6 +127,7 @@ def merge_alignments(outfile):
     os.system(cmd)
     #for some buggy reason these can be unaligned, so realigning here
     if check_unaligned(outfile) == False:
+        print colored.red("PROBLEM REDOING ALIGNMENT")
         cmd = "mafft --quiet "+outfile+" > "+outfile+".temp"
         os.system(cmd)
         move(outfile+".temp",outfile)
