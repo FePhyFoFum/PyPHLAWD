@@ -13,24 +13,25 @@ from conf import tempname
 from conf import length_limit
 from conf import evalue_limit
 import math
+from conf import merge
 
-
-def add_ind_mafft(inseq,cl_file):
+def add_ind_mafft(inseq,cl_file, merge):
     tf = open(cl_file,"a")
     tf.write(inseq.get_fasta())
     tf.close()
     #make temp
-    tf = open("subMSAtable","w")
-    tf2 = open("temp.mergealn","w")
-    count = 1
-    for i in seq.read_fasta_file_iter(cl_file.replace(".fa",".aln")):
-        tf2.write(i.get_fasta())
-        tf.write(str(count)+" ")
-        count += 1
-    tf2.write(inseq.get_fasta())
-    tf.close()
-    tf2.close()
-    merge_alignments(cl_file.replace(".fa",".aln"))
+    if merge:
+        tf = open("subMSAtable","w")
+        tf2 = open("temp.mergealn","w")
+        count = 1
+        for i in seq.read_fasta_file_iter(cl_file.replace(".fa",".aln")):
+            tf2.write(i.get_fasta())
+            tf.write(str(count)+" ")
+            count += 1
+        tf2.write(inseq.get_fasta())
+        tf.close()
+        tf2.close()
+        merge_alignments(cl_file.replace(".fa",".aln"))
 
 def process_blast_ind():
     inf = open(tempname+".rawblastn","r")
@@ -76,5 +77,5 @@ if __name__ == "__main__":
         blast_file_against_db(sys.argv[1],"notinchildren.fas")
         clus,reps_clus = process_blast_ind()
         for i in clus:
-            add_ind_mafft(seqd[i],outclu+"/"+clus[i])
+            add_ind_mafft(seqd[i],outclu+"/"+clus[i],merge)
     log.c()

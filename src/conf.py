@@ -11,6 +11,8 @@ nthread = 10
 takeouttaxondups = True
 #build trees
 treemake = False
+#merge alignment
+merge = True
 #blast bits
 length_limit = 0.6
 evalue_limit = 10e-10
