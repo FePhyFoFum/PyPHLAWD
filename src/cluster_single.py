@@ -40,6 +40,9 @@ if __name__ == "__main__":
     cmd = "python "+DI+"write_fasta_files_from_mcl.py "+INFILE+".fas "+INFILE+".mclout 1 "+sys.argv[1]+"/clusters/"
     log.wac("RUNNING "+cmd)
     os.system(cmd)
+    cmd = "rm "+INFILE+".fasta.rawblastn "+INFILE+".db.n* "+INFILE+".fasta.rawblastn.mclin "+INFILE+".mclout"
+    log.wac("CLEANING "+cmd)
+    os.system(cmd)
     cmd = "python "+DI+"align_tip_clusters.py "+sys.argv[1]+"/clusters "+LOGFILE
     log.wac("RUNNING "+cmd)
     os.system(cmd)

@@ -9,6 +9,7 @@ class Node:
         self.data = {}
         self.istip = False
         self.height = 0
+        self.droot = 0
         self.note = ""
     
     def add_child(self,child):
@@ -95,11 +96,21 @@ class Node:
             tnode = self
             h = 0
             while len(tnode.children) > 0:
-                if tnode.children[1].length < tnode.children[0].length:
-                    tnode = tnode.children[1]
-                else:
+                if len(tnode.children) == 1:
                     tnode = tnode.children[0]
+                else:
+                    if tnode.children[1].length < tnode.children[0].length:
+                        tnode = tnode.children[1]
+                    else:
+                        tnode = tnode.children[0]
                 h += tnode.length
             self.height = h
 
+    def set_dist_root(self):
+        self.droot = 0
+        if self.parent != None:
+            cn = self
+            while cn.parent != None:
+                self.droot += 1
+                cn = cn.parent
 
