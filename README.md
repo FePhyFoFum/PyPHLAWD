@@ -7,7 +7,7 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 ### Requirements
 - a database created by `PHLAWD` or the `phlawd_db_maker` (_COMING SOON:_ or your own sequences). I recommend [phlawd_db_maker](https://github.com/blackrim/phlawd_db_maker) as it is simpler.
 - python : version 2 
-	- you will also need python libraries for sqlite3 and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
+	- you will also need python libraries for sqlite3, networkx, and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
 - [mafft](http://mafft.cbrc.jp/alignment/software/) : You will need a recent version (>=v7.3 works well) that has threading and merging. 
 - [FastTree](http://www.microbesonline.org/fasttree/) : (if you have `treemake` on)
 - [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
@@ -22,7 +22,7 @@ Coming soon! The idea here is to be able to either supplement the NCBI sequences
 To add your own sequences to an analysis, regardless of whether they are supplemental or not, you will want to add your sequences to the database. You can have this data in two forms: one file per taxon with sequence data in a fasta format in that file or one file with format `>taxon_name@seq_id`. 
 
 ## Running 
-There are two basic ways to run PyPHLAWD:
+There are two basic ways to run PyPHLAWD (the outdir must exist):
 - `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/`
 - `python setup_clade_bait.py Dipsacales bait_dir/ PHLAWD_DBS/pln.db OUTDIR/`
 

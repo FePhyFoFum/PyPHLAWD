@@ -114,11 +114,11 @@ if __name__ == "__main__":
     print len(keepers)
 
     # do you want to rename these ones?
-    rename = raw_input("Do you want to rename these clusters? y/n ")
+    rename = raw_input("Do you want to rename these clusters? y/n/# ")
     if rename == 'y':
         tab = cld+"/"+cld.split("/")[-1]+".table"
         rtn = cld.split("/")[-1]
-        cmd = "python "+DI+"change_id_to_name_fasta_mult.py "+tab+" "+ " ".join([cld+"/clusters/"+i for i in keepers])
+        cmd = "python "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join([cld+"/clusters/"+i for i in keepers])
         #print cmd
         os.system(cmd)
         concat = raw_input("Do you want to concat? y/n ")
@@ -126,7 +126,17 @@ if __name__ == "__main__":
             cmd = "pxcat -s "+" ".join([cld+"/clusters/"+i+".rn" for i in keepers])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
             #print cmd
             os.system(cmd)
-
-    #print "pxcat -s "+" ".join(keepers)+" -o outaln -p outpart "
+    elif rename == '#':
+        nums = raw_input("List cluster numbers separated by spaces: ")
+        tab = cld+"/"+cld.split("/")[-1]+".table"
+        rtn = cld.split("/")[-1]
+        cmd = "python "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join([cld+"/clusters/cluster"+i+".aln" for i in nums.split(" ")])
+        os.system(cmd)
+        concat = raw_input("Do you want to concat? y/n ")
+        if concat == 'y':
+            cmd = "pxcat -s "+" ".join([cld+"/clusters/cluster"+i+".aln.rn" for i in nums.split(" ")])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
+            #print cmd
+            os.system(cmd) 
+        #print cmd
 
 

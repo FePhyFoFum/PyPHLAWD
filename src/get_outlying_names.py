@@ -70,9 +70,12 @@ if __name__ == "__main__":
 
     for i in intree.iternodes(order="POSTORDER"):
         if len(i.children) > 0:
-            if max(i.children[0].data["h"],i.children[1].data["h"]) - min(i.children[0].data["h"],i.children[1].data["h"]) > 1:
-                print "error in ",i.get_newick_repr(False)
-                #sys.exit(0)
+            try:
+                if max(i.children[0].data["h"],i.children[1].data["h"]) - min(i.children[0].data["h"],i.children[1].data["h"]) > 1:
+                    print "error in ",i.get_newick_repr(False)
+                    #sys.exit(0)
+            except:
+                continue
     print intree.get_newick_repr(False)+";"
 
         

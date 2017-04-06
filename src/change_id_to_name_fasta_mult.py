@@ -16,7 +16,7 @@ if __name__ == "__main__":
     for j in sys.argv[2:]:
         outf = open(j+".rn","w")
         for i in seq.read_fasta_file_iter(j):
-            i.name = idn[i.name].replace(" ","_")
+            i.name = idn[i.name].replace(" ","_"),+"_"+i.name
             outf.write(i.get_fasta())
         outf.close()
        

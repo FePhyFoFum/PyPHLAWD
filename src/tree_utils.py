@@ -190,3 +190,44 @@ def reroot(oldroot, newroot):
         cp.length = node.length
         cp.label = node.label
     return newroot
+
+
+def get_mrca(nodes,tree):
+    traceback = []
+    first = nodes[0]
+    while first != tree:
+        first = first.parent
+        traceback.append(first)
+        if first.parent == None:
+            break
+    curmrca = nodes[0].parent
+    for i in nodes:
+        if i == nodes[0]:
+            continue
+        curmrca = mrca_recurs(curmrca,traceback,i)
+    return curmrca
+
+def mrca_recurs(node1,path1,node2):
+    path = path1[path1.index(node1):]
+    parent = node2
+    mrca = None
+    while parent != None:
+        if parent in path:
+            mrca = parent
+            break
+        parent = parent.parent
+    return mrca
+
+#assumes an ultrametric tree
+def scale_root(tree,age):
+    for i in tree.iternodes(order="postorder"):
+        i.set_height()
+    oldroot = tree.height
+    tree.height = age
+    for i in tree.iternodes(order="postorder"):
+        if i != tree and len(i.children) > 0:
+            i.height = (i.height/oldroot) * tree.height
+    for i in tree.iternodes(order="postorder"):
+        if len(i.children) > 0:
+            for j in i.children:
+                j.length = i.height - j.height
