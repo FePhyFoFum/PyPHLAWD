@@ -1,3 +1,11 @@
+# temp files etc.
+.DS_Store
+phyx.logfile
+temp*
+mafft.out
+log*
+subMSAtable
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
