@@ -34,7 +34,8 @@ def process_second_result(fl):
     for i in sorted_x:
         if i[1] < smallcut:
             below01.append(i[0])
-    if len(below01) < 3:
+    mincut = max(len(nms)*.5,3)
+    if len(below01) < mincut:
         return below01
     else:
         return None

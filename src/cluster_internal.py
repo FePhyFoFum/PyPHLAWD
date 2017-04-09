@@ -31,6 +31,7 @@ if __name__ == "__main__":
             cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
             os.system(cmd)
         # NEED TO DO SOMETHING ABOUT THE ALIGNMENT FILES
+    print colored.green("   ADDING INTERNAL SEQS"),d
     cmd = "python "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE
     os.system(cmd)
     cmd = "python "+DI+"add_internal_seqs_to_clusters.py "+d+" "+outclu+" "+LOGFILE

@@ -1,0 +1,3 @@
+patterns = ["sp.",
+            "aff.",
+            " x "]

@@ -43,6 +43,8 @@ def record_info_table(infilecsv):
 
 def check_info_table(tree):
     for i in tree.iternodes(order="POSTORDER"):
+        if "names" not in i.data:
+            continue
         if i.parent != None:
             for j in clusterind:
                 inter = set(i.data["names"]).intersection(set(mat_nms[j]))
