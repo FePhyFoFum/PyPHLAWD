@@ -78,8 +78,10 @@ if __name__ == "__main__":
             mtnods = []
             mr = None
             for j in remove_mrca[i]:
-                mtnods.append(mnodes[j])
-                mr = tree_utils.get_mrca(mtnods,mtree)
+                # just removeing from the ML, if you uncomment below, you need to uncomment this
+                removetaxa.add(j)
+                #mtnods.append(mnodes[j])
+                #mr = tree_utils.get_mrca(mtnods,mtree)
             """
             connect = None
             mtnods = []
@@ -100,7 +102,6 @@ if __name__ == "__main__":
             for j in notdone:
                 mnodes[j].parent = connect
                 connect.add_child(mnodes[j])
-            """
             parmr = mr.parent
             parmr.remove_child(mr)
             if len(parmr.children) == 1:
@@ -108,6 +109,7 @@ if __name__ == "__main__":
                 pparmr = parmr.parent
                 pparmr.remove_child(parmr)
                 pparmr.add_child(och)
+            """
         for i in removetaxa:
             par = mnodes[i].parent
             par.remove_child(mnodes[i])
