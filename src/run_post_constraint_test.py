@@ -19,7 +19,9 @@ def process_first_result(fl):
     x = f.readline().strip()
     spls = x.split(",")
     f.close()
-    return float(spls[1])
+    if len(spls) > 1:
+        return float(spls[1])
+    return 1.
 
 def process_second_result(fl):
     f = open(fl,"r")
@@ -56,7 +58,7 @@ if __name__ == "__main__":
             continue
         else:
             nms = i.lvsnms()
-            cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 300 -T 4 -q "+partfile+" -C "+",".join(nms)+" -P > /dev/null 2>&1"
+            cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 300 -T 12 -q "+partfile+" -C "+",".join(nms)+" -P > /dev/null 2>&1"
             os.system(cmd)
             firstres = process_first_result("RESULT.node_scores.csv")
             if firstres < badfreq:
@@ -65,7 +67,7 @@ if __name__ == "__main__":
                     print firstres,",".join(nms)
                 else:
                     print firstres,i.label
-                cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 500 -T 4 -q "+partfile+" -C "+",".join(nms)+" -P -m > /dev/null 2>&1"
+                cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 500 -T 12 -q "+partfile+" -C "+",".join(nms)+" -P -m > /dev/null 2>&1"
                 os.system(cmd)
                 secondres = process_second_result("RESULT.node_scores.csv.clade")
                 if secondres != None:

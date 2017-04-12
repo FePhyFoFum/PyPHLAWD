@@ -33,6 +33,12 @@ class Node:
             for child in self.children:
                 child.leaves(v)
         return v
+    
+    def get_leaf_by_name(self,nm):
+        for i in self.leaves():
+            if i.label == nm:
+                return i
+        return None
 
     def leaves_fancy(self):
         return [n for n in self.iternodes() if n.istip ]

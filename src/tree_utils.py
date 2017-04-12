@@ -192,6 +192,13 @@ def reroot(oldroot, newroot):
     return newroot
 
 
+def get_mrca_wnms(names,tree):
+    nds = []
+    for i in tree.leaves():
+        if i.label in names:
+            nds.append(i)
+    return get_mrca(nds,tree)
+
 def get_mrca(nodes,tree):
     traceback = []
     first = nodes[0]

@@ -1,3 +1,4 @@
-patterns = ["sp.",
-            "aff.",
+patterns = [" sp.",
+            " aff.",
+            " var.",
             " x "]
