@@ -17,3 +17,6 @@ merge = True
 length_limit = 0.6
 evalue_limit = 10e-10
 perc_identity = 20
+
+#superfluous things
+emoticons = True

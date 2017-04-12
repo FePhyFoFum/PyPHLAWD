@@ -3,11 +3,14 @@ import sys
 import tree_reader
 from clint.textui import colored
 from conf import DI
+import emoticons
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
         print "python "+sys.argv[0]+" taxon db dirl [taxalist]"
         sys.exit(0)
+    
+    print colored.blue("STARTING PYPHLAWD"+emoticons.get_ran_emot("excited"))
     
     dirl = sys.argv[3]
     if dirl[-1] == "/":

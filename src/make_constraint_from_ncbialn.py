@@ -40,8 +40,10 @@ def construct_tree_only_ids(baseid,c,ids):
                 nodes[tid] = nn
                 # node_ids[tid] = id
                 if id in ids or "incertae" in str(j[2]) or "unidentified" in str(j[2]) or "unplaced" in str(j[2]):
-                    nn.parent = nodes[id].parent
-                    nodes[id].parent.add_child(nn)
+                    #should lose these and not constrain
+                    nodes[tid] = nodes[id]
+                    #nn.parent = nodes[id].parent
+                    #nodes[id].parent.add_child(nn)
                 else:
                     nn.parent = nodes[id]
                     nodes[id].add_child(nn)

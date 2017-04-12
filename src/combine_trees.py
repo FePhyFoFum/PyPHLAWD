@@ -4,6 +4,8 @@ import tree_reader
 import tree_utils
 import node
 
+VERBOSE = False
+
 """
 this is a proof of concept to get trees combined
 one needs to be preferred over another
@@ -19,7 +21,7 @@ def get_nds_names(nms,tre):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+ " preftree bigtre"
+        print "python "+sys.argv[0]+ " addtree bigtre"
         sys.exit(0)
 
     tree1 = tree_reader.read_tree_file_iter(sys.argv[1]).next()
@@ -27,13 +29,16 @@ if __name__ == "__main__":
 
     rootnms = set(tree1.lvsnms())
     othernms = set(bigtree.lvsnms())
+    for i in bigtree.iternodes():
+        i.length = 0
     diffnms = []
     diffnds = {}
     didit = False
     nrt = tree_utils.get_mrca_wnms(list(rootnms.intersection(othernms)),bigtree).parent
     rm = []
     for i in nrt.children:
-        print i.lvsnms(),rootnms
+        if VERBOSE:
+            print i.lvsnms(),rootnms
         xs = set(i.lvsnms()).intersection(rootnms)
         if len(xs)>0:
             rm.append(i)
@@ -43,11 +48,13 @@ if __name__ == "__main__":
                 diffnds[j] = i.get_leaf_by_name(j)
     for i in rm:
         nrt.remove_child(i)
-    print nrt.get_newick_repr(False)
+    if VERBOSE:
+        print nrt.get_newick_repr(False)
     nrt.add_child(tree1)
     while len(diffnms) > 0:
         for j in diffnms:
-            print j,diffnds[j]
+            if VERBOSE: 
+                print j,diffnds[j]
             going = True
             cn = diffnds[j]
             while going:
@@ -55,7 +62,8 @@ if __name__ == "__main__":
                 pln = set(par.lvsnms()).intersection(rootnms)
                 if len(pln) > 0:
                     amrca = tree_utils.get_mrca_wnms(pln,tree1)
-                    print "add at this node",par.get_newick_repr(False),amrca.get_newick_repr(False)
+                    if VERBOSE:
+                        print "add at this node",par.get_newick_repr(False),amrca.get_newick_repr(False)
                     if len(pln) == 1:
                         amrca = tree1.get_leaf_by_name(list(pln)[0])
                         nn = node.Node()
