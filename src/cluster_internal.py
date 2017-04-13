@@ -4,6 +4,7 @@ from conf import DI
 from conf import takeouttaxondups
 from clint.textui import colored
 from logger import Logger
+import emoticons
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     for c in dirs:
         if "environmental" in c or "clusters" in c:
             continue
-        print colored.green("  ADDING"),c
+        print colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh"))
         cur =  c+"/clusters"
         cmd = "python "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE
         os.system(cmd)
@@ -31,7 +32,7 @@ if __name__ == "__main__":
             cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
             os.system(cmd)
         # NEED TO DO SOMETHING ABOUT THE ALIGNMENT FILES
-    print colored.green("   ADDING INTERNAL SEQS"),d
+    print colored.green("   ADDING INTERNAL SEQS"),d,colored.green(emoticons.get_ran_emot("meh"))
     cmd = "python "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE
     os.system(cmd)
     cmd = "python "+DI+"add_internal_seqs_to_clusters.py "+d+" "+outclu+" "+LOGFILE

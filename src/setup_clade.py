@@ -44,3 +44,7 @@ if __name__ == "__main__":
         os.remove("log.md.gz")
     cmd = "python "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ log.md.gz"
     os.system(cmd)
+    
+    print colored.blue("PYPHLAWD DONE "+emoticons.get_ran_emot("excited"))
+
+

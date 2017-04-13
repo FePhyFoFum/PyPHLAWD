@@ -58,6 +58,9 @@ if __name__ == "__main__":
         par.remove_child(mr)
         mrca_pars.append(par)
     for i in removetaxa:
+        # in case you remove
+        if i not in nodes:
+            continue
         par = nodes[i].parent
         par.remove_child(nodes[i])
         if len(par.children) == 1:
@@ -111,6 +114,9 @@ if __name__ == "__main__":
                 pparmr.add_child(och)
             """
         for i in removetaxa:
+            #in case you remove taxa before 
+            if i not in mnodes:
+                continue
             par = mnodes[i].parent
             par.remove_child(mnodes[i])
             if len(par.children) == 1:
