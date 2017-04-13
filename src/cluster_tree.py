@@ -4,6 +4,7 @@ import tree_reader
 from clint.textui import colored
 from logger import Logger
 from conf import DI
+import emoticons
 
 
 if __name__ == "__main__":
@@ -19,13 +20,13 @@ if __name__ == "__main__":
         if "clusters" not in root:
             log.whac(root)
             if len(dirs) == 1:
-                print colored.yellow("CLUSTERING SINGLE"),root
+                print colored.yellow("CLUSTERING SINGLE"),root,colored.yellow(emoticons.get_ran_emot("meh"))
                 log.wac("CLUSTERING SINGLE "+root)
                 tablename = [x for x in files if ".table" in x][0]
                 cmd = "python "+DI+"cluster_single.py "+root+" "+logfile
                 os.system(cmd)
             else:
-                print colored.blue("CLUSTERING INTERNAL"),root
+                print colored.blue("CLUSTERING INTERNAL"),root,colored.blue(emoticons.get_ran_emot("meh"))
                 log.wac("CLUSTERING INTERNAL "+root)
                 tablename = [x for x in files if ".table" in x][0]
                 if root[-1] != "/":

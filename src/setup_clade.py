@@ -10,7 +10,7 @@ if __name__ == "__main__":
         print "python "+sys.argv[0]+" taxon db dirl [taxalist]"
         sys.exit(0)
     
-    print colored.blue("STARTING PYPHLAWD"+emoticons.get_ran_emot("excited"))
+    print colored.blue("STARTING PYPHLAWD "+emoticons.get_ran_emot("excited"))
     
     dirl = sys.argv[3]
     if dirl[-1] == "/":
@@ -28,16 +28,16 @@ if __name__ == "__main__":
         cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" "+taxalistf+" > "+tname
     else:
         cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
-    print colored.yellow("MAKING TREE"),taxon
+    print colored.yellow("MAKING TREE"),taxon,colored.yellow(emoticons.get_ran_emot("excited"))
     os.system(cmd)
     trn = tree_reader.read_tree_file_iter(tname).next().label
     cmd = "python "+DI+"make_dirs.py "+tname+" "+dirl
-    print colored.yellow("MAKING DIRS IN"),dirl
+    print colored.yellow("MAKING DIRS IN"),dirl,colored.yellow(emoticons.get_ran_emot("excited"))
     os.system(cmd)
     cmd = "python "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db
     if taxalistf != None:
         cmd += " "+taxalistf
-    print colored.yellow("POPULATING DIRS"),dirl
+    print colored.yellow("POPULATING DIRS"),dirl,colored.yellow(emoticons.get_ran_emot("excited"))
     os.system(cmd)
     
     if os.path.isfile("log.md.gz"):

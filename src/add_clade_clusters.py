@@ -13,6 +13,7 @@ from conf import dosamp
 from conf import nthread
 from conf import treemake
 from conf import length_limit,evalue_limit,perc_identity
+import emoticons
 
 nthread = str(nthread)
 
@@ -131,7 +132,8 @@ def merge_alignments(outfile):
     os.system(cmd)
     #for some buggy reason these can be unaligned, so realigning here
     if check_unaligned(outfile) == False:
-        print colored.red("PROBLEM REDOING ALIGNMENT")
+        print colored.red("PROBLEM REDOING ALIGNMENT"+" "+emoticons.get_ran_emot("sad"))
+
         #log.w("PROBLEM REDOING ALIGNMENT")
         copyfile("subMSAtable","problem_subMSAtable")
         copyfile("temp.mergealn","problem_temp.mergealn")
