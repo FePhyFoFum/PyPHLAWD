@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import sys
 import random
+from clint.textui import colored
+
 
 angry = ["(૭ ◉༬◉)૭⁾⁾⁾⁾"]
 sad = ["( ≧Д≦)",
@@ -428,9 +430,24 @@ meh = ["¯\_(ツ)_/¯",
 "⁎ۜ′̛˷˒′̛⌕",
 "⋆ᶿ̵᷄ ˒̼ ᶿ̵᷅⋆"]
 
+huh = ["ʕ ͠° ʖ̫ °͠ ʔ"]
+
 glasses_animated = ["|","|•)","•_•)","( •_•)>⌐■-■","(⌐■_■)"]
 
-emotions = {"excited":excited,"sad":sad,"meh":meh}
+emotions = {"excited":excited,"sad":sad,"meh":meh,"huh":huh}
+
+def animate(an_emot_list,color=None):
+    longest = 0
+    for i in an_emot_list:
+        if len(i) > longest:
+            longest = len(i)
+    import time
+    for sym in an_emot_list:
+        sym += (longest-len(sym))*" "
+        sys.stdout.write(str(("\b"*longest)+"%s") % sym)
+        sys.stdout.flush()
+        time.sleep(.5)
+    
 
 def get_ran_emot(emotion):
     return random.sample(emotions[emotion],1)[0]
@@ -439,3 +456,5 @@ if __name__ == "__main__":
     print get_ran_emot("excited")
     print get_ran_emot("sad")
     print get_ran_emot("meh")
+    print get_ran_emot("huh")
+    

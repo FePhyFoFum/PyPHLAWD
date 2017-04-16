@@ -4,6 +4,7 @@ import tree_reader
 from clint.textui import colored
 from conf import DI
 import emoticons
+from datetime import datetime
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
@@ -11,7 +12,7 @@ if __name__ == "__main__":
         sys.exit(0)
     
     print colored.blue("STARTING PYPHLAWD "+emoticons.get_ran_emot("excited"))
-    
+    start = datetime.now()
     dirl = sys.argv[3]
     if dirl[-1] == "/":
         dirl = dirl[:-1]
@@ -46,5 +47,10 @@ if __name__ == "__main__":
     os.system(cmd)
     
     print colored.blue("PYPHLAWD DONE "+emoticons.get_ran_emot("excited"))
-
+    end = datetime.now()
+    print colored.blue("Total time (H:M:S): "+str(end-start)+" "+emoticons.get_ran_emot("excited"))
+    from utils import bcolors
+    print bcolors.HEADER,
+    emoticons.animate(emoticons.glasses_animated)
+    print bcolors.ENDC
 

@@ -35,4 +35,6 @@ if __name__ == "__main__":
                 os.system(cmd)
     cmd = "python "+DI+"annotate_clusters.py "+sys.argv[1]
     os.system(cmd)
+    cmd = "python "+DI+"post_process_cluster_info.py "+sys.argv[1]
+    os.system(cmd)
     

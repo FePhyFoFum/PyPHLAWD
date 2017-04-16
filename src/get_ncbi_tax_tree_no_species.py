@@ -12,7 +12,9 @@ def get_all_included(taxalist,c):
         going = True
         while going:
             c.execute("select ncbi_id, parent_ncbi_id from taxonomy where ncbi_id = ?", (cur, ))
+            count = 0
             for j in c:
+                count += 1
                 inc.add(str(j[0]))
                 par = str(j[1])
                 if par != "1" and par not in inc:
@@ -20,6 +22,8 @@ def get_all_included(taxalist,c):
                 else:
                     going = False
                     break
+            if count == 0:
+                print "delete "+i
     return inc
 
 def construct_tree(taxon, db, taxalist = None):
