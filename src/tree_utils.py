@@ -48,7 +48,7 @@ def remove_kink(node,curroot):
     to prevent creating orphaned tips
     after prunning twice at the same node
     """
-    if node == curroot and len(curroot.children) == 2:
+    if node == curroot: #and len(curroot.children) == 2:
         #move the root away to an adjacent none-tip
         if curroot.children[0].istip: #the other child is not tip
             curroot = reroot(curroot,curroot.children[1])

@@ -2,6 +2,8 @@ import sys,os,sqlite3
 from bad_seqs import gids
 from bad_taxa import taxonids
 from exclude_patterns import patterns
+from exclude_desc_patterns import desc_patterns
+from conf import smallest_size
 
 def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
     outfile = open(outfilen,"w")
@@ -40,6 +42,16 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
         for j in l:
             #catch bad seqs
             if str(j[3]) in gids:
+                continue
+            #bad description
+            bad_desc = False
+            for k in desc_patterns:
+                if k in str(j[4]):
+                    bad_desc = True
+                    break
+            if bad_desc:
+                continue
+            if len(str(j[5])) < smallest_size:
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
@@ -83,6 +95,16 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
     for j in l:
         #catch bad seqs
         if str(j[3]) in gids:
+            continue
+        #bad description
+        bad_desc = False
+        for k in desc_patterns:
+            if k in str(j[4]):
+                bad_desc = True
+                break
+        if bad_desc:
+            continue
+        if len(str(j[5])) < smallest_size:
             continue
         #exclude bad taxa
         if str(j[1]) in taxonids:

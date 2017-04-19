@@ -1,7 +1,11 @@
 import sys
 import os
 import node
+import shlex
+import subprocess
 from conf import DI
+from conf import relcut
+from conf import abscut
 
 """
 this assumes that you have already run 
@@ -69,6 +73,28 @@ def check_info_table(tree):
                     keepers.add(clusterind[j].replace(".fa",".aln"))
     return
 
+def make_trim_trees(alignments):
+    newalns = {}
+    for i in alignments:
+        print "making tree for",i
+        cmd = "FastTree -nt -gtr "+i+" > "+i.replace(".aln",".tre")+" 2> /dev/null"
+        os.system(cmd)
+        cmd = "python "+DI+"trim_tips.py "+i.replace(".aln",".tre")+" "+str(relcut)+" "+str(abscut)
+        p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
+        outtre = p.stdout.read().strip()
+        outrem = p.stderr.read().strip()
+        if len(outrem) > 0:
+            print "  removing",len(outrem.split("\n")),"tips"
+            removetax = []
+            for j in outrem.split("\n"):
+                taxon = j.split(" ")[1]
+                removetax.append(taxon)
+            cmd = "pxrms -s "+i+" -n "+",".join(removetax)+" -o "+i.replace(".aln",".aln.ed")
+            newalns[i] = i.replace(".aln",".aln.ed")
+            #print cmd
+            os.system(cmd)
+    return newalns
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print "python "+sys.argv[0]+" startdir"
@@ -115,30 +141,32 @@ if __name__ == "__main__":
     check_info_table(tree)
     print len(keepers)
 
+
     # do you want to rename these ones?
     rename = raw_input("Do you want to rename these clusters? y/n/# ")
-    if rename == 'y':
+    if rename == 'y' or rename == '#':
+        keeps = None
+        if rename == '#':
+            nums = raw_input("List cluster numbers separated by spaces: ")
+            keeps = [cld+"/clusters/cluster"+i+".aln" for i in nums.split(" ")]
+        else:
+            keeps = [cld+"/clusters/"+i for i in keepers]
+        # do you want to make trees and trim tips?
+        maketrees = raw_input("Do you want to make trees and trim tips for these gene regions? y/n ")
+        if maketrees == 'y':
+            newalns = make_trim_trees(keeps)
+            if len(newalns) > 0:
+                for i in newalns:
+                    keeps.remove(i)
+                    keeps.append(newalns[i])
         tab = cld+"/"+cld.split("/")[-1]+".table"
         rtn = cld.split("/")[-1]
-        cmd = "python "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join([cld+"/clusters/"+i for i in keepers])
+        cmd = "python "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join(keeps)
         #print cmd
         os.system(cmd)
         concat = raw_input("Do you want to concat? y/n ")
         if concat == 'y':
-            cmd = "pxcat -s "+" ".join([cld+"/clusters/"+i+".rn" for i in keepers])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
+            cmd = "pxcat -s "+" ".join([i+".rn" for i in keeps])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
             #print cmd
             os.system(cmd)
-    elif rename == '#':
-        nums = raw_input("List cluster numbers separated by spaces: ")
-        tab = cld+"/"+cld.split("/")[-1]+".table"
-        rtn = cld.split("/")[-1]
-        cmd = "python "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join([cld+"/clusters/cluster"+i+".aln" for i in nums.split(" ")])
-        os.system(cmd)
-        concat = raw_input("Do you want to concat? y/n ")
-        if concat == 'y':
-            cmd = "pxcat -s "+" ".join([cld+"/clusters/cluster"+i+".aln.rn" for i in nums.split(" ")])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
-            #print cmd
-            os.system(cmd) 
-        #print cmd
-
 

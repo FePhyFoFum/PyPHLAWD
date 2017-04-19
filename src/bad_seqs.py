@@ -25,4 +25,5 @@ gids = ["705923695", #KM258478, mislabeled Lonicera
         "769468447", #mislabeled Abelia floribunda isolate BOP022783
         "769468399", #mislabeled Abelia floribunda isolate BOP022783
         "440579093", #mislabeled Oenocarpus sp. Baker 998
+        "1825451", #mislabeled Cryptocarya obovata
         ]

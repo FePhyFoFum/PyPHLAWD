@@ -11,7 +11,6 @@ plat = platform.platform()
 from conf import tempname
 from conf import dosamp
 from conf import nthread
-from conf import treemake
 from conf import length_limit,evalue_limit,perc_identity
 import emoticons
 
@@ -146,9 +145,7 @@ def merge_alignments(outfile):
     #os.remove("subMSAtable")
     #os.remove("temp.mergealn")
 
-def run_tree(infile,outfile):
-    cmd = "FastTree -nt -gtr "+infile+" 2>fasttree.out > "+outfile
-    os.system(cmd)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3 and len(sys.argv) != 4:
@@ -217,9 +214,6 @@ if __name__ == "__main__":
                     write_merge_table_and_temp_aln_file(x)
                     outfile = diro+"/"+"cluster"+str(origcurcount)+".aln"
                     merge_alignments(outfile)
-                    if treemake:
-                        run_tree(outfile,outfile.replace(".aln",".tre"))
-                        #cut internal branches
                     log.w(" ".join(["CREATED FROM MERGE",diro+"/cluster"+str(origcurcount)+".aln"]))
                     for j in i:
                         if diro in j:
@@ -240,9 +234,6 @@ if __name__ == "__main__":
                         for k in seq.read_fasta_file_iter(j.replace(".fa",".aln")):
                             tf.write(k.get_fasta())
                             numseq += 1
-                        if numseq > 3 and treemake:
-                            #copy over tree
-                            copyfile(j.replace(".fa",".tre"),diro+"/"+"cluster"+str(origcurcount)+".tre")
                         if diro in j:
                             log.w(" ".join(["REMOVING ALIGNMENTS"+j,j.replace(".fa",".aln")]))
                             os.remove(j)

@@ -14,7 +14,13 @@ mac = False
 if "Darwin" in plat:
     mac = True
 
+revcomp = 0 # 0 mafft, 1 phyx
+prealn = ""
 alc = "mafft --thread "+nthread+" --adjustdirection --quiet INFILE 2> mafft.out > OUTFILE "
+if revcomp == 1:
+    prealn = "pxssort -s INFILE -b 4 | pxrevcomp -m > OUTFILE"
+    alc = "mafft --thread "+nthread+" --auto --quiet INFILE 2> mafft.out > OUTFILE "
+#don't use below if you are using the pxssort above
 trf = "FastTree -nt -gtr INFILE 2>fasttree.out > OUTFILE"
 
 if __name__ == "__main__":
@@ -35,12 +41,19 @@ if __name__ == "__main__":
             for j in seq.read_fasta_file_iter(inf):
                 sc += 1
             if sc > 1:
+                #using pxssort and pxrevcomp
+                if revcomp == 1:
+                    os.system(prealn.replace("INFILE",inf).replace("OUTFILE",inf+".temp"))
+                    copyfile(inf+".temp",inf)
+                    os.remove(inf+".temp")
+                #end using pxssort and pxrevcomp
                 log.w("ALIGNING FROM "+inf+" TO "+ouf)
                 os.system(alc.replace("INFILE",inf).replace("OUTFILE",ouf))
-                if mac == False:
-                    os.system("sed -i 's/_R_//g' "+ouf)
-                else:
-                    os.system("sed -i '' 's/_R_//g' "+ouf)
+                if revcomp == 0:
+                    if mac == False:
+                        os.system("sed -i 's/_R_//g' "+ouf)
+                    else:
+                        os.system("sed -i '' 's/_R_//g' "+ouf)
                 if sc > 3 and treemake:
                     log.w("TREE BUILDING FROM "+ouf+" TO "+ouf.replace(".aln",".tre"))
                     os.system(trf.replace("INFILE",ouf).replace("OUTFILE",ouf.replace(".aln",".tre")))

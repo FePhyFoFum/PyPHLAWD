@@ -4,8 +4,12 @@ import tree_reader
 from clint.textui import colored
 from logger import Logger
 from conf import DI
+from conf import treemake
 import emoticons
 
+def run_tree(infile,outfile):
+    cmd = "FastTree -nt -gtr "+infile+" 2>fasttree.out > "+outfile
+    os.system(cmd)
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

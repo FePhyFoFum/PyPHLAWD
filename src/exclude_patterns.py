@@ -1,4 +1,5 @@
 patterns = [" sp.",
             " aff.",
             " var.",
-            " x "]
+            " x ",
+            " cf."]

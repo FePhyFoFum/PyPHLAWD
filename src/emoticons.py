@@ -437,6 +437,7 @@ glasses_animated = ["|","|•)","•_•)","( •_•)>⌐■-■","(⌐■_■)
 emotions = {"excited":excited,"sad":sad,"meh":meh,"huh":huh}
 
 def animate(an_emot_list,color=None):
+    import os
     longest = 0
     for i in an_emot_list:
         if len(i) > longest:
@@ -447,7 +448,6 @@ def animate(an_emot_list,color=None):
         sys.stdout.write(str(("\b"*longest)+"%s") % sym)
         sys.stdout.flush()
         time.sleep(.5)
-    
 
 def get_ran_emot(emotion):
     return random.sample(emotions[emotion],1)[0]
