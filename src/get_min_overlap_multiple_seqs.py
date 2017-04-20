@@ -21,16 +21,19 @@ if __name__ == "__main__":
     genes = {}
     seqfiles = []
     badseqs = []
+    goodseqs = []
     for i in sys.argv[2:]:
         if i[0] != "_":
             seqfiles.append(i)
         else:
-            badseqs.append(i[1:])
+            goodseqs.append(i[1:])
     for i in seqfiles:
         genes[i] = []
         for j in seq.read_fasta_file_iter(i):
             genes[i].append(j.name)
 
+    print seqfiles
+    print goodseqs
     filt = set()
 
     for i in tree.iternodes(order="POSTORDER"):
@@ -56,9 +59,10 @@ if __name__ == "__main__":
         
         for j in gene_per_taxon:
             if len(gene_per_taxon[j]) == 1:
-                if gene_per_taxon[j][0] in badseqs:
+                if gene_per_taxon[j][0] not in goodseqs:
                     G.remove_node(j)
                     filt.add(j)
+
         x = list(nx.connected_components(G))
         if len(x) > 1:
             largest = 0
@@ -72,5 +76,14 @@ if __name__ == "__main__":
                     for k in x[j]:
                         filt.add(k)
             print x,len(lvsnmsin)
-
-    print ",".join(list(filt))
+    
+    if len(filt) > 0:
+        alnfile = raw_input("Concat aln filename: ")
+        treefile = sys.argv[1]
+        if len(alnfile) > 2 and len(treefile) > 2:
+            cmd = "pxrmt -t "+treefile+" -n "+",".join(list(filt))+" > "+treefile+".filt"
+            print cmd
+            os.system(cmd)
+            cmd = "pxrms -s "+alnfile+" -n "+",".join(list(filt))+" > "+alnfile+".filt"
+            print cmd
+            os.system(cmd)

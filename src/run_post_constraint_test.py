@@ -4,9 +4,9 @@ from tree_reader import *
 from conf import DI
 import operator
 from conf import nthread
-
-badfreq = 0.45
-smallcut = 0.1
+from conf import qjfreqcut
+from conf import qjpropcut
+from conf import qjsmallcut
 
 """
 this will write a constraint_processing_file that will need to be
@@ -35,9 +35,9 @@ def process_second_result(fl):
     sorted_x = sorted(nms.items(), key=operator.itemgetter(1))
     below01 = []
     for i in sorted_x:
-        if i[1] < smallcut:
+        if i[1] < qjsmallcut:
             below01.append(i[0])
-    mincut = max(len(nms)*.05,3)
+    mincut = max(len(nms)*qjpropcut,3)
     if len(below01) < mincut:
         return below01
     else:
@@ -62,7 +62,7 @@ if __name__ == "__main__":
             cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 300 -T "+str(nthread)+" -q "+partfile+" -C "+",".join(nms)+" -P > /dev/null 2>&1"
             os.system(cmd)
             firstres = process_first_result("RESULT.node_scores.csv")
-            if firstres < badfreq:
+            if firstres < qjfreqcut:
                 print "lose constraint"
                 if i.label == "":
                     print firstres,",".join(nms)

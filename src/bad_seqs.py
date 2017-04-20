@@ -26,4 +26,10 @@ gids = ["705923695", #KM258478, mislabeled Lonicera
         "769468399", #mislabeled Abelia floribunda isolate BOP022783
         "440579093", #mislabeled Oenocarpus sp. Baker 998
         "1825451", #mislabeled Cryptocarya obovata
+        "30349755", #mislabeled Lindera thomsonii
+        "332015635", #mislabeled Machilus chrysotricha
+        "770588647", #mislabeled Litsea reticulata
+        "770589819", #mislabeled Litsea reticulata
+        "384569220", #mislabeled Persea floccosa
+        "770589543", #mislabeled Beilschmiedia elliptica
         ]

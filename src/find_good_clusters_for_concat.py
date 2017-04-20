@@ -169,4 +169,13 @@ if __name__ == "__main__":
             cmd = "pxcat -s "+" ".join([i+".rn" for i in keeps])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
             #print cmd
             os.system(cmd)
+        constraint = raw_input("Do you want to make a constraint? y/n")
+        if constraint == 'y':
+            dbname = raw_input("Where is the DB? ")
+            baseid = raw_input("What is the baseid? ")
+            if len(dbname) > 2 and len(baseid) > 2:
+                cmd = "python "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+cld+"/"+rtn+"_outaln > "+cld+"/"+rtn+"_outaln.constraint.tre"
+                os.system(cmd)
+            print "line for get_min"
+            print "python "+DI+"get_min_overlap_multiple_seqs.py "+cld+"/"+rtn+"_outaln.constraint.tre "+" ".join([i+".rn" for i in keeps])
 
