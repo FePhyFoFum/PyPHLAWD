@@ -26,10 +26,11 @@ merge = True
 #blast bits
 length_limit = 0.65
 evalue_limit = 10e-10
+evalue_limit_lc = 10e-20
 perc_identity = 20
 
 #cutoffs for trim tips
-relcut = 0.75
+relcut = 0.25
 abscut = 1
 
 #cutoffs for qjpost

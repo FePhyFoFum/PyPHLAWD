@@ -80,6 +80,7 @@ def make_trim_trees(alignments):
         cmd = "FastTree -nt -gtr "+i+" > "+i.replace(".aln",".tre")+" 2> /dev/null"
         os.system(cmd)
         cmd = "python "+DI+"trim_tips.py "+i.replace(".aln",".tre")+" "+str(relcut)+" "+str(abscut)
+        #print cmd
         p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
         outtre = p.stdout.read().strip()
         outrem = p.stderr.read().strip()

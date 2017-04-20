@@ -172,7 +172,7 @@ if __name__ == "__main__":
                     blast_file_against_db(dir1,i)
             else:
                 blast_file_against_db(dir1,i)
-            dclus,clus = filter_blast.process_blast_out(tempname+".rawblastn")
+            dclus,clus = filter_blast.process_blast_out_lce(tempname+".rawblastn")
             if len(clus) > 0:
                 for j in clus:
                     G.add_edge(dir1+"/"+i,diro+"/"+j)

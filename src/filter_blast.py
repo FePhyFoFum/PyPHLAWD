@@ -2,6 +2,7 @@ import sys
 import math
 from conf import length_limit
 from conf import evalue_limit
+from conf import evalue_limit_lc
 
 
 def process_blast_out(infile,outfile=None):
@@ -46,9 +47,9 @@ def process_blast_out_lce(infile, outfile = None):
             val = -math.log10(float(spls[14])) * qlen * slen
         else:
             val = 180 * qlen * slen
-        if val < -math.log(evalue_limit):
+        if val < -math.log(evalue_limit_lc):
             continue
-        dclus.add(spls[2].split("___")[0])
+        dclus[spls[0]] = spls[2].split("___")[0]
         clus.add(spls[2].split("___")[0])
         if ouf != None:
             ouf.write(spls[0]+"\t"+spls[2]+"\t"+spls[14]+"\n")
@@ -61,4 +62,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 3:
         print "python "+sys.argv[0]+" infile.rawblast outfile.mclin"
         sys.exit(0)
-    process_blast_out(sys.argv[1],sys.argv[2])
+    process_blast_out_lce(sys.argv[1],sys.argv[2])
