@@ -12,6 +12,7 @@ from conf import tempname
 from conf import dosamp
 from conf import nthread
 from conf import length_limit,evalue_limit,perc_identity
+import filter_blast
 import emoticons
 
 nthread = str(nthread)
@@ -57,25 +58,6 @@ def make_blast_db_from_cluster_samp(indir):
 def blast_file_against_db(indir,filename):
     cmd = "blastn -db "+tempname+".db -query "+indir+"/"+filename+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     os.system(cmd)
-
-def process_blast_out():
-    inf = open(tempname+".rawblastn","r")
-    clus = set()
-    for i in inf:
-        spls = i.strip().split("\t")
-        #get this test from internal_conf
-        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < length_limit:
-            continue
-        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < length_limit:
-            continue
-        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < length_limit:
-            continue
-        if float(spls[14]) != 0:
-            if -math.log10(float(spls[14])) < -math.log(evalue_limit):
-                continue
-        clus.add(spls[2].split("___")[0])
-    inf.close()
-    return clus
 
 def add_file(fromfile,tofile):
     tf = open(tofile,"a")
@@ -190,7 +172,7 @@ if __name__ == "__main__":
                     blast_file_against_db(dir1,i)
             else:
                 blast_file_against_db(dir1,i)
-            clus = process_blast_out()
+            dclus,clus = filter_blast.process_blast_out(tempname+".rawblastn")
             if len(clus) > 0:
                 for j in clus:
                     G.add_edge(dir1+"/"+i,diro+"/"+j)

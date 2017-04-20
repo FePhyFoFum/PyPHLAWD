@@ -14,6 +14,7 @@ from conf import length_limit
 from conf import evalue_limit
 import math
 from conf import merge
+import filter_blast
 
 def add_ind_mafft(inseq,cl_file, merge):
     tf = open(cl_file,"a")
@@ -32,27 +33,6 @@ def add_ind_mafft(inseq,cl_file, merge):
         tf.close()
         tf2.close()
         merge_alignments(cl_file.replace(".fa",".aln"))
-
-def process_blast_ind():
-    inf = open(tempname+".rawblastn","r")
-    clus = {}
-    reps_clus = set()
-    for i in inf:
-        spls = i.strip().split("\t")
-        #get this test from internal_conf
-        if min(float(spls[1]),float(spls[3]))/max(float(spls[1]),float(spls[3])) < length_limit:
-            continue
-        if (max(float(spls[10]),float(spls[11]))-min(float(spls[10]),float(spls[11]))) / float(spls[1]) < length_limit:
-            continue
-        if (max(float(spls[12]),float(spls[13]))-min(float(spls[12]),float(spls[13]))) / float(spls[3]) < length_limit:
-            continue
-        if float(spls[14]) != 0:
-            if -math.log10(float(spls[14])) < -math.log10(evalue_limit):
-                continue
-        clus[spls[0]]=spls[2].split("___")[0]
-        reps_clus.add(spls[2].split("___")[0])
-    inf.close()
-    return clus,reps_clus
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -75,7 +55,8 @@ if __name__ == "__main__":
         #make blastdb of the cluster dir
         make_blast_db_from_cluster(outclu)
         blast_file_against_db(sys.argv[1],"notinchildren.fas")
-        clus,reps_clus = process_blast_ind()
-        for i in clus:
-            add_ind_mafft(seqd[i],outclu+"/"+clus[i],merge)
+        #clus,reps_clus = process_blast_ind()
+        dclus,clus = filter_blast.process_blast_out(tempname+".rawblastn")
+        for i in dclus:
+            add_ind_mafft(seqd[i],outclu+"/"+dclus[i],merge)
     log.c()
