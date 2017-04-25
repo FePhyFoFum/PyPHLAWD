@@ -55,7 +55,7 @@ if __name__ == "__main__":
         #make blastdb of the cluster dir
         make_blast_db_from_cluster(outclu)
         blast_file_against_db(sys.argv[1],"notinchildren.fas")
-        dclus,clus = filter_blast.process_blast_out_lce(tempname+".rawblastn")
+        dclus,clus = filter_blast.process_blast_out(tempname+".rawblastn")
         for i in dclus:
             add_ind_mafft(seqd[i],outclu+"/"+dclus[i],merge)
     log.c()

@@ -190,11 +190,11 @@ def process_replicate(replicate):
         raxml_args = [raxml_path,
                       "-s", temp_aln_fname,
                       "-n", temp_ml_search_label+".0",
-                      "-m", "GTRGAMMA",
+                      "-m", "GTRCAT",
                       "-T", "2",
                       "-p", "123",
                       "-f", "N",
-                      "--silent", "-F",
+                      "--silent",
                       "-z", "test.trees.0"]
 
         if using_partitions:
@@ -212,11 +212,11 @@ def process_replicate(replicate):
         raxml_args = [raxml_path,
                       "-s", temp_aln_fname,
                       "-n", temp_ml_search_label+".1",
-                      "-m", "GTRGAMMA",
+                      "-m", "GTRCAT",
                       "-T", "2",
                       "-p", "123",
                       "-f", "N",
-                      "--silent", "-F",
+                      "--silent",
                       "-z", "test.trees.1"]
         p = subprocess.Popen(raxml_args, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
@@ -226,11 +226,11 @@ def process_replicate(replicate):
         raxml_args = [raxml_path,
                       "-s", temp_aln_fname,
                       "-n", temp_ml_search_label+".2",
-                      "-m", "GTRGAMMA",
+                      "-m", "GTRCAT",
                       "-T", "2",
                       "-p", "123",
                       "-f", "N",
-                      "--silent", "-F",
+                      "--silent",
                       "-z", "test.trees.2"]
         p = subprocess.Popen(raxml_args, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
@@ -241,10 +241,10 @@ def process_replicate(replicate):
         raxml_args = [raxml_path,
                       "-s", temp_aln_fname,
                       "-n", temp_ml_search_label,
-                      "-m", "GTRGAMMA",
+                      "-m", "GTRCAT",
                       "-T", "2",
                       "-p", "123",
-                      "--silent", "-F"]
+                      "--silent"]
         if using_partitions:
             raxml_args += ["-q", temp_part_fname]
         result["raxml_args"] = " ".join(raxml_args)
@@ -254,7 +254,7 @@ def process_replicate(replicate):
                              stderr=subprocess.PIPE)
         ts, tse = p.communicate()
         result["raxml_stdout"] = ts.decode("utf-8")
-        print (result["raxml_stdout"])
+        #print (result["raxml_stdout"])
         result["raxml_stderr"] = tse
     result["label"] = unique_label
     queue.put(result)

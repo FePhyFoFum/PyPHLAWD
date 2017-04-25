@@ -1,5 +1,32 @@
 import tree_reader,os,sys
 
+# using rooted trees for unrooted means ignoring anything with one
+def calc_biparts(tree1):
+    allbiparts1 = []
+    allbiparts2 = []
+    for i in tree1.iternodes():
+        bp1, bp2 = get_bipart(i, tree1)
+        if len(bp1) < 2 or len(bp2) < 2:
+            continue
+        if bp1 in allbiparts1 or bp1 in allbiparts2:
+            continue
+        allbiparts1.append(bp1)
+        allbiparts2.append(bp2)
+    return allbiparts1, allbiparts2
+
+
+def get_bipart(node, root):
+    rtlvs = []
+    for i in root.leaves_fancy():
+        rtlvs.append(i.label)
+    ndlvs = []
+    for i in node.leaves_fancy():
+        ndlvs.append(i.label)
+    bp1 = set(rtlvs) - set(ndlvs)
+    bp2 = set(ndlvs)
+    return bp1, bp2
+
+
 def get_name(label):
     """Get taxonID from a tip label or a file name
     same = {"FZQN":"Sila","Sivu_ALN":"Sivu",\
