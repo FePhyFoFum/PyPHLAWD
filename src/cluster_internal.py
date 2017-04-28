@@ -5,6 +5,7 @@ from conf import takeouttaxondups
 from clint.textui import colored
 from logger import Logger
 import emoticons
+import subprocess
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
@@ -27,7 +28,10 @@ if __name__ == "__main__":
         print colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh"))
         cur =  c+"/clusters"
         cmd = "python "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE
-        os.system(cmd)
+        rc = subprocess.call(cmd, shell=True)
+        if rc != 0:
+            print colored.red("  PROBLEM ADDING CLADE"),colored.red(emoticons.get_ran_emot("sad"))
+            sys.exit(1)
         if takeouttaxondups:
             cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
             os.system(cmd)

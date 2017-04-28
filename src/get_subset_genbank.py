@@ -41,7 +41,7 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
         l = c.fetchall()
         for j in l:
             #catch bad seqs
-            if str(j[3]) in gids:
+            if str(j[3]) in gids or str(j[2]) in gids:
                 continue
             #bad description
             bad_desc = False
@@ -94,7 +94,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
     l = c.fetchall()
     for j in l:
         #catch bad seqs
-        if str(j[3]) in gids:
+        if str(j[3]) in gids or str(j[2]) in gids:
             continue
         #bad description
         bad_desc = False
@@ -171,7 +171,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
         #only record everything for the table
         for j in l:
             #catch bad seqs
-            if str(j[3]) in gids:
+            if str(j[3]) in gids or str(j[2]) in gids:
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue

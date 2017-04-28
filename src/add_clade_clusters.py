@@ -111,6 +111,9 @@ def check_unaligned(infile):
 def merge_alignments(outfile):
     cmd = "mafft --thread "+nthread+" --quiet --adjustdirection --merge subMSAtable temp.mergealn 2>mafft.out > "+outfile
     os.system(cmd)
+    if os.path.exists(outfile) == False:
+        print colored.red("ALIGNMENT DOESN'T EXIST"+" "+emoticons.get_ran_emot("sad"))
+        sys.exit(1)
     #for some buggy reason these can be unaligned, so realigning here
     if check_unaligned(outfile) == False:
         print colored.red("PROBLEM REDOING ALIGNMENT"+" "+emoticons.get_ran_emot("sad"))

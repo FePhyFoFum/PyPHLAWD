@@ -5,6 +5,7 @@ from clint.textui import colored
 from logger import Logger
 from conf import DI
 from conf import treemake
+import subprocess
 import emoticons
 
 def run_tree(infile,outfile):
@@ -36,7 +37,10 @@ if __name__ == "__main__":
                 if root[-1] != "/":
                     root = root+"/"
                 cmd = "python "+DI+"cluster_internal.py "+root+ " "+root+tablename+" "+logfile
-                os.system(cmd)
+                rc = subprocess.call(cmd,shell=True)
+                if rc != 0:
+                    print colored.red("PROBLEM WITH CLUSTERING INTERNAL"),colored.red(emoticons.get_ran_emot("sad"))
+                    sys.exit(1)
     cmd = "python "+DI+"annotate_clusters.py "+sys.argv[1]
     os.system(cmd)
     cmd = "python "+DI+"post_process_cluster_info.py "+sys.argv[1]

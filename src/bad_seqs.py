@@ -32,4 +32,12 @@ gids = ["705923695", #KM258478, mislabeled Lonicera
         "770589819", #mislabeled Litsea reticulata
         "384569220", #mislabeled Persea floccosa
         "770589543", #mislabeled Beilschmiedia elliptica
+        "JX171463", #mislabeled Fusarium
+        "AF228358", #mislabeled Fusarium
+        "BTU35304", #mislabeled   
+        "BTU19040", #mislabeled 
+        "BTU19041", #mislabeled
+        "4090408",
+        "1143726",
+        "2294036",
         ]

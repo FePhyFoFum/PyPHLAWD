@@ -3,7 +3,6 @@ import os
 import seq
 import networkx as nx
 import tree_reader
-import matplotlib.pyplot as plt
 from networkx.drawing.nx_agraph import write_dot
 
 
