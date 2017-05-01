@@ -29,8 +29,6 @@ if __name__ == "__main__":
 
     rootnms = set(tree1.lvsnms())
     othernms = set(bigtree.lvsnms())
-    for i in bigtree.iternodes():
-        i.length = 0
     diffnms = []
     diffnds = {}
     didit = False
@@ -49,7 +47,7 @@ if __name__ == "__main__":
     for i in rm:
         nrt.remove_child(i)
     if VERBOSE:
-        print nrt.get_newick_repr(False)
+        print nrt.get_newick_repr(True)
     nrt.add_child(tree1)
     while len(diffnms) > 0:
         for j in diffnms:
@@ -67,6 +65,7 @@ if __name__ == "__main__":
                     if len(pln) == 1:
                         amrca = tree1.get_leaf_by_name(list(pln)[0])
                         nn = node.Node()
+                        nn.length = amrca.length
                         amrca.parent.add_child(nn)
                         amrca.parent.remove_child(amrca)
                         nn.add_child(amrca)
