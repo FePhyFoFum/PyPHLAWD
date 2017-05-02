@@ -11,10 +11,17 @@ if __name__ == "__main__":
     tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
     dirl = sys.argv[2]+"/"
 
+    didntmake = set()
+
     for i in tree.iternodes(order="PREORDER"):
         if "unclassified" in i.label:
+            didntmake.add(i)
             continue
         if "environmental" in i.label:
+            didntmake.add(i)
+            continue
+        if i.parent in didntmake:
+            didntmake.add(i)
             continue
         if i != tree:
             i.label = i.parent.label+"/"+i.label

@@ -4,7 +4,7 @@ import tree_reader
 import tree_utils
 import node
 
-VERBOSE = False
+VERBOSE = True
 
 """
 this is a proof of concept to get trees combined
@@ -29,14 +29,19 @@ if __name__ == "__main__":
 
     rootnms = set(tree1.lvsnms())
     othernms = set(bigtree.lvsnms())
+    if VERBOSE:
+        ddifs = rootnms.difference(othernms)
+        for i in ddifs:
+            sys.stderr.write(i+"\n")
     diffnms = []
     diffnds = {}
     didit = False
     nrt = tree_utils.get_mrca_wnms(list(rootnms.intersection(othernms)),bigtree).parent
+    sys.stderr.write("new root label:"+nrt.label+"\n")
     rm = []
     for i in nrt.children:
         if VERBOSE:
-            print i.lvsnms(),rootnms
+            sys.stderr.write(str(len(i.lvsnms()))+" "+str(len(rootnms))+"\n")
         xs = set(i.lvsnms()).intersection(rootnms)
         if len(xs)>0:
             rm.append(i)
@@ -46,13 +51,13 @@ if __name__ == "__main__":
                 diffnds[j] = i.get_leaf_by_name(j)
     for i in rm:
         nrt.remove_child(i)
-    if VERBOSE:
-        print nrt.get_newick_repr(True)
+    #if VERBOSE:
+    #    sys.stderr.write(nrt.get_newick_repr(False)+"\n")
     nrt.add_child(tree1)
+    if VERBOSE:
+        sys.stderr.write("here\n")
     while len(diffnms) > 0:
         for j in diffnms:
-            if VERBOSE: 
-                print j,diffnds[j]
             going = True
             cn = diffnds[j]
             while going:
@@ -60,8 +65,8 @@ if __name__ == "__main__":
                 pln = set(par.lvsnms()).intersection(rootnms)
                 if len(pln) > 0:
                     amrca = tree_utils.get_mrca_wnms(pln,tree1)
-                    if VERBOSE:
-                        print "add at this node",par.get_newick_repr(False),amrca.get_newick_repr(False)
+                    #if VERBOSE:
+                        #sys.stderr.write("add at this node"+" "+par.get_newick_repr(False)+" "+amrca.get_newick_repr(False)+"\n")
                     if len(pln) == 1:
                         amrca = tree1.get_leaf_by_name(list(pln)[0])
                         nn = node.Node()

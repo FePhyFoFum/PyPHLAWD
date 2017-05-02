@@ -5,7 +5,7 @@ DI = "~/Dropbox/programming/pyphlawd/src/"
 tempname = "temp.fas"
 
 #smallest seq size
-smallest_size = 600
+smallest_size = 700
 
 #sample size for blast and comps
 dosamp = True
@@ -31,10 +31,10 @@ perc_identity = 20
 
 #cutoffs for trim tips
 relcut = 0.25
-abscut = 1
+abscut = 0.7
 
 #cutoffs for qjpost
-qjfreqcut = 0.45
+qjfreqcut = 0.3
 #freq to cut for a particular tip
 qjsmallcut = 0.1 
 #maximum proportion of tips to cut

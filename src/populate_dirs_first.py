@@ -24,10 +24,16 @@ if __name__ == "__main__":
             taxalist.add(i.strip())
         taxalistf.close()
 
+    didntmake = set()
     for i in tree.iternodes():
         if "unclassified" in i.label:
+            didntmake.add(i)
             continue
         if "environmental" in i.label:
+            didntmake.add(i)
+            continue
+        if i.parent in didntmake:
+            didntmake.add(i)
             continue
         orig = i.label
         if i != tree:

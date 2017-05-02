@@ -2,4 +2,5 @@ patterns = [" sp.",
             " aff.",
             " var.",
             " x ",
-            " cf."]
+            " cf.",
+            " isolate BB"]

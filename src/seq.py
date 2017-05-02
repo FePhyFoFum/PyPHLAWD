@@ -42,7 +42,10 @@ class Sequence:
             else:
                 tseq += i
         self.seq = tseq
-    
+
+    def __len__(self):
+        return len((self.seq.lower().replace("-","").replace("n","")))
+
 def fastq_generator(infile):
     line = infile.readline()
     while len(line) > 0: #no empty string at end-of-file in readline
