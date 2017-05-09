@@ -5,6 +5,7 @@ import tree_utils
 import node
 
 VERBOSE = True
+EXTRACT = True # alternative is that it will insert into the big tree instead of return the root
 
 """
 this is a proof of concept to get trees combined
@@ -71,6 +72,7 @@ if __name__ == "__main__":
                         amrca = tree1.get_leaf_by_name(list(pln)[0])
                         nn = node.Node()
                         nn.length = amrca.length
+                        amrca.length = 0.0
                         amrca.parent.add_child(nn)
                         amrca.parent.remove_child(amrca)
                         nn.add_child(amrca)
@@ -86,5 +88,8 @@ if __name__ == "__main__":
                 cn = par
         break
 
-    print bigtree.get_newick_repr(True)+";"
+    if EXTRACT:
+        print tree1.get_newick_repr(True)+";"
+    else:
+        print bigtree.get_newick_repr(True)+";"
 
