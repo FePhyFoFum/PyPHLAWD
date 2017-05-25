@@ -254,8 +254,7 @@ def mrca_recurs(node1,path1,node2):
 
 #assumes an ultrametric tree
 def scale_root(tree,age):
-    for i in tree.iternodes(order="postorder"):
-        i.set_height()
+    set_heights(tree)
     oldroot = tree.height
     tree.height = age
     for i in tree.iternodes(order="postorder"):
@@ -265,3 +264,30 @@ def scale_root(tree,age):
         if len(i.children) > 0:
             for j in i.children:
                 j.length = i.height - j.height
+
+def scale_edges(tree,age):
+    set_heights(tree)
+    oldroot = tree.height
+    tree.height = age
+    for i in tree.iternodes(order="postorder"):
+        i.length = age/oldroot * i.length
+
+def set_heights(tree):
+    for i in tree.leaves():
+        cur = i
+        h = 0
+        going = True
+        while going:
+            h += cur.length
+            cur = cur.parent
+            if cur == None:
+                going = False
+                break
+            else:
+                if h > cur.height:
+                    cur.height = h
+    for i in tree.iternodes("preorder"):
+        if i != tree:
+            i.height = abs(round(i.parent.height - i.length,5)) #weird rounding thing on some machines
+        else:
+            i.height = i.height+i.length

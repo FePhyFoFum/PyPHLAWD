@@ -5,12 +5,7 @@ import tree_utils
 import node
 
 VERBOSE = True
-EXTRACT = True#False# alternative is that it will insert into the big tree instead of return the root
-
-"""
-this is a proof of concept to get trees combined
-one needs to be preferred over another
-"""
+EXTRACT = False#True# alternative is that it will insert into the big tree instead of return the root
 
 def get_nds_names(nms,tre):
     nds = []
@@ -37,7 +32,9 @@ if __name__ == "__main__":
         sys.exit(0)
 
     tree1 = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree_utils.set_heights(tree1)
     bigtree = tree_reader.read_tree_file_iter(sys.argv[2]).next()
+    tree_utils.set_heights(bigtree)
 
     rootnms = set(tree1.lvsnms())
     
@@ -52,7 +49,12 @@ if __name__ == "__main__":
     diffnds = {}
     didit = False
     nrt = tree_utils.get_mrca_wnms(list(rootnms.intersection(othernms)),bigtree).parent
-    sys.stderr.write("new root label:"+nrt.label+"\n")
+
+    try:
+        sys.stderr.write("new root label:"+nrt.label+"\n")
+    except:
+        sys.stderr.write("new root label:") 
+
     rm = []
     for i in nrt.children:
         if VERBOSE:
@@ -67,7 +69,8 @@ if __name__ == "__main__":
     for i in rm:
         nrt.remove_child(i)
     #if VERBOSE:
-    #    sys.stderr.write(nrt.get_newick_repr(False)+"\n")
+    #    sys.stderr.write(nrt.get_newick_repr(True)+"\n")
+    tree1.length = nrt.height-tree1.height
     nrt.add_child(tree1)
     if VERBOSE:
         sys.stderr.write("here\n")
@@ -81,12 +84,14 @@ if __name__ == "__main__":
                 if len(pln) > 0:
                     amrca = tree_utils.get_mrca_wnms(pln,tree1)
                     #if VERBOSE:
-                        #sys.stderr.write("add at this node"+" "+par.get_newick_repr(False)+" "+amrca.get_newick_repr(False)+"\n")
+                    #    sys.stderr.write("add at this node"+" "+par.get_newick_repr(False)+" "+amrca.get_newick_repr(False)+"\n")
                     if len(pln) == 1:
                         amrca = tree1.get_leaf_by_name(list(pln)[0])
+                        #print "f",amrca.get_newick_repr(True)
                         nn = node.Node()
-                        #nn.length = amrca.length
-                        amrca.length = 0.0
+                        nn.length = amrca.length/2.
+                        nn.height = amrca.height+amrca.length/2.
+                        amrca.length = nn.length
                         amrca.parent.add_child(nn)
                         amrca.parent.remove_child(amrca)
                         nn.add_child(amrca)
@@ -95,6 +100,14 @@ if __name__ == "__main__":
                         if len(set(k.lvsnms()).intersection(rootnms)) > 0:
                             continue
                         else:
+                            #tree_utils.set_heights(amrca)
+                            #print k.get_newick_repr(True),amrca.length,amrca.get_newick_repr(True)
+                            if len(k.leaves()) > 1:
+                                tree_utils.scale_edges(k,amrca.height)
+                            else:
+                                #print k.get_newick_repr(True),amrca.height
+                                k.length = amrca.height
+                            #print k.get_newick_repr(True)
                             amrca.add_child(k)
                             for m in k.lvsnms():
                                 diffnms.remove(m)
