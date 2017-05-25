@@ -5,7 +5,7 @@ import tree_utils
 import node
 
 VERBOSE = True
-EXTRACT = True # alternative is that it will insert into the big tree instead of return the root
+EXTRACT = True#False# alternative is that it will insert into the big tree instead of return the root
 
 """
 this is a proof of concept to get trees combined
@@ -19,6 +19,17 @@ def get_nds_names(nms,tre):
             nds.append(i)
     return nds
 
+def remove_int_ext_nodes(nms,tre):
+    toremove = []
+    for i in tre.iternodes():
+        if len(i.children) > 0:
+            if i.label in nms:
+                toremove.append(i)
+    for i in toremove:
+        sys.stderr.write("remove internal: "+i.get_newick_repr(False)+"\n")
+        par = i.parent
+        par.remove_child(i)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -29,6 +40,9 @@ if __name__ == "__main__":
     bigtree = tree_reader.read_tree_file_iter(sys.argv[2]).next()
 
     rootnms = set(tree1.lvsnms())
+    
+    remove_int_ext_nodes(rootnms,bigtree)
+
     othernms = set(bigtree.lvsnms())
     if VERBOSE:
         ddifs = rootnms.difference(othernms)
@@ -71,7 +85,7 @@ if __name__ == "__main__":
                     if len(pln) == 1:
                         amrca = tree1.get_leaf_by_name(list(pln)[0])
                         nn = node.Node()
-                        nn.length = amrca.length
+                        #nn.length = amrca.length
                         amrca.length = 0.0
                         amrca.parent.add_child(nn)
                         amrca.parent.remove_child(amrca)

@@ -3,4 +3,6 @@ patterns = [" sp.",
             " var.",
             " x ",
             " cf.",
+            " TNS:",
+            " SK-",
             " isolate BB"]

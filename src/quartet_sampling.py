@@ -1044,6 +1044,7 @@ if __name__ == "__main__":
         write_test_trees(".")
         # skip tips and root
         if nd.istip or nd.parent is None:
+            """
             if nd.istip:
                 try:
                     int(nd.label)
@@ -1057,6 +1058,7 @@ if __name__ == "__main__":
             if (args.verbose):
                 print("\nskipping " + ("tip " +
                       nd.label if nd.label is not None else "root"))
+            """
             continue
 
         #  record the node label in the tree, these are required for user to
