@@ -44,14 +44,16 @@ def process_second_result(fl):
         return None
 
 
+"""
+taking out the part for now because it doesn't help that much and greatly increases runtime
+"""
 if __name__ == "__main__":
-    if len(sys.argv) != 6:
-        print "python "+sys.argv[0]+" constrainttre calculatedtree alnfile partfile outfile"
+    if len(sys.argv) != 5:
+        print "python "+sys.argv[0]+" constrainttre calculatedtree alnfile outfile"
         sys.exit(0)
     tree = read_tree_file_iter(sys.argv[1]).next()
     treefile = sys.argv[2]
     alnfile = sys.argv[3]
-    partfile = sys.argv[4]
     lose = set()
     remove_taxa = set()
     for i in tree.iternodes():
@@ -59,7 +61,7 @@ if __name__ == "__main__":
             continue
         else:
             nms = i.lvsnms()
-            cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 300 -T "+str(nthread)+" -q "+partfile+" -C "+",".join(nms)+" -P > /dev/null 2>&1"
+            cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 300 -T "+str(nthread)+" -C "+",".join(nms)+" -P > /dev/null 2>&1"
             os.system(cmd)
             firstres = process_first_result("RESULT.node_scores.csv")
             if firstres < qjfreqcut:
@@ -68,7 +70,7 @@ if __name__ == "__main__":
                     print firstres,",".join(nms)
                 else:
                     print firstres,i.label
-                cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 500 -T "+str(nthread)+" -q "+partfile+" -C "+",".join(nms)+" -P -m > /dev/null 2>&1"
+                cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 500 -T "+str(nthread)+" -C "+",".join(nms)+" -P -m > /dev/null 2>&1"
                 os.system(cmd)
                 secondres = process_second_result("RESULT.node_scores.csv.clade")
                 if secondres != None:
@@ -77,7 +79,7 @@ if __name__ == "__main__":
                         remove_taxa.add(j)
                 else:
                     lose.add(i)
-    outfile = open(sys.argv[5],"w")
+    outfile = open(sys.argv[4],"w")
     for i in remove_taxa:
         outfile.write("remove_taxon:"+i+"\n")
     for i in lose:
