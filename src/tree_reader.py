@@ -1,5 +1,9 @@
 import string, sys
-from node import Node
+import conf
+if conf.usecython:
+    from cnode import Node
+else:
+    from node import Node
 
 
 """

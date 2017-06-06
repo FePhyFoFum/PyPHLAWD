@@ -2,11 +2,16 @@ import sys
 import os
 import tree_reader
 import tree_utils
-import node
+import conf
+if conf.usecython:
+    import cnode as node
+else:
+    import node
 
 VERBOSE = True
-EXTRACT = False#True# alternative is that it will insert into the big tree instead of return the root
+EXTRACT = False# alternative is that it will insert into the big tree instead of return the root
 ADDMISSING = True
+EDITLEN = True
 
 def get_nds_names(nms,tre):
     nds = []
@@ -33,9 +38,10 @@ if __name__ == "__main__":
         sys.exit(0)
 
     tree1 = tree_reader.read_tree_file_iter(sys.argv[1]).next()
-    tree_utils.set_heights(tree1)
     bigtree = tree_reader.read_tree_file_iter(sys.argv[2]).next()
-    tree_utils.set_heights(bigtree)
+    if EDITLEN:
+        tree_utils.set_heights(tree1)
+        tree_utils.set_heights(bigtree)
 
     rootnms = set(tree1.lvsnms())
     
@@ -50,7 +56,6 @@ if __name__ == "__main__":
     diffnds = {}
     didit = False
     nrt = tree_utils.get_mrca_wnms(list(rootnms.intersection(othernms)),bigtree).parent
-
     try:
         sys.stderr.write("new root label:"+nrt.label+"\n")
     except:
@@ -72,13 +77,16 @@ if __name__ == "__main__":
         nrt.remove_child(i)
     #if VERBOSE:
     #    sys.stderr.write(nrt.get_newick_repr(True)+"\n")
-    testlength = nrt.height-tree1.height
-    if testlength < 0:
-        tree_utils.scale_edges(tree1,nrt.height-1)
-        tree1.length = 1
-    else:
-        tree1.length = testlength
+    if EDITLEN:
+        testlength = nrt.height-tree1.height
+        if testlength < 0:
+            tree_utils.scale_edges(tree1,nrt.height-1)
+            tree1.length = 1
+        else:
+            tree1.length = testlength
     nrt.add_child(tree1)
+    if EDITLEN:
+        tree_utils.set_heights(bigtree)
     tree1.label = sys.argv[1].split("/")[-1]
     if ADDMISSING:
         if VERBOSE:
@@ -98,9 +106,10 @@ if __name__ == "__main__":
                             amrca = tree1.get_leaf_by_name(list(pln)[0])
                             #print "f",amrca.get_newick_repr(True)
                             nn = node.Node()
-                            nn.length = amrca.length/2.
-                            nn.height = amrca.height+amrca.length/2.
-                            amrca.length = nn.length
+                            if EDITLEN:
+                                nn.length = amrca.length/2.
+                                nn.height = amrca.height+amrca.length/2.
+                                amrca.length = nn.length
                             amrca.parent.add_child(nn)
                             amrca.parent.remove_child(amrca)
                             nn.add_child(amrca)
@@ -111,11 +120,12 @@ if __name__ == "__main__":
                             else:
                                 #tree_utils.set_heights(amrca)
                                 #print "a",k.get_newick_repr(True),amrca.length,amrca.get_newick_repr(True),amrca.height
-                                if len(k.leaves()) > 1 or len(k.children) > 0:
-                                    tree_utils.scale_edges(k,amrca.height)
-                                else:
-                                    #print "b",k.get_newick_repr(True),amrca.height
-                                    k.length = amrca.height
+                                if EDITLEN:
+                                    if len(k.leaves()) > 1 or len(k.children) > 0:
+                                        tree_utils.scale_edges(k,amrca.height)
+                                    else:
+                                        #print "b",k.get_newick_repr(True),amrca.height
+                                        k.length = amrca.height
                                 #print "c",k.get_newick_repr(True)
                                 amrca.add_child(k)
                                 for m in k.lvsnms():

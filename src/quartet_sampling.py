@@ -10,7 +10,11 @@ import sys
 import time
 import math
 import seq
-from node import Node
+import conf
+if conf.usecython:
+    from cnode import Node
+else:
+    from node import Node
 from multiprocessing import Manager, Pool
 
 """Consider each node N in the rooted tree to identify bipartition X, which is

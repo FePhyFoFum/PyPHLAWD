@@ -5,7 +5,7 @@ import sqlite3
 
 
 def phyname(nm):
-    return nm.replace(" ","_").replace(":","_").replace(",","_").replace("(","_").replace(")","_").replace("[","_").replace("]","_").replace(";","_")
+    return nm.replace("'","").replace(" ","_").replace(":","_").replace(",","_").replace("(","_").replace(")","_").replace("[","_").replace("]","_").replace(";","_")
 
 
 def get_ncbi_names(DB, ncbilist):
@@ -56,6 +56,32 @@ if __name__ == "__main__":
     # now do ncbi
     nidn = get_ncbi_names(sys.argv[2],ncbis)
 
+    names_done = set()
+
+    #first we do NCBI
+    tree = tree_reader.read_tree_file_iter(sys.argv[3]).next()
+    for j in tree.iternodes():
+        if j.label in nidn:
+            j.label = phyname(nidn[j.label])
+            names_done.add(j.label)
+
+    prune = set()
+    #then we do ott
+    outf = open(sys.argv[4],"w")
+    for j in tree.iternodes():
+        if j.label in oidn:
+            if phyname(oidn[j.label]) in names_done:
+                prune.add(j.label)
+            else:
+                j.label = phyname(oidn[j.label])
+                names_done.add(j.label)
+    outf.write(tree.get_newick_repr_note(True)+";")
+    outf.close()
+    
+    cmd = "pxrmt -t "+sys.argv[-1]+" -n "+",".join(list(prune))+" > "+sys.argv[-1]+".pr.tre"
+    print cmd
+    os.system(cmd)
+    """
     outf = open(sys.argv[4],"w")
     for i in tree_reader.read_tree_file_iter(sys.argv[3]):
         for j in i.iternodes():
@@ -63,6 +89,6 @@ if __name__ == "__main__":
                 j.label = phyname(oidn[j.label])
             elif j.label in nidn:
                 j.label = phyname(nidn[j.label])
-        outf.write(i.get_newick_repr(True)+";")
+        outf.write(i.get_newick_repr_note(True)+";")
     outf.close()
-   
+   """

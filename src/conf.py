@@ -5,7 +5,7 @@ DI = "~/Dropbox/programming/pyphlawd/src/"
 tempname = "temp.fas"
 
 #smallest seq size
-smallest_size = 700
+smallest_size = 600
 
 #sample size for blast and comps
 dosamp = True
@@ -42,3 +42,6 @@ qjpropcut = 0.05
 
 #superfluous things
 emoticons = True
+
+#cython
+usecython = True

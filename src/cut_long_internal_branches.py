@@ -5,7 +5,12 @@ If no long branch, copy the input tree to the out dir for the next round
 The input trees can be .tre, .tre.mm or .tre.mm.tt depends on the workflow
 """
 
-import tree_reader,node,os,sys,math
+import tree_reader,os,sys,math
+import conf
+if conf.usecython:
+    import cnode as node
+else:
+    import node
 from tree_utils import get_front_names,remove_kink,get_front_labels
 from shutil import copy
 from logger import Logger

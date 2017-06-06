@@ -1,4 +1,3 @@
-import node
 import sys
 import os
 import tree_reader

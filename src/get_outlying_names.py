@@ -1,9 +1,11 @@
-import node
 import sys
 import os
 import tree_reader
-
-
+import conf
+if conf.usecython:
+    import cnode as node
+else:
+    import node
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:

@@ -1,11 +1,15 @@
 import sys
 import os
-import node
 import shlex
 import subprocess
 from conf import DI
 from conf import relcut
 from conf import abscut
+from conf import usecython
+if usecython:
+    import cnode as node
+else:
+    import node
 
 """
 this assumes that you have already run 

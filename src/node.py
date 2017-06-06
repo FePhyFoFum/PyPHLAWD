@@ -95,6 +95,24 @@ class Node:
             ret += ":" + str(self.length)
         return ret
 
+    def get_newick_repr_note(self,showbl=False):
+        ret = ""
+        for i in range(len(self.children)):
+            if i == 0:
+                ret += "("
+            ret += self.children[i].get_newick_repr_note(showbl)
+            if i == len(self.children)-1:
+                ret += ")"
+            else:
+                ret += ","
+        if self.label != None:
+            ret += self.label
+        if len(self.note) > 0:
+            ret += "["+self.note+"]"
+        if showbl == True:
+            ret += ":" + str(self.length)
+        return ret
+
     def set_height(self):
         if len(self.children) == 0:
             self.height = 0

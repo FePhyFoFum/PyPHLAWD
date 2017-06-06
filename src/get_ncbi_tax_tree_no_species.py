@@ -1,6 +1,10 @@
 import sys
 import sqlite3
-import node
+import conf
+if conf.usecython:
+    import cnode as node
+else:
+    import node
 
 def clean_name(name):
     return name.replace(" ", "_").replace("&","_")

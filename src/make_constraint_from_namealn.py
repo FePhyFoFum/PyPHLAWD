@@ -1,7 +1,11 @@
 import sys
 import sqlite3
 import seq
-import node
+import conf
+if conf.usecython:
+    import cnode as node
+else:
+    import node
 from get_ncbi_ids_for_names import get_taxid_for_name 
 from get_ncbi_tax_tree_no_species import get_all_included,clean_name
 
