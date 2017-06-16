@@ -23,7 +23,6 @@ if __name__ == "__main__":
         for i in taxalistf:
             taxalist.add(i.strip())
         taxalistf.close()
-
     didntmake = set()
     for i in tree.iternodes():
         if "unclassified" in i.label:
