@@ -9,7 +9,7 @@ else:
     import node
 
 VERBOSE = True
-EXTRACT = False# alternative is that it will insert into the big tree instead of return the root
+EXTRACT = True# alternative is that it will insert into the big tree instead of return the root
 ADDMISSING = True
 EDITLEN = True
 

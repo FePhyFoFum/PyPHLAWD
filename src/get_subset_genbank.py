@@ -5,6 +5,11 @@ from exclude_patterns import patterns
 from exclude_desc_patterns import desc_patterns
 from conf import smallest_size
 
+"""
+this version of the file is updated to take into account the change from gi to acc
+
+"""
+
 def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
     outfile = open(outfilen,"w")
     outfileg = None
@@ -43,7 +48,7 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
             #if the title sequence name is not the same as the id name (first part)
             #  then we skip it. sorry sequence! you are outta here
             try:
-                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[4]).split(" ")[0]+str(j[4]).split(" ")[1]:
+                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
                     continue
             except:
                 continue
@@ -53,26 +58,26 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
             #bad description
             bad_desc = False
             for k in desc_patterns:
-                if k in str(j[4]):
+                if k in str(j[5]):
                     bad_desc = True
                     break
             if bad_desc:
                 continue
-            if len(str(j[5])) < smallest_size:
+            if len(str(j[7])) < smallest_size:
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
             if remove_genomes:
-                if len(str(j[5])) > 10000:
+                if len(str(j[7])) > 10000:
                     outfileg.write(">"+str(j[3])+"\n")
-                    outfileg.write(str(j[5])+"\n")
+                    outfileg.write(str(j[7])+"\n")
                 else:
                     outfile.write(">"+str(j[3])+"\n")
-                    outfile.write(str(j[5])+"\n")
+                    outfile.write(str(j[7])+"\n")
             else:
                 outfile.write(">"+str(j[3])+"\n")
-                outfile.write(str(j[5])+"\n")
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\n")
+                outfile.write(str(j[7])+"\n")
+            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
@@ -93,17 +98,17 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     #only get the ones that are this specific taxon
-    c.execute("select * from sequence where ncbi_id = ?",(str(taxonid),))
     c.execute("select name from taxonomy where ncbi_id = ? and name_class = 'scientific name'",(str(taxonid),))
     l = c.fetchall()
     for j in l:
         tname = str(j[0])
+    c.execute("select * from sequence where ncbi_id = ?",(str(taxonid),))
     l = c.fetchall()
     for j in l:
         #if the title sequence name is not the same as the id name (first part)
         #  then we skip it. sorry sequence! you are outta here
         try:
-            if tname.split(" ")[0]+tname.split(" ")[1] != str(j[4]).split(" ")[0]+str(j[4]).split(" ")[1]:
+            if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
                 continue
         except:
             continue
@@ -113,12 +118,12 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
         #bad description
         bad_desc = False
         for k in desc_patterns:
-            if k in str(j[4]):
+            if k in str(j[5]):
                 bad_desc = True
                 break
         if bad_desc:
             continue
-        if len(str(j[5])) < smallest_size:
+        if len(str(j[7])) < smallest_size:
             continue
         #exclude bad taxa
         if str(j[1]) in taxonids:
@@ -133,15 +138,15 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
         if limitlist != None and str(j[1]) not in limitlist:
             continue
         if remove_genomes:
-            if len(str(j[5])) > 10000:
+            if len(str(j[7])) > 10000:
                 outfileg.write(">"+str(j[3])+"\n")
-                outfileg.write(str(j[5])+"\n")
+                outfileg.write(str(j[7])+"\n")
             else:
                 outfile.write(">"+str(j[3])+"\n")
-                outfile.write(str(j[5])+"\n")
+                outfile.write(str(j[7])+"\n")
         else:
             outfile.write(">"+str(j[3])+"\n")
-            outfile.write(str(j[5])+"\n")
+            outfile.write(str(j[7])+"\n")
     # get the children of the taxon that have no children (and so the sequences would go here)
     keepers = []
     c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(str(taxonid),))
@@ -187,7 +192,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
             #if the title sequence name is not the same as the id name (first part)
             #  then we skip it. sorry sequence! you are outta here
             try:
-                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[4]).split(" ")[0]+str(j[4]).split(" ")[1]:
+                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
                     continue
             except:
                 continue
@@ -197,13 +202,13 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
             if str(j[1]) in keepers:
-                if len(str(j[5])) > 10000:
+                if len(str(j[7])) > 10000:
                     outfileg.write(">"+str(j[3])+"\n")
-                    outfileg.write(str(j[5])+"\n")
+                    outfileg.write(str(j[7])+"\n")
                 else:
                     outfile.write(">"+str(j[3])+"\n")
-                    outfile.write(str(j[5])+"\n")
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\n")
+                    outfile.write(str(j[7])+"\n")
+            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
@@ -235,7 +240,7 @@ def make_files_with_id_justtable(taxonid, DB,outfile_tbln):
         c.execute("select * from sequence where ncbi_id = ?",(id,))
         l = c.fetchall()
         for j in l:
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\n")
+            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
@@ -264,8 +269,8 @@ def make_files(taxon, DB,outfilen,outfile_tbln):
         l = c.fetchall()
         for j in l:
             outfile.write(">"+str(j[3])+"\n")
-            outfile.write(str(j[5])+"\n")
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(j[4])+"\n")
+            outfile.write(str(j[7])+"\n")
+            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\n")
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
