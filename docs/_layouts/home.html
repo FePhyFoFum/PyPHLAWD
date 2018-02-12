@@ -1,0 +1,38 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <h1 class="page-heading">About</h1>
+  <p>Here is a site for the <a href="https://github.com/FePhyFoFum/PyPHLAWD">PyPHLAWD</a> package. There are installation and run instructions available here. Other analyses are also described as the scripts can do several analyses other than the typical runs.</p>
+
+  <br>
+  <br>
+
+  <h1 class="page-heading">News and updates</h1>
+  
+  {{ content }}
+
+  <ul class="post-list">
+    {% for post in site.posts limit 8 %}
+      <li>
+        {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+
+        <h2>
+          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </h2>
+        <!--<p>{{ post.excerpt }}</p>-->
+        <div class="wrapper-nopadding">
+            {{ post.content }}
+        </div>
+        <!--{{ post.content | strip_html | truncatewords:75}}<br>
+        <a href="{{ post.url }}">Read more...</a>-->
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!--<p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>-->
+
+</div>
