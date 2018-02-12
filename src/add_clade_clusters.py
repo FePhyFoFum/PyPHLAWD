@@ -26,7 +26,7 @@ use_merge = True
 def make_blast_db_from_cluster(indir):
     outf = open(tempname,"w")
     for i in os.listdir(indir):
-        if i[-3:] != ".fa":
+        if i[-3:] != ".fa" and i[-4:] != ".fas" and i[-6] != ".fasta":
             continue
         fn = i
         for j in seq.read_fasta_file_iter(indir+"/"+i):
