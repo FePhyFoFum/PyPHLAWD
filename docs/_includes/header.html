@@ -4,7 +4,7 @@
     {% assign default_paths = site.pages | map: "path" %}
     {% assign page_paths = site.header_pages | default: default_paths %}
     <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}
-    <img src="assets/img/pyphlawd_log.png" alt="art" style="float: left;margin-right: 7px;margin-bottom: 7px; height: 55px;"></a>
+    <img src="/assets/img/pyphlawd_log.png" alt="art" style="float: left;margin-right: 7px;margin-bottom: 7px; height: 55px;"></a>
   
     {% if page_paths %}
       <nav class="site-nav">
