@@ -38,3 +38,8 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+header_pages:
+  - install.md
+  - runs.md
+  - other.md
