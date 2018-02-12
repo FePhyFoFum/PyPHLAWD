@@ -28,6 +28,11 @@ perc_identity = 20       # at least this identity
 
 If you edit this file, be sure to save your copy before you `git pull` as it will overwrite. There will soon be a way to identify which `conf.py` file you would like to use as an environmental variable (coming soon).
 
+#### Changing parameters
+ - `length_limit` : Typically, this works best if it is above 0.4. If you go too low, you may not that there are alignments problems (`PyPHLAWD` shouts in <font color="red"> RED CAPS </font>)
+ - `perc_identity` : This also works best if it is not too low (as with `length_limit`) for the same reasons.
+ - `evalue_limit` : This value you can gauge based on your typical usage with blast. For nucleotide sequences, we often use `10e-10` and for protein `10e-4`. However, there are no great rules (see [Smith and Pease 2017](https://academic.oup.com/bib/article/18/3/451/2453289) ) for some discussion.
+
 ### Clustering runs
 Clustering runs use both `blast` and `mcl` to cluster sequences. They can also break clusters by trees as in Yang and Smith 2014 and Yang et al. 2015 but this hasn't been necessary yet with testing and so it is turned off by default. To run a clustering run you run `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/` where `Dipsacales` is the name in NCBI, `PHLAWD_DBS/pln.db` is where ever the relevant database is that was made with `phlawd_db_maker`, and `OUTDIR/` is where ever you want the resulting directory to be.
 
