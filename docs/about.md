@@ -4,4 +4,4 @@ title: About
 permalink: /about/
 ---
 
-This is the site for PyPHLAWD. Test
+This is the site for PyPHLAWD.
