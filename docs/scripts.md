@@ -29,6 +29,11 @@ in `.aln`. The user can also specify a log file or alternatively the logfile `py
 
 EX: `python add_clade_cluster.py CLUSTER_FOLDER OUT_FOLDER OPTIONAL_LOGFILE`
 
+-`compile_cython.sh` If you plan on using [cython](https://pypi.python.org/pypi/Cython/) while running PyPHLAWD, this program will set it
+up to make the possible.
+
+EX: `sh compile_cython.sh`
+
 -`trim_tips.py` This program is designed to help clean trees after they have been inferred. You specify an absolute value and a relative
 value for which terminal branches of these lengths will be removed. This is to help remove sequences that have been included from misidentified
 orthology, long branch attraction or another source of systematic error. Details regarding choice for absolute and relative values may be
@@ -36,3 +41,5 @@ found in Yang and Smith, 2014. This is performed during the regular analysis wit
 file, however, can also be used for refinement of final trees.
 
 EX: `python trim_tips.py TREE.tre REL_VALUE ABS_VALUE`
+
+
