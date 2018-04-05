@@ -21,6 +21,21 @@ Coming soon! The idea here is to be able to either supplement the NCBI sequences
 
 To add your own sequences to an analysis, regardless of whether they are supplemental or not, you will want to add your sequences to the database. You can have this data in two forms: one file per taxon with sequence data in a fasta format in that file or one file with format `>taxon_name@seq_id`. 
 
+### conf.py
+There is a configuration file that has some basic configuration settings. You will probably need to at least change the `DI` setting. This is the location of the PyPHLAWD scripts that you downloaded. The other settings are described below. 
+
+```
+DI = "~/Dropbox/programming/pyphlawd/src/"     # location of the scripts
+tempname = "temp.fas"    # the name of a temp file, created in your current dir
+dosamp = True            # do you want to sample big seq files. If not, set `False`
+sampsize = 20            # if True above, then set a size - the number of sequences
+nthread = 10             # number of threads for threaded packages
+treemake = False         # do you want to build trees for clusters? runtime increases
+length_limit = 0.5       # seqs must match at least this length
+evalue_limit = 10e-10    # evalue limit, must be better
+perc_identity = 20       # at least this identity
+```
+
 ## Running 
 There are two basic ways to run PyPHLAWD (the outdir must exist):
 - `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/`
@@ -46,22 +61,6 @@ There is a helper script that will help make your taxa list file. If you have a 
 ### Updating analyses
 Soon you will be able to add sequences to these runs without completely redoing all the analyses.
 Coming soon!
-
-### conf.py
-There is a configuration file that has some basic configuration settings. You will probably need to at least change the `DI` setting. This is the location of the PyPHLAWD scripts that you downloaded. The other settings are described below. 
-
-```
-DI = "~/Dropbox/programming/pyphlawd/src/"     # location of the scripts
-tempname = "temp.fas"    # the name of a temp file, created in your current dir
-dosamp = True            # do you want to sample big seq files. If not, set `False`
-sampsize = 20            # if True above, then set a size - the number of sequences
-nthread = 10             # number of threads for threaded packages
-treemake = False         # do you want to build trees for clusters? runtime increases
-length_limit = 0.5       # seqs must match at least this length
-evalue_limit = 10e-10    # evalue limit, must be better
-perc_identity = 20       # at least this identity
-```
-
 
 ## Output
 PyPHLAWD will make a bunch of directories. In each directory, there will be a `clusters` folder that has either the constructed bait files or the clusters. There is also an `info.html` file in each directory. If you open the root one (the one inside the main directory made) you will see the stats for each cluster/bait that has more than 3 taxa. There will be an alignment file (with `.aln` file ending for each file) and a `.tre` if you have treemake on.
