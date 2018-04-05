@@ -40,7 +40,7 @@ plugins:
 #   - vendor/ruby/
 
 header_pages:
+  - introduction.md
   - install.md
   - runs.md
   - other.md
-  - introduction.md
