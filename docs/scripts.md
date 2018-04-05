@@ -18,3 +18,7 @@ EX: `python setup_clade.py CLADE PHLAWD_DB.db OUTDIR/`
 These sequences should be in fasta format and put in a directory. If the sequences you have are not in fasta format, the program
 `pxs2fa` from the suite [phyx](https://github.com/FePhyFoFum/phyx) can be used to convert it.
 EX: `python setup_clade.py CLADE BAIT_DIR/ PHLAWD_DB.db OUTDIR/`
+
+-`add_clade_cluster` This will run during the main program or can be run separately to combine clusters together. The user specifies
+a folder with clusters to combine. This should contain a set of fasta files that end in `.fa` and their corresponding alignments ending
+in `.aln`. The user can also specify a log file or alternatively the logfile `pyphlawd.log` will have the information written to. 
