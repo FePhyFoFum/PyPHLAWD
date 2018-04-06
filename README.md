@@ -7,11 +7,13 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 ### Requirements
 - a database created by `PHLAWD` or the `phlawd_db_maker` (_COMING SOON:_ or your own sequences). I recommend [phlawd_db_maker](https://github.com/blackrim/phlawd_db_maker) as it is simpler.
 - python : version 2 
-	- you will also need python libraries for sqlite3, networkx, and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
-- [mafft](http://mafft.cbrc.jp/alignment/software/) : You will need a recent version (>=v7.3 works well) that has threading and merging. 
+  - you will also need python libraries for sqlite3, networkx, and [clint](https://pypi.python.org/pypi/clint) (for text coloring). all available from pip
+- [cython](http://cython.org/) : Available using pip
+- [mafft](http://mafft.cbrc.jp/alignment/software/) : You will need a recent version (>=v7.3 works well) that has threading and merging
 - [FastTree](http://www.microbesonline.org/fasttree/) : (if you have `treemake` on)
-- [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
+- [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well
 - [mcl](http://micans.org/mcl/) : Markov clustering for the clustering runs (you won't need this if you only bait)
+- [phyx](https://github.com/FePhyFoFum/phyx) : Some analyses may require various programs from this suite
 
 ### Database
 I would recommend that you use `phlawd_db_maker` to make the necessary sequence database. You will want to make a database (e.g., `phlawd_db_maker pln ~/PHLAWD_DBS/pln.db`). This will be used if you are using NCBI sequences (if you are using something else, see that section below). 
@@ -20,6 +22,22 @@ I would recommend that you use `phlawd_db_maker` to make the necessary sequence 
 Coming soon! The idea here is to be able to either supplement the NCBI sequences or to conduct your own analysis entirely of your own sequences. To do this, you will still want to create your own database of the sequences using the table structure already in use with the `phlawd_db_maker`. 
 
 To add your own sequences to an analysis, regardless of whether they are supplemental or not, you will want to add your sequences to the database. You can have this data in two forms: one file per taxon with sequence data in a fasta format in that file or one file with format `>taxon_name@seq_id`. 
+
+### conf.py
+
+There is a configuration file (located in `PyPHLAWD/src/`) that has some basic configuration settings. You will probably need to at least change the `DI` setting. This is the location of the PyPHLAWD scripts that you downloaded. The other settings are described below. 
+
+```
+DI = "~/Dropbox/programming/pyphlawd/src/"     # location of the scripts
+tempname = "temp.fas"    # the name of a temp file, created in your current dir
+dosamp = True            # do you want to sample big seq files. If not, set `False`
+sampsize = 20            # if True above, then set a size - the number of sequences
+nthread = 10             # number of threads for threaded packages
+treemake = False         # do you want to build trees for clusters? runtime increases
+length_limit = 0.5       # seqs must match at least this length
+evalue_limit = 10e-10    # evalue limit, must be better
+perc_identity = 20       # at least this identity
+```
 
 ## Running 
 There are two basic ways to run PyPHLAWD (the outdir must exist):
@@ -46,21 +64,6 @@ There is a helper script that will help make your taxa list file. If you have a 
 ### Updating analyses
 Soon you will be able to add sequences to these runs without completely redoing all the analyses.
 Coming soon!
-
-### conf.py
-There is a configuration file that has some basic configuration settings. You will probably need to at least change the `DI` setting. This is the location of the PyPHLAWD scripts that you downloaded. The other settings are described below. 
-
-```
-DI = "~/Dropbox/programming/pyphlawd/src/"     # location of the scripts
-tempname = "temp.fas"    # the name of a temp file, created in your current dir
-dosamp = True            # do you want to sample big seq files. If not, set `False`
-sampsize = 20            # if True above, then set a size - the number of sequences
-nthread = 10             # number of threads for threaded packages
-treemake = False         # do you want to build trees for clusters? runtime increases
-length_limit = 0.5       # seqs must match at least this length
-evalue_limit = 10e-10    # evalue limit, must be better
-perc_identity = 20       # at least this identity
-```
 
 
 ## Output
