@@ -29,7 +29,7 @@ or `change_ncbi_to_name_tre_fromlist.py` in order to change ncbi names to specie
 
 EX: `python get_all_ncbi_names.py Database.db OutputFileName`
 
--`align_tip_clusters.py` This will align fasta sequences within a folder using `mafft` and the `phyx` program `pxssort`. This is good to run before
+-`align_tip_clusters.py` This will align fasta sequences within a folder using [mafft](http://mafft.cbrc.jp/alignment/software/) and the [phyx](https://github.com/FePhyFoFum/phyx) program `pxssort`. This is good to run before
 `add_clade_cluster.py` if the sequences have not been aligned.
 
 EX: `python add_clade_cluster.py FOLDER_WITH_FASTA OPTIONAL_LOGFILE`
