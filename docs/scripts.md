@@ -58,4 +58,12 @@ file, however, can also be used for refinement of final trees.
 
 EX: `python trim_tips.py TREE.tre REL_VALUE ABS_VALUE`
 
+-`write_fasta_files_from_mcl.py` This program is designed to extract the clusters identified through markov clustering as implemented in 
+[mcl](https://micans.org/mcl/). The input is a fasta file which contains all sequences clustered (typically the file which an all-by-all blast was performed
+on), the outfile from the clustering analysis and the minimal number of required to be in the clustering analysis. This program requires a
+premade folder, and the output will be all the clusters identified by mcl that meet the minimum number of taxa requirement.
+
+EX: `python write_fasta_files_from_mcl.py AllFasta.fa mcl_outfile minimum_taxa OUTDIR`
+
+
 
