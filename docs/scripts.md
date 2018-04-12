@@ -23,6 +23,12 @@ EX: `python setup_clade.py CLADE BAIT_DIR/ PHLAWD_DB.db OUTDIR/`
 
 ### Other Scripts
 
+-`get_all_ncbi_names.py` This is a script that will read all the names from your database and output a table with them. This is useful
+for if you want to quickly see if species of interest are available. The table can be input to the name changing program `change_id_to_name_fasta.py`
+or `change_ncbi_to_name_tre_fromlist.py` in order to change ncbi names to species names.
+
+EX: `python get_all_ncbi_names.py Database.db OutputFileName`
+
 -`align_tip_clusters.py` This will align fasta sequences within a folder using `mafft` and the `phyx` program `pxssort`. This is good to run before
 `add_clade_cluster.py` if the sequences have not been aligned.
 
@@ -39,10 +45,19 @@ up to make the possible.
 
 EX: `sh compile_cython.sh`
 
--`change_id_to_ncbi_fasta.py` This will allow you to change names in a user input fasta file with a list of given names. The input is
+-`change_id_to_name_fasta.py ` This will allow you to change names in a user input fasta file with a list of given names. The input is
 a tab delimited file containing the current names in the first column and the names to be replaced with in the second.
 
-EX: `python change_id_to_ncbi_fasta.py Table.tsv InputFasta.fa OutputFile`
+EX: `python change_id_to_name_fasta.py Table.tsv InputFasta.fa OutputFile`
+
+-`change_ncbi_to_name_tre_fromlist.py` Change the names on a tree. This will allow you to switch the names from ncbi to species file.
+The table should be tab delimited.
+
+EX: `python change_ncbi_to_name_tre_fromlist.py Table.tsv Tree.tre OutTree.tre
+
+-`get_len_seq_summary.py` This program will summarize the length to standard out of every fasta sequence in a file.
+
+EX: `python get_len_seq_summary.py FASTA`
 
 -`cut_long_internal_branches.py` This program will allow the user to split clades connect by a branch of a designated length. This is intended
 to divide clusters that have brought together based upon misidentified orthology. The user specifies a branch length cutoff and the number
@@ -58,12 +73,15 @@ file, however, can also be used for refinement of final trees.
 
 EX: `python trim_tips.py TREE.tre REL_VALUE ABS_VALUE`
 
+-`filter_blast.py` This program will create an mcl file out of a blast output.
+
+EX: `python filter_blast.py BLASTOUTPUT MCLFILE`
+
 -`write_fasta_files_from_mcl.py` This program is designed to extract the clusters identified through markov clustering as implemented in 
 [mcl](https://micans.org/mcl/). The input is a fasta file which contains all sequences clustered (typically the file which an all-by-all blast was performed
 on), the outfile from the clustering analysis and the minimal number of required to be in the clustering analysis. This program requires a
 premade folder, and the output will be all the clusters identified by mcl that meet the minimum number of taxa requirement.
 
 EX: `python write_fasta_files_from_mcl.py AllFasta.fa mcl_outfile minimum_taxa OUTDIR`
-
 
 
