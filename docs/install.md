@@ -15,6 +15,9 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 - [FastTree](http://www.microbesonline.org/fasttree/) : (if you have `treemake` on)
 - [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
 - [mcl](http://micans.org/mcl/) : Markov clustering for the clustering runs (you won't need this if you only bait)
+- [phyx](https://github.com/FePhyFoFum/phyx/) : Relies upon pxssort, pxrevcomp, pxrmt, pxcat, and pxrms
+- [cython](cython.org/) : This is optional but will speed up some functions
+
 
 ### Database
 I would recommend that you use `phlawd_db_maker` to make the necessary sequence database. You will want to make a database (e.g., `phlawd_db_maker pln ~/PHLAWD_DBS/pln.db`). This will be used if you are using NCBI sequences (if you are using something else, see that section below). 
