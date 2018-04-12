@@ -39,6 +39,11 @@ up to make the possible.
 
 EX: `sh compile_cython.sh`
 
+-`change_id_to_ncbi_fasta.py` This will allow you to change names in a user input fasta file with a list of given names. The input is
+a tab delimited file containing the current names in the first column and the names to be replaced with in the second.
+
+EX: `python change_id_to_ncbi_fasta.py Table.tsv InputFasta.fa OutputFile`
+
 -`cut_long_internal_branches.py` This program will allow the user to split clades connect by a branch of a designated length. This is intended
 to divide clusters that have brought together based upon misidentified orthology. The user specifies a branch length cutoff and the number
 of taxa for a clade. The input will be a folder containing the trees that are to be cut and the file ending of those trees (e.g .new, .tre etc...).
