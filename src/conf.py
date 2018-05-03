@@ -1,5 +1,8 @@
 #directory that houses the scripts for pyphlawd
 DI = "~/Dropbox/programming/pyphlawd/src/"
+#don't edit, just adding a trailing / if it isn't there
+if DI[-1] != "/":
+    DI += "/"
 
 #just a temporary name for the fasta files
 tempname = "temp.fas"
