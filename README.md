@@ -1,10 +1,13 @@
 # PyPHLAWD
-Python version of PHLAWD. This will conduct analyses either clustering or using bait to construct large alignments.
+
+Python version of PHLAWD. This will conduct analyses either clustering or using bait to construct large alignments. You can find more information at the website [https://fephyfofum.github.io/PyPHLAWD/](here).
 
 ## Setup
+
 PyPHLAWD should be easy to setup (or that is the hope). There are a few programs that it requires (listed below). These need to be in the PATH (so when you type the program, like `mafft`, it just runs). You should use the instructions on these pages to help you install for your machine. If you are running linux, it is significantly simpler because many of these are in your repos (e.g., `sudo apt-get`...). 
 
 ### Requirements
+
 - a database created by `PHLAWD` or the `phlawd_db_maker` (_COMING SOON:_ or your own sequences). I recommend [phlawd_db_maker](https://github.com/blackrim/phlawd_db_maker) as it is simpler.
 - python : version 2 
   - you will also need python libraries for sqlite3, networkx, and [clint](https://pypi.python.org/pypi/clint) (for text coloring). all available from pip
