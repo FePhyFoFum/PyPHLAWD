@@ -18,7 +18,8 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 - [FastTree](http://www.microbesonline.org/fasttree/) : (if you have `treemake` on)
 - [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well.
 - [mcl](http://micans.org/mcl/) : Markov clustering for the clustering runs (you won't need this if you only bait)
-- [phyx](https://github.com/FePhyFoFum/phyx/) : Relies upon pxssort, pxrevcomp, pxrmt, pxcat, and pxrms
+- [phyx](https://github.com/FePhyFoFum/phyx/)
+  - Relies upon `pxssort`, `pxrevcomp`, `pxrmt`, `pxcat`, and `pxrms`. You can only install these if you like by specifying `make pxssort pxrevcomp pxrmt pxcat pxrms` instead of just `make` or `make all` when installing `phyx`. More instructions can be found at the [`phyx` website](https://github.com/FePhyFoFum/phyx/).
 - [cython](cython.org/) : This is optional but will speed up some functions
   -cython can be installed using pip `sudo pip install cython`
 
