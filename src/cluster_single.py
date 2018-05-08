@@ -17,6 +17,7 @@ if __name__ == "__main__":
     INFILE = sys.argv[1]+"/"+sp
     LOGFILE = sys.argv[2]
     log = Logger(LOGFILE)
+
     if os.path.isfile( INFILE+".fas" ) == False:
         log.wac("NO DATA IN "+INFILE+".fas")
         sys.exit(0)

@@ -1,5 +1,6 @@
 import os
 import sys
+import random
 import tree_reader
 from clint.textui import colored
 from logger import Logger
@@ -20,6 +21,11 @@ if __name__ == "__main__":
     root = sys.argv[1]
     logfile = sys.argv[2]
     log = Logger(logfile)
+    # get the random directory so you can run multiple things in the same directory
+    rantempdir = "TEMPDIR_"+str(random.randint(0,100000))+"/"
+    print colored.blue("CREATED"),rantempdir
+    os.mkdir(rantempdir)
+    log.wac("CREATED "+rantempdir)
     count = 0
     for root, dirs, files in os.walk(root,topdown=False):
         if "clusters" not in root:
@@ -36,7 +42,7 @@ if __name__ == "__main__":
                 tablename = [x for x in files if ".table" in x][0]
                 if root[-1] != "/":
                     root = root+"/"
-                cmd = "python "+DI+"cluster_internal.py "+root+ " "+root+tablename+" "+logfile
+                cmd = "python "+DI+"cluster_internal.py "+root+ " "+root+tablename+" "+logfile+" "+rantempdir
                 rc = subprocess.call(cmd,shell=True)
                 if rc != 0:
                     print colored.red("PROBLEM WITH CLUSTERING INTERNAL"),colored.red(emoticons.get_ran_emot("sad"))

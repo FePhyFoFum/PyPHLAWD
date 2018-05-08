@@ -7,8 +7,8 @@ import emoticons
 from datetime import datetime
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" taxon db dirl [taxalist]"
+    if len(sys.argv) != 5 and len(sys.argv) != 6:
+        print "python "+sys.argv[0]+" taxon db dirl logfile [taxalist]"
         sys.exit(0)
     
     print colored.blue("STARTING PYPHLAWD "+emoticons.get_ran_emot("excited"))
@@ -20,9 +20,14 @@ if __name__ == "__main__":
     db = sys.argv[2]
     # This will be used to limit the taxa
     taxalistf = None
-    if len(sys.argv) == 5:
-        taxalistf = sys.argv[4]
-        print colored.yellow("LIMITING TO TAXA IN"),sys.argv[4]
+    if len(sys.argv) == 6:
+        taxalistf = sys.argv[5]
+        print colored.yellow("LIMITING TO TAXA IN"),sys.argv[5]
+
+    # Log file
+    logfile = sys.argv[4]
+    if logfile[-len(".md.gz"):] != ".md.gz":
+        logfile += ".md.gz"
 
     tname = dirl+"/"+taxon+".tre"
     if taxalistf != None:
@@ -43,7 +48,7 @@ if __name__ == "__main__":
     
     if os.path.isfile("log.md.gz"):
         os.remove("log.md.gz")
-    cmd = "python "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ log.md.gz"
+    cmd = "python "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ "+logfile
     os.system(cmd)
     
     print colored.blue("PYPHLAWD DONE "+emoticons.get_ran_emot("excited"))

@@ -23,8 +23,8 @@ if "Darwin" in plat:
 
 use_merge = True
 
-def make_blast_db_from_cluster(indir):
-    outf = open(tempname,"w")
+def make_blast_db_from_cluster(indir,tempdir="./"):
+    outf = open(tempdir+tempname,"w")
     for i in os.listdir(indir):
         if i[-3:] != ".fa" and i[-4:] != ".fas" and i[-6] != ".fasta":
             continue
@@ -33,11 +33,11 @@ def make_blast_db_from_cluster(indir):
             j.name = fn+"___"+j.name
             outf.write(j.get_fasta())
     outf.close()
-    cmd = "makeblastdb -in "+tempname+" -out "+tempname+".db -dbtype nucl > /dev/null 2>&1"
+    cmd = "makeblastdb -in "+tempdir+tempname+" -out "+tempdir+tempname+".db -dbtype nucl > /dev/null 2>&1"
     os.system(cmd)
 
-def make_blast_db_from_cluster_samp(indir):
-    outf = open(tempname,"w")
+def make_blast_db_from_cluster_samp(indir,tempdir="./"):
+    outf = open(tempdir+tempname,"w")
     for i in os.listdir(indir):
         if i[-3:] != ".fa":
             continue
@@ -51,12 +51,11 @@ def make_blast_db_from_cluster_samp(indir):
                 j.name = fn+"___"+j.name
                 outf.write(j.get_fasta())
     outf.close()
-    cmd = "makeblastdb -in "+tempname+" -out "+tempname+".db -dbtype nucl > /dev/null 2>&1"
+    cmd = "makeblastdb -in "+tempdir+tempname+" -out "+tempdir+tempname+".db -dbtype nucl > /dev/null 2>&1"
     os.system(cmd)
 
-
-def blast_file_against_db(indir,filename):
-    cmd = "blastn -db "+tempname+".db -query "+indir+"/"+filename+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+def blast_file_against_db(indir,filename,tempdir="./"):
+    cmd = "blastn -db "+tempdir+tempname+".db -query "+indir+"/"+filename+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempdir+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     os.system(cmd)
 
 def add_file(fromfile,tofile):
@@ -67,9 +66,9 @@ def add_file(fromfile,tofile):
     ff.close()
     tf.close()
 
-def write_merge_table_and_temp_aln_file(filelist):
-    tf = open("subMSAtable","w")
-    tf2 = open("temp.mergealn","w")
+def write_merge_table_and_temp_aln_file(filelist,tempdir="./"):
+    tf = open(tempdir+"subMSAtable","w")
+    tf2 = open(tempdir+"temp.mergealn","w")
     count = 1
     addlater = []
     for i in filelist:
@@ -108,8 +107,8 @@ def check_unaligned(infile):
         return False
     return True
 
-def merge_alignments(outfile):
-    cmd = "mafft --thread "+nthread+" --quiet --adjustdirection --merge subMSAtable temp.mergealn 2>mafft.out > "+outfile
+def merge_alignments(outfile,tempdir="./"):
+    cmd = "mafft --thread "+nthread+" --quiet --adjustdirection --merge "+tempdir+"subMSAtable "+tempdir+"temp.mergealn 2>mafft.out > "+outfile
     os.system(cmd)
     if os.path.exists(outfile) == False:
         print colored.red("ALIGNMENT DOESN'T EXIST"+" "+emoticons.get_ran_emot("sad"))
@@ -119,9 +118,9 @@ def merge_alignments(outfile):
         print colored.red("PROBLEM REDOING ALIGNMENT"+" "+emoticons.get_ran_emot("sad"))
 
         #log.w("PROBLEM REDOING ALIGNMENT")
-        copyfile("subMSAtable","problem_subMSAtable")
-        copyfile("temp.mergealn","problem_temp.mergealn")
-        cmd = "mafft --quiet --adjustdirection temp.mergealn > "+outfile
+        copyfile(tempdir+"subMSAtable","problem_subMSAtable")
+        copyfile(tempdir+"temp.mergealn","problem_temp.mergealn")
+        cmd = "mafft --quiet --adjustdirection "+tempdir+"temp.mergealn > "+outfile
         os.system(cmd)
     if mac == False:
         os.system("sed -i 's/_R_//g' "+outfile)
@@ -130,19 +129,22 @@ def merge_alignments(outfile):
     #os.remove("subMSAtable")
     #os.remove("temp.mergealn")
 
-
-
 if __name__ == "__main__":
-    if len(sys.argv) != 3 and len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" fromclusterdir tooutdir [logfile]"
+    if len(sys.argv) != 4 and len(sys.argv) != 5:
+        print "python "+sys.argv[0]+" fromclusterdir tooutdir logfile [TEMPDIR]"
         sys.exit(0)
     dir1 = sys.argv[1]
     diro = sys.argv[2]
-    logfile = "pyphlawd.log"
-    if len(sys.argv) == 4:
-        logfile = sys.argv[3]
+    logfile = sys.argv[3]
     log = Logger(logfile)
     log.a()
+
+    tempdir = "./"
+    if len(sys.argv) == 5:
+        tempdir = sys.argv[4]
+        if tempdir[-1] != "/":
+            tempdir += "/"
+
     curcount = 0
     if len(os.listdir(diro)) == 0:
         from shutil import copyfile
@@ -159,9 +161,9 @@ if __name__ == "__main__":
         curcount += 1
         #make blast dir of the out
         if dosamp:
-            make_blast_db_from_cluster_samp(diro)
+            make_blast_db_from_cluster_samp(diro, tempdir)
         else:
-            make_blast_db_from_cluster(diro)
+            make_blast_db_from_cluster(diro, tempdir)
         count = 1
         G = nx.Graph()
         for i in os.listdir(dir1):
@@ -170,12 +172,12 @@ if __name__ == "__main__":
             # doing just the sample for speed
             if dosamp:
                 if os.path.isfile(dir1+"/"+i.replace(".fa",".samp")):
-                    blast_file_against_db(dir1,i.replace(".fa",".samp"))
+                    blast_file_against_db(dir1,i.replace(".fa",".samp"),tempdir)
                 else:
-                    blast_file_against_db(dir1,i)
+                    blast_file_against_db(dir1,i,tempdir)
             else:
                 blast_file_against_db(dir1,i)
-            dclus,clus = filter_blast.process_blast_out(tempname+".rawblastn")
+            dclus,clus = filter_blast.process_blast_out(tempdir+tempname+".rawblastn")
             if len(clus) > 0:
                 for j in clus:
                     G.add_edge(dir1+"/"+i,diro+"/"+j)
@@ -196,9 +198,9 @@ if __name__ == "__main__":
                 if len(i) > 1:
                     x = [j.replace(".fa",".aln") for j in i]
                     log.w(" ".join(["MERGING ALIGNMENTS FROM"," ".join(x)]))
-                    write_merge_table_and_temp_aln_file(x)
+                    write_merge_table_and_temp_aln_file(x,tempdir)
                     outfile = diro+"/"+"cluster"+str(origcurcount)+".aln"
-                    merge_alignments(outfile)
+                    merge_alignments(outfile,tempdir)
                     log.w(" ".join(["CREATED FROM MERGE",diro+"/cluster"+str(origcurcount)+".aln"]))
                     for j in i:
                         if diro in j:

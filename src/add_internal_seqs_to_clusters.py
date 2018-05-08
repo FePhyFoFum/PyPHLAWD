@@ -16,14 +16,14 @@ import math
 from conf import merge
 import filter_blast
 
-def add_ind_mafft(inseq,cl_file, merge):
+def add_ind_mafft(inseq,cl_file, merge,tempdir="./"):
     tf = open(cl_file,"a")
     tf.write(inseq.get_fasta())
     tf.close()
     #make temp
     if merge:
-        tf = open("subMSAtable","w")
-        tf2 = open("temp.mergealn","w")
+        tf = open(tempdir+"subMSAtable","w")
+        tf2 = open(tempdir+"temp.mergealn","w")
         count = 1
         for i in seq.read_fasta_file_iter(cl_file.replace(".fa",".aln")):
             tf2.write(i.get_fasta())
@@ -35,8 +35,8 @@ def add_ind_mafft(inseq,cl_file, merge):
         merge_alignments(cl_file.replace(".fa",".aln"))
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" indir outclu logfile"
+    if len(sys.argv) != 4 and len(sys.argv) != 5:
+        print "python "+sys.argv[0]+" indir outclu logfile [TEMPDIR]"
         sys.exit(0)
     curfas = sys.argv[1]+"/notinchildren.fas"
     if os.path.isfile(curfas) == False:
@@ -45,6 +45,13 @@ if __name__ == "__main__":
     LOGFILE = sys.argv[3]
     log = Logger(LOGFILE)
     log.a()
+
+    tempdir = "./"
+    if len(sys.argv) == 5:
+        tempdir = sys.argv[4]
+        if tempdir[-1] != "/":
+            tempdir += "/"
+
     slen = 0
     seqs = seq.read_fasta_file(curfas)
     if len(seqs)> 0:
@@ -53,9 +60,9 @@ if __name__ == "__main__":
             seqd[i.name] = i
         log.w("UNCLUSTERED SEQS IN "+sys.argv[1])
         #make blastdb of the cluster dir
-        make_blast_db_from_cluster(outclu)
+        make_blast_db_from_cluster(outclu,tempdir)
         blast_file_against_db(sys.argv[1],"notinchildren.fas")
-        dclus,clus = filter_blast.process_blast_out(tempname+".rawblastn")
+        dclus,clus = filter_blast.process_blast_out(tempdir+tempname+".rawblastn")
         for i in dclus:
-            add_ind_mafft(seqd[i],outclu+"/"+dclus[i],merge)
+            add_ind_mafft(seqd[i],outclu+"/"+dclus[i],merge,tempdir)
     log.c()

@@ -1,6 +1,8 @@
 import sys
 import os
 import tree_reader
+import emoticons
+from clint.textui import colored
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -24,6 +26,14 @@ if __name__ == "__main__":
             continue
         if i != tree:
             i.label = i.parent.label+"/"+i.label
-        os.mkdir(dirl+i.label)
-        os.mkdir(dirl+i.label+"/clusters")
+        try:
+            os.mkdir(dirl+i.label)
+        except:
+            print colored.red("PROBLEM CREATING"),dirl+i.label,colored.red(emoticons.get_ran_emot("sad"))
+            sys.exit(1)
+        try:
+            os.mkdir(dirl+i.label+"/clusters")
+        except:
+            print colored.red("PROBLEM CREATING"),dirl+i.label+"/clusters",colored.red(emoticons.get_ran_emot("sad"))
+            sys.exit(1)
     

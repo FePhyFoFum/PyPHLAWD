@@ -6,6 +6,7 @@ from logger import Logger
 from add_clade_clusters import write_merge_table_and_temp_aln_file as wmtt
 from add_clade_clusters import merge_alignments
 import seq
+import emoticons
 
 
 def write_fasta_file(files,outfilen):
@@ -16,13 +17,22 @@ def write_fasta_file(files,outfilen):
     outfile.close()
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" startdir tablefile logfile"
+    if len(sys.argv) != 4 and len(sys.argv) != 5:
+        print "python "+sys.argv[0]+" startdir tablefile logfile [TEMPDIR]"
         sys.exit(0)
     d = sys.argv[1]
     tablefile=sys.argv[2]
     LOGFILE = sys.argv[3]
     log = Logger(LOGFILE)
+    
+    # read the temp directory if there is one
+    if len(sys.argv) == 4:
+        TEMPDIR = "./"
+    else:
+        TEMPDIR = sys.argv[4]
+        if TEMPDIR[-1] != "/":
+            TEMPDIR += "/"
+    
     outclu = d+"/clusters/"
     #TODO: need to make sure that the seqs that are in the DIR that aren't in the children get clustered and included here
     #   1 make a tempfile with the seqs that aren't in children
@@ -33,7 +43,7 @@ if __name__ == "__main__":
     for c in dirs:
         if "environmental" in c or "clusters" in c:
             continue
-        print colored.green("  ADDING"),c
+        print colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh"))
         cur =  c+"/clusters"
         for i in os.listdir(cur):
             if i[-3:] == ".fa":
@@ -41,10 +51,10 @@ if __name__ == "__main__":
                     joinseqs[i] = []
                 joinseqs[i].append(cur+"/"+i)
     for i in joinseqs:
-        print colored.red("    MERGING"),i
+        print colored.green("    MERGING"),i,colored.green(emoticons.get_ran_emot("meh"))
         write_fasta_file(joinseqs[i],outclu+i)
-        wmtt([j.replace(".fa",".aln") for j in joinseqs[i]])
-        merge_alignments(outclu+i.replace(".fa",".aln"))
+        wmtt([j.replace(".fa",".aln") for j in joinseqs[i]],TEMPDIR)
+        merge_alignments(outclu+i.replace(".fa",".aln"),TEMPDIR)
 
     """
     cmd = "python "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE

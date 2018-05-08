@@ -23,8 +23,8 @@ def make_files(clus, infile, outfiledir):
         outf.close()
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" indir logfile"
+    if len(sys.argv) != 3 and len(sys.argv) != 4:
+        print "python "+sys.argv[0]+" indir logfile [TEMPDIR]"
         sys.exit(0)
     if sys.argv[1][-1] == "/":
         sys.argv[1]=sys.argv[1][:-1]
@@ -37,7 +37,16 @@ if __name__ == "__main__":
         sys.exit(0)
     LOGFILE = sys.argv[2]
     log = Logger(LOGFILE)
-    cmd = "blastn -db "+tempname+".db -query "+INFILE+".fas -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+INFILE+".fasta.rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+
+    # read the temp directory if there is one
+    if len(sys.argv) == 3:
+        TEMPDIR = "./"
+    else:
+        TEMPDIR = sys.argv[3]
+        if TEMPDIR[-1] != "/":
+            TEMPDIR += "/"
+
+    cmd = "blastn -db "+TEMPDIR+tempname+".db -query "+INFILE+".fas -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+INFILE+".fasta.rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     log.wac("RUNNING "+cmd)
     os.system(cmd)
 
