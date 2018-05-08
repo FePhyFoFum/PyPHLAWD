@@ -8,7 +8,7 @@ permalink: /install/
 PyPHLAWD should be easy to setup (or that is the hope). There are a few programs that it requires (listed below). These need to be in the PATH (so when you type the program, like `mafft`, it just runs). You should use the instructions on these pages to help you install for your machine. If you are running linux, it is significantly simpler because many of these are in your repos (e.g., `sudo apt-get`...). 
 
 ### Requirements
-- a database created by `PHLAWD` or the `phlawd_db_maker` (_COMING SOON:_ or your own sequences). I recommend [phlawd_db_maker](https://github.com/blackrim/phlawd_db_maker) as it is simpler.
+- a database created by [`phlawd_db_maker`](https://github.com/blackrim/phlawd_db_maker) (_COMING SOON:_ or your own sequences).
 - python : version 2 
 	- you will also need python libraries for [sqlite3](https://docs.python.org/3/library/sqlite3.html#module-sqlite3), [networkx](https://github.com/networkx/networkx), and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
 	- These libraries can be installed using pip `sudo pip install networkx` and `sudo pip install clint`
