@@ -29,7 +29,7 @@ We would recommend that you use `phlawd_db_maker` to make the necessary sequence
 
 ### Setup
 
-Now that you have a database and you have the dependencies installed, you can compile the `cython` part. This will make operations on larger trees much faster. 
+Now that you have a database and you have the dependencies installed, you should clone the repository with this command `git clone https://github.com/FePhyFoFum/PyPHLAWD.git`. Then we should compile the `cython` part. This will make operations on larger trees much faster. To compile this, go into the `src` directory (`cd PyPHLAWD/src`) and type `bash compile_cython.sh`. Hopefully `cython` was installed and there was just some output but no error. You don't need to do anything else. Stuff will just work. 
 
 ## Using virtualenv for clusters or other systems
 There are some situations where it might be easier to install PyPHLAWD using virtualenv. In particular, this may be the easiest way to install on a cluster. To do this, you will need to install `pip` (or already have `pip` installed). If you have a linux distribution with a package manager, you can install it with that. If you have to get and install pip, you can use the instructions [here](http://thelazylog.com/install-python-as-local-user-on-linux/). Basically,  `wget --no-check-certificate https://bootstrap.pypa.io/get-pip.py -O - | python - --user`, then edit `~/.bashrc` or `~/.bashrc_profile` with `export PATH=$HOME/.local/bin:$PATH`. When you do `which pip` after this, it should point to `~/.local/bin`. 
