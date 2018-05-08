@@ -21,7 +21,7 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 - [phyx](https://github.com/FePhyFoFum/phyx/)
   - Relies upon `pxssort`, `pxrevcomp`, `pxrmt`, `pxcat`, and `pxrms`. You can only install these if you like by specifying `make pxssort pxrevcomp pxrmt pxcat pxrms` instead of just `make` or `make all` when installing `phyx`. More instructions can be found at the [`phyx` website](https://github.com/FePhyFoFum/phyx/).
 - [cython](cython.org/) : This is optional but will speed up some functions
-  -cython can be installed using pip `sudo pip install cython` or if you are running linux, you can do `sudo apt install python-cython`
+  -cython can be installed using pip `sudo pip install cython` or if you are running linux, you can do `sudo apt install cython`
 
 ### Database
 
