@@ -11,4 +11,4 @@ The files necessary to run this example can be found in the `examples/baited` di
 
 We are going to assume that you have already installed everything. This animation below starts from cloning the repo but assumes that all the dependencies are installed.
 
-![setting things up]({{ site.url }}/assets/img/bait_ex_1.gif)
+![setting things up]({{ site.url }}/PyPHLAWD/assets/img/bait_ex_1.gif)
