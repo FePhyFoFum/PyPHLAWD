@@ -6,12 +6,16 @@ permalink: /runs/
 
 This assumes that you have already setup things as per the [installation instructions](https://fephyfofum.github.io/PyPHLAWD/install/).
 
+In addition to the information below, there are two examples with more detailed information: [one bait run](https://fephyfofum.github.io/PyPHLAWD/runs/bait_ex/) and [one clustering run](https://fephyfofum.github.io/PyPHLAWD/runs/clustering_ex/). 
+
 ## Running 
+
 There are two basic ways to run PyPHLAWD (the outdir must exist):
 - `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/`
 - `python setup_clade_bait.py Dipsacales bait_dir/ PHLAWD_DBS/pln.db OUTDIR/`
 
 ### conf.py
+
 There is a configuration file that has some basic configuration settings. You will probably need to at least change the `DI` setting. This is the location of the PyPHLAWD scripts that you downloaded. The other settings are described below. 
 
 ```
