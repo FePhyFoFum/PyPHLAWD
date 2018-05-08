@@ -176,7 +176,7 @@ if __name__ == "__main__":
                 else:
                     blast_file_against_db(dir1,i,tempdir)
             else:
-                blast_file_against_db(dir1,i)
+                blast_file_against_db(dir1,i,tempdir)
             dclus,clus = filter_blast.process_blast_out(tempdir+tempname+".rawblastn")
             if len(clus) > 0:
                 for j in clus:
