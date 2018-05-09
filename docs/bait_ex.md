@@ -5,7 +5,7 @@ permalink: /runs/bait_ex/
 ---
 # Bait Run Example
 
-The files necessary to run this example can be found in the `examples/baited` directory. There is a `baits` directory with a few sequences (not comprehensive) for `ITS`, `matK`, `rbcL`, and `trnLF`. With this example, we will conduct a baited run for PyPHLAWD on the `Dipsacales` plant clade. 
+The files necessary to run this example can be found in the `examples/baited` directory. There is a `baits` directory with a few sequences (not comprehensive) for `ITS`, `matK`, `rbcL`, and `trnLF`. With this example, we will conduct a baited run for PyPHLAWD on the `Adoxaceae` plant clade. 
 
 ## Setting things up
 
@@ -40,3 +40,5 @@ Inside the `Adoxaceae_4206` that is created, there will be an `info.html`. Below
 The files that are found in `Adoxaceae_4206/clusters` directory include unaligned and aligned fasta files with ids corresponding to GenBank IDs. Below we should how you can change those to NCBI taxon ids (e.g., so they can be concatenated).
 
 ![names]({{ site.url }}/PyPHLAWD/assets/img/bait_ex_4.gif)
+
+You can see the clustering analyses [here](https://fephyfofum.github.io/PyPHLAWD/runs/clustering_ex/).
