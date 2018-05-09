@@ -48,3 +48,7 @@ emoticons = True
 
 #cython
 usecython = True
+
+#find good clusters things
+smallest_cluster = 20
+cluster_prop = 0.2

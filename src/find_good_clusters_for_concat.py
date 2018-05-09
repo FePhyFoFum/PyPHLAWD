@@ -6,6 +6,8 @@ from conf import DI
 from conf import relcut
 from conf import abscut
 from conf import usecython
+from conf import smallest_cluster
+from conf import cluster_prop
 if usecython:
     import cnode as node
 else:
@@ -19,9 +21,6 @@ post_process_cluster_info.py startdir
 mat_nms = []
 clusterind = {}
 keepers = set()#node
-percent = 0.2
-atleastlength = 20
-
 
 def record_info_table(infilecsv):
     tf = open(infilecsv,"r")
@@ -58,7 +57,7 @@ def check_info_table(tree):
                 inter = set(i.data["names"]).intersection(set(mat_nms[j]))
                 pinter = set(i.parent.data["names"]).intersection(set(mat_nms[j]))
                 if len(inter) > 0 and len(pinter) == len(inter) and len(inter) == len(mat_nms[j]):
-                    if len(inter) / float(len(i.data["names"])) > percent and len(inter) > atleastlength:
+                    if len(inter) / float(len(i.data["names"])) > cluster_prop and len(inter) > smallest_cluster:
                         print i.label,clusterind[j],len(inter),len(i.data["names"])
                         keepers.add(clusterind[j].replace(".fa",".aln"))
         else:
@@ -66,11 +65,11 @@ def check_info_table(tree):
                 inter = set(i.data["names"]).intersection(set(mat_nms[j]))
                 keep = False
                 if len(i.data["names"]) > 100:
-                    if len(inter)/float(len(i.data["names"])) > percent:
+                    if len(inter)/float(len(i.data["names"])) > cluster_prop:
                         print clusterind[j],len(inter),len(i.data["names"])
                         keep = True
                 else:
-                    if len(inter)/float(len(i.data["names"])) > percent+0.5:
+                    if len(inter)/float(len(i.data["names"])) > cluster_prop+0.5:
                         print clusterind[j],len(inter),len(i.data["names"])
                         keep = True
                 if keep == True:
@@ -174,7 +173,7 @@ if __name__ == "__main__":
             cmd = "pxcat -s "+" ".join([i+".rn" for i in keeps])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
             #print cmd
             os.system(cmd)
-        constraint = raw_input("Do you want to make a constraint? y/n")
+        constraint = raw_input("Do you want to make a constraint? y/n ")
         if constraint == 'y':
             dbname = raw_input("Where is the DB? ")
             baseid = raw_input("What is the baseid? ")
