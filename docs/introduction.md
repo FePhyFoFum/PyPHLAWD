@@ -3,8 +3,7 @@ layout: page
 title: Introduction
 permalink: /introduction/
 ---
-
-# About
+## About
 
 PyPHLAWD is an updated version of [PHLAWD](https://github.com/blackrim/phlawd) written in python that has significant improvements and expansions. In addition to baited runs, PyPHLAWD can also do clustering. Specifically, this uses the tip-to-root clustering method as a basis for identifying orthology to assemble large phylogenetic trees. Many of the scripts in PyPHLAWD may be run separately allowing the functions of the program to be performed without requiring the full analysis. You can find several how-tos and tutorials and other information for specific scripts in different parts of the website.
 
