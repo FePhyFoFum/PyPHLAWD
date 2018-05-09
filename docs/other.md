@@ -3,12 +3,17 @@ layout: page
 title: Other
 permalink: /other/
 ---
+This page serves to describe some other information on particular analyses.
+
 ## Finding good clusters
 
 There is a script that can be useful for finding good clusters to use for concatenation. A user can always check the `info.html` or investigate specific clusters, but there are times that you might want to try and automate the discovery of good clusters. The script is run with the command `python src/find_good_clusters_for_concat.py startdir`. The `startdir` refers to the directory that you created with the PyPHLAWD analysis. This script will check for clusters that have at least a certain proportion of taxa represented based on the number in NCBI (the `cluster_prop` in `conf.py`) and at least a certain size (the `smallest_cluster` in `conf.py`). This checks from tip to root so if there is a genus that has good representation for a gene, it will include that even if it doesn't have good representation in the deeper clade. Here is a demonstration of the script from the [clustering example](https://fephyfofum.github.io/PyPHLAWD/runs/clustering_ex/).
 
 ![clusters]({{ site.url }}/PyPHLAWD/assets/img/clus_ex_3.gif)
 
+## Tip-to-root clustering
+
+PyPHLAWD uses a tip-to-root clustering process that works to identify orthologous sequences based upon previously determined phylogenetic relationships. In the case of PyPHLAWD the taxonomy as input on NCBI is used for this. Initial clusters are formed at the tips through an all-by-all blast approach (user specified settings), followed by a Markov clustering approach as implemented in MCL. The sequences are then aligned using mafft and this process is performed for every tip. The tips are then combined in a postorder fashion (tip-to-root). PyPHLAWD selects the longest sequence from a tip cluster and compares that to its closest related sister cluster as identified through the NCBI taxonomy.
 
 ## Using your own sequences
 
