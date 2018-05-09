@@ -8,8 +8,8 @@ This assumes that you have already setup things as per the [installation instruc
 
 In addition to the information below, there are two examples with more detailed information: 
 
-- [one bait run](https://fephyfofum.github.io/PyPHLAWD/runs/bait_ex/)
-- [one clustering run](https://fephyfofum.github.io/PyPHLAWD/runs/clustering_ex/)
+- [**bait run**](https://fephyfofum.github.io/PyPHLAWD/runs/bait_ex/)
+- [**clustering run**](https://fephyfofum.github.io/PyPHLAWD/runs/clustering_ex/)
 
 ## Running 
 
