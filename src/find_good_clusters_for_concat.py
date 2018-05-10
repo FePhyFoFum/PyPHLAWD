@@ -2,12 +2,15 @@ import sys
 import os
 import shlex
 import subprocess
+import check_for_programs
 from conf import DI
 from conf import relcut
 from conf import abscut
 from conf import usecython
 from conf import smallest_cluster
 from conf import cluster_prop
+import emoticons
+from clint.textui import colored
 if usecython:
     import cnode as node
 else:
@@ -77,6 +80,9 @@ def check_info_table(tree):
     return
 
 def make_trim_trees(alignments):
+    if check_for_programs.which_program("FastTree") == None:
+        print colored.red("FastTree NOT IN PATH"),colored.red(emoticons.get_ran_emot("sad"))
+        sys.exit(1)
     newalns = {}
     for i in alignments:
         print "making tree for",i
