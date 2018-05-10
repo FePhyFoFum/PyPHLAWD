@@ -15,4 +15,7 @@ The first use of PyPHLAWD was in
 The program is describe in 
 - Smith, S. A. and J. F. Walker. _in review_. PyPHLAWD: a python package for phylogenetic dataset construction
 
-PyPHLAWD is currently in a rolling release format. You can refer to your current version if you `git clone` the repository by running the command `git rev-parse HEAD` inside the PyPHLAWD directory. That will give you the hash for the version you are running.
+PyPHLAWD is currently in a rolling release format. You can refer to your current version if you `git clone` the repository by running the command `python logo.py`. That will give you the hash for the version you are running as below
+
+
+![logo]({{ site.url }}/PyPHLAWD/assets/img/logo.gif)
