@@ -25,6 +25,8 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 
 ### Database
 
+There are _some_ prebuilt databases [here](http://141.211.236.35:10998/). The files are big (many GBs so it may take time). If there is one that isn't listed, put an [issue](https://github.com/FePhyFoFum/PyPHLAWD/issues) in github or make one with the instructions below.
+
 We would recommend that you use `phlawd_db_maker` to make the necessary sequence database. You will want to make a database (e.g., `phlawd_db_maker pln ~/PHLAWD_DBS/pln.db`). This will be used if you are using NCBI sequences (if you are using something else, see that section below). 
 
 ### Post installation setup
