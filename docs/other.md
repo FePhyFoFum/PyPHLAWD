@@ -11,6 +11,10 @@ There is a script that can be useful for finding good clusters to use for concat
 
 ![clusters]({{ site.url }}/PyPHLAWD/assets/img/clus_ex_3.gif)
 
+## Excluding taxa or sequences
+
+PyPHLAWD allows you to exclude bad sequences or patterns that can be found in the sequence name or description. For example, in the `bad_taxa.py` users can place NCBI taxon ids and in `bad_seqs.py` users can place NCBI GenBank ids. IDs found in these files will be excluded during the analysis. There are already some placed in there that the user can delete or add to. In addition to these, there are also the files `exclude_patterns.py` and `exclude_desc_patterns.py`. In `exclude_patterns.py` you will find text that if found in the species name, it will be skipped. In `exclude_desc_patterns.py` you will find text that if found in the sequence description it will be skipped. The user can edit these as they like. 
+
 ## Tip-to-root clustering
 
 PyPHLAWD uses a tip-to-root clustering process that works to identify orthologous sequences based upon previously determined phylogenetic relationships. In the case of PyPHLAWD the taxonomy as input on NCBI is used for this. Initial clusters are formed at the tips through an all-by-all blast approach (user specified settings), followed by a Markov clustering approach as implemented in MCL. The sequences are then aligned using mafft and this process is performed for every tip. The tips are then combined in a postorder fashion (tip-to-root). PyPHLAWD selects the longest sequence from a tip cluster and compares that to its closest related sister cluster as identified through the NCBI taxonomy.
