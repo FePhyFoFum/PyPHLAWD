@@ -12,7 +12,7 @@ PyPHLAWD is an updated version of [PHLAWD](https://github.com/blackrim/phlawd) w
 The first use of PyPHLAWD was in 
 - Smith, S. A. and J. W. Brown. 2018. Constructing a broadly inclusive seed plant phylogeny. _American Journal of Botany_ 105(3): 1–13. [link](https://onlinelibrary.wiley.com/doi/abs/10.1002/ajb2.1019)
 
-The program is describe in 
+The program is described in 
 - Smith, S. A. and J. F. Walker. _in review_. PyPHLAWD: a python package for phylogenetic dataset construction
 
 PyPHLAWD is currently in a rolling release format. You can refer to your current version if you `git clone` the repository by running the command `python logo.py`. That will give you the hash for the version you are running as below

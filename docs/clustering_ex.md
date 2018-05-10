@@ -5,7 +5,7 @@ permalink: /runs/clustering_ex/
 ---
 # Clustering Run Example
 
-In the example below, I conduct the run in the `examples/clustered` directory but there isn't really anything there. It is just a space for conducting the analyses.With this example, we will conduct a clustering run for PyPHLAWD on the `Adoxaceae` plant clade.
+In the example below, I conduct the run in the `examples/clustered` directory but there isn't really anything there. It is just a space for conducting the analyses. With this example, we will conduct a clustering run for PyPHLAWD on the `Adoxaceae` plant clade.
 
 ## Setting things up
 
