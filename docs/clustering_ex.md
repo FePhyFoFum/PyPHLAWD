@@ -13,11 +13,24 @@ We are going to assume that you have already installed all the dependencies (if 
 
 ![setting things up]({{ site.url }}/PyPHLAWD/assets/img/clus_ex_1.gif)
 
+Commands from gif
+
+- `git clone https://github.com/FePhyFoFum/PyPHLAWD.git`
+- `cd PyPHLAWD/src`
+- `bash compile_cython.sh`
+- edit `conf.py` changing the `DI` to the directory where PyPHLAWD `src` is, changing the `smallest_size=500`, and changing `length_limit=0.5`
+- `cd ../examples/clustered`
+- `python ../../src/setup_clade.py Adoxaceae ~/Desktop/pln.041118.db . log.md.gz`
+
 ## Starting a run
 
 We have the run going now (and the gif is a little sped up). But all of the commands can be found in the `log.md.gz` that is created. Check out the baited example [here](https://fephyfofum.github.io/PyPHLAWD/runs/bait_ex/) if you want to see what that file looks like.
 
 ![starting a run]({{ site.url }}/PyPHLAWD/assets/img/clus_ex_2_fast.gif)
+
+Commands from gif
+
+- `python ../../src/setup_clade.py Adoxaceae ~/Desktop/pln.041118.db . log.md.gz`
 
 ## Looking at the results
 
@@ -31,11 +44,23 @@ You can manually pick what clusters you like or you can use a script called `fin
 
 ![clusters]({{ site.url }}/PyPHLAWD/assets/img/clus_ex_3.gif)
 
+Commands from gif
+
+- `python ../../src/find_good_clusters_for_concat.py Adoxaceae_4206/`
+- `Do you want to rename these clusters? y/n/#` `y`
+- `Do you want to make trees and trim tips for these gene regions y/n` `n`
+- `Do you want to concat? y/n` `y`
+- `Do you want to make a constraint? y/n` `n` 
+
 ## Changing the names
 
 I went ahead and conducted a phylogenetic analysis on the concatenated dataset from the above procedure. The resulting tree has NCBI taxon ids as the tip labels. I haven't memorized these so I need taxon labels. To change that, you can use the script `change_ncbi_to_name_tre.py` as demonstrated below.
 
 ![names]({{ site.url }}/PyPHLAWD/assets/img/clus_ex_4.gif)
+
+Commands from gif
+
+- `python ../../src/change_ncbi_to_name_tre.py Adoxaceae_4206/Adoxaceae_4206.table Adoxaceae_4206/RAxML_bestTree.ADOX Adoxaceae_4206/RAxML_bestTree.ADOX.cn`
 
 ## What is in the directory
 
