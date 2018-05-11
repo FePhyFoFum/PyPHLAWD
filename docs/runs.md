@@ -42,7 +42,7 @@ If you edit this file, be sure to save your copy before you `git pull` as it wil
  - `evalue_limit` : This value you can gauge based on your typical usage with blast. For nucleotide sequences, we often use `10e-10` and for protein `10e-4`. However, there are no great rules (see [Smith and Pease 2017](https://academic.oup.com/bib/article/18/3/451/2453289) ) for some discussion.
 
 ### Clustering runs
-Clustering runs use both `blast` and `mcl` to cluster sequences. They can also break clusters by trees as in Yang and Smith 2014 and Yang et al. 2015 but this hasn't been necessary yet with testing and so it is turned off by default. To run a clustering run you run `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/` where `Dipsacales` is the name in NCBI, `PHLAWD_DBS/pln.db` is where ever the relevant database is that was made with `phlawd_db_maker`, and `OUTDIR/` is where ever you want the resulting directory to be.
+Clustering runs use both `blast` and `mcl` to cluster sequences. They can also break clusters by trees as in Yang and Smith 2014 and Yang et al. 2015 but this hasn't been necessary yet with testing and so it is turned off by default. To run a clustering run you run `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/ logfile` where `Dipsacales` is the name in NCBI, `PHLAWD_DBS/pln.db` is where ever the relevant database is that was made with `phlawd_db_maker`, and `OUTDIR/` is where ever you want the resulting directory to be.
 
 ### Bait runs
 In addition to the clustering runs (that will look at all the available data, you can also look at only the gene regions you're interest in (as the old PHLAWD).
@@ -52,8 +52,8 @@ Bait files need to be in a directory and need to have the file ending `.fa` or `
 
 ### Subsetting taxa
 With either of the above runs types, you can limit what taxa are considered. For this, you will need a file that has an ncbi id on each line. These will be the only ones considered. Then you run like:
-- `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/ taxalist` 
-- `python setup_clade_bait.py Dipsacales bait_dir/ PHLAWD_DBS/pln.db OUTDIR/ taxalist` 
+- `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/ logfile taxalist` 
+- `python setup_clade_bait.py Dipsacales bait_dir/ PHLAWD_DBS/pln.db OUTDIR/ logfile taxalist` 
 
 There is a helper script that will help make your taxa list file. If you have a file that has `Genus species` on each line, you can use the script 
 - `python get_ncbi_ids_for_names.py names_file PHLAWD_DBS/pln.db > taxalist`
