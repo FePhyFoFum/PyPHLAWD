@@ -13,6 +13,15 @@ We are going to assume that you have already installed all the dependencies (if 
 
 ![setting things up]({{ site.url }}/PyPHLAWD/assets/img/bait_ex_1.gif)
 
+Commands from gif
+
+- `git clone https://github.com/FePhyFoFum/PyPHLAWD.git`
+- `cd PyPHLAWD/src`
+- `bash compile_cython.sh`
+- edit `conf.py` changing the `DI` to the directory
+- `cd ../examples/baited`
+- `python ../../src/setup_clade_bait.py Adoxaceae baits/ ~/Desktop/pln.041118.db . log.md.gz`
+
 ## Starting a run
 
 Now we are going to start a baited run using the bait in the `baits` directory in the `examples/baited` directory. For this example, we are going to conduct the analysis on Adoxaceae. We need to have a database of the plant sequences from GenBank (constructed using `phlawd_db_maker` or downloaded from another source). We also provide a directory to put the results (the `.` refers to the current directory). Finally, we give an output filename (here, `log.md.gz`). The log file will be gzipped so that it isn't too big and in a markdown format with each command that is run recorded.
