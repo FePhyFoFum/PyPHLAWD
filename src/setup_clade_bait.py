@@ -8,7 +8,7 @@ from datetime import datetime
 
 if __name__ == "__main__":
     if len(sys.argv) != 6 and len(sys.argv) != 7:
-        print "python "+sys.argv[0]+" taxon baitdir db dirl logfile [taxalist]"
+        print "python "+sys.argv[0]+" taxon baitdir db outdir logfile [taxalist]"
         sys.exit(0)
     
     print colored.blue("STARTING PYPHLAWD (baited) "+emoticons.get_ran_emot("excited"))

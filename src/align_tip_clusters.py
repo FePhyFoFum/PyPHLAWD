@@ -49,6 +49,7 @@ if __name__ == "__main__":
                 #end using pxssort and pxrevcomp
                 log.w("ALIGNING FROM "+inf+" TO "+ouf)
                 os.system(alc.replace("INFILE",inf).replace("OUTFILE",ouf))
+                os.system("rm mafft.out")
                 if revcomp == 0:
                     if mac == False:
                         os.system("sed -i 's/_R_//g' "+ouf)

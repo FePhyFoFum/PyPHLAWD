@@ -15,8 +15,8 @@ In addition to the information below, there are two examples with more detailed 
 
 There are two basic ways to run PyPHLAWD (the outdir must exist):
 
-- `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/`
-- `python setup_clade_bait.py Dipsacales bait_dir/ PHLAWD_DBS/pln.db OUTDIR/`
+- `python setup_clade.py Dipsacales PHLAWD_DBS/pln.db OUTDIR/ logfile`
+- `python setup_clade_bait.py Dipsacales bait_dir/ PHLAWD_DBS/pln.db OUTDIR/ logfile`
 
 ### conf.py
 
