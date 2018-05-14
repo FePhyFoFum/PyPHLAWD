@@ -32,7 +32,7 @@ def add_ind_mafft(inseq,cl_file, merge,tempdir="./"):
         tf2.write(inseq.get_fasta())
         tf.close()
         tf2.close()
-        merge_alignments(cl_file.replace(".fa",".aln"))
+        merge_alignments(cl_file.replace(".fa",".aln"),tempdir)
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         log.w("UNCLUSTERED SEQS IN "+sys.argv[1])
         #make blastdb of the cluster dir
         make_blast_db_from_cluster(outclu,tempdir)
-        blast_file_against_db(sys.argv[1],"notinchildren.fas")
+        blast_file_against_db(sys.argv[1],"notinchildren.fas",tempdir)
         dclus,clus = filter_blast.process_blast_out(tempdir+tempname+".rawblastn")
         for i in dclus:
             add_ind_mafft(seqd[i],outclu+"/"+dclus[i],merge,tempdir)
