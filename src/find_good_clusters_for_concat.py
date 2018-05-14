@@ -182,7 +182,8 @@ if __name__ == "__main__":
         constraint = raw_input("Do you want to make a constraint? y/n ")
         if constraint == 'y':
             dbname = raw_input("Where is the DB? ")
-            baseid = raw_input("What is the baseid? ")
+            #baseid = raw_input("What is the baseid? ")
+            baseid = cld.split("_")[-1]
             if len(dbname) > 2 and len(baseid) > 2:
                 cmd = "python "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+cld+"/"+rtn+"_outaln > "+cld+"/"+rtn+"_outaln.constraint.tre"
                 os.system(cmd)
