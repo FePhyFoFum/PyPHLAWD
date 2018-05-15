@@ -115,7 +115,7 @@ def merge_alignments(outfile,tempdir="./"):
         sys.exit(1)
     #for some buggy reason these can be unaligned, so realigning here
     if check_unaligned(outfile) == False:
-        print colored.red("PROBLEM REDOING ALIGNMENT"+" "+emoticons.get_ran_emot("sad"))
+        print colored.red("PROBLEM REDOING ALIGNMENT ("+outfile+")"+" "+emoticons.get_ran_emot("sad"))
 
         #log.w("PROBLEM REDOING ALIGNMENT")
         copyfile(tempdir+"subMSAtable","problem_subMSAtable")
