@@ -10,7 +10,7 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 
 ### Requirements
 
-- a database created by [`phlawd_db_maker`](https://github.com/blackrim/phlawd_db_maker) (_COMING SOON:_ or your own sequences).
+- a database created by [`phlawd_db_maker`](https://github.com/blackrim/phlawd_db_maker) (_COMING SOON:_ or your own sequences). You can grab a premake one for many databases [here](http://141.211.236.35:10998/).
 - python : version 2
   - you will also need python libraries for [sqlite3](https://docs.python.org/3/library/sqlite3.html#module-sqlite3), [networkx](https://github.com/networkx/networkx), and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
   - These libraries can be installed using pip `sudo pip install networkx` and `sudo pip install clint`. If you are running linux you can probably do `sudo apt install python-networkx python-sqlite python-clint`
