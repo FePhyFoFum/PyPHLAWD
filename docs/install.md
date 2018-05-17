@@ -14,10 +14,10 @@ PyPHLAWD should be easy to setup (or that is the hope). There are a few programs
 - python : version 2
   - you will also need python libraries for [sqlite3](https://docs.python.org/3/library/sqlite3.html#module-sqlite3), [networkx](https://github.com/networkx/networkx), and [clint](https://pypi.python.org/pypi/clint) (for text coloring)
   - These libraries can be installed using pip `sudo pip install networkx` and `sudo pip install clint`. If you are running linux you can probably do `sudo apt install python-networkx python-sqlite python-clint`
-- [mafft](http://mafft.cbrc.jp/alignment/software/) : You will need a recent version (>=v7.3 works well) that has threading and merging. If you are running linux, you can probably run `sudo apt install mafft`
+- [mafft](http://mafft.cbrc.jp/alignment/software/) : You will need a recent version (>=v7.3 works well) that has threading and merging. If you are running linux, you can probably run `sudo apt install mafft` or `brew install mafft` on Mac (with homebrew)
 - [FastTree](http://www.microbesonline.org/fasttree/) : (if you have `treemake` on)
-- [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well. You can install this with `sudo apt install ncbi-blast+`
-- [mcl](http://micans.org/mcl/) : Markov clustering for the clustering runs (you won't need this if you only bait). If you are on linux, you can run `sudo apt install mcl`
+- [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) : Currently, this runs `blastn` and `makeblastdb` from the blast+ package. Soon, it will use `blastp` as well. You can install this with `sudo apt install ncbi-blast+` or `brew install blast` on Mac (with homebrew)
+- [mcl](http://micans.org/mcl/) : Markov clustering for the clustering runs (you won't need this if you only bait). If you are on linux, you can run `sudo apt install mcl` or `brew install brewsci/bio/mcl` on Mac (with homebrew)
 - [phyx](https://github.com/FePhyFoFum/phyx/)
   - Relies upon `pxssort`, `pxrevcomp`, `pxrmt`, `pxcat`, and `pxrms`. You can only install these if you like by specifying `make pxssort pxrevcomp pxrmt pxcat pxrms` instead of just `make` or `make all` when installing `phyx`. Then you want to do `sudo make install` so these go in your PATH. More instructions can be found at the [`phyx` website](https://github.com/FePhyFoFum/phyx/).
 - [cython](cython.org/) : This is optional but will speed up some functions
