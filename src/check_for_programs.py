@@ -16,4 +16,5 @@ def which_program(program):
 
     return None
 
-print which_program("FastTree")
+if __name__ == "__main__":
+    print which_program("FastTree")
