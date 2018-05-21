@@ -66,16 +66,8 @@ def check_info_table(tree):
         else:
             for j in clusterind:
                 inter = set(i.data["names"]).intersection(set(mat_nms[j]))
-                keep = False
-                if len(i.data["names"]) > 100:
-                    if len(inter)/float(len(i.data["names"])) > cluster_prop:
-                        print clusterind[j],len(inter),len(i.data["names"])
-                        keep = True
-                else:
-                    if len(inter)/float(len(i.data["names"])) > cluster_prop+0.5:
-                        print clusterind[j],len(inter),len(i.data["names"])
-                        keep = True
-                if keep == True:
+                if len(inter)/float(len(i.data["names"])) > cluster_prop and len(inter) > smallest_cluster:
+                    print clusterind[j],len(inter),len(i.data["names"])
                     keepers.add(clusterind[j].replace(".fa",".aln"))
     return
 
