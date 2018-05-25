@@ -66,7 +66,7 @@ def make_cluster_table(cld, idn,idd, outfile):
     htmlf.write(htmlbegin)
     htmlf.write('<div class="row"><div class="col">\n<pre>\n     ___       ___  __ ____   ___ _      _____ \n    / _ \__ __/ _ \/ // / /  / _ | | /| / / _ \ \n   / ___/ // / ___/ _  / /__/ __ | |/ |/ / // /\n  /_/   \_, /_/  /_//_/____/_/ |_|__/|__/____/ \n       /___/                                  </pre></div>\n')
     htmlf.write('<div class="col"><br><h1>'+name+'</h1></div>\n</div>\n')
-    htmlf.write("<div class=\"row\">\n<div class=\"col-sm-2\">\n")
+    htmlf.write("<div class=\"row\">\n<div class=\"col-sm-3\">\n")
     htmlc = hl.table(links,style=None,border=None,cellpadding=None,classs="table",header_row=fhr)
     htmlf.write(htmlc)
     htmlf.write("</div>\n<div class=\"col\">\n")
