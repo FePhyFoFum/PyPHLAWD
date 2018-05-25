@@ -8,7 +8,7 @@ if DI[-1] != "/":
 tempname = "temp.fas"
 
 #smallest seq size
-smallest_size = 600
+smallest_size = 500
 
 #sample size for blast and comps
 dosamp = True
@@ -27,7 +27,7 @@ treemake = False
 merge = True
 
 #blast bits
-length_limit = 0.65
+length_limit = 0.55
 evalue_limit = 10e-10
 evalue_limit_lc = 10e-20
 perc_identity = 20
