@@ -3,6 +3,29 @@ import os
 import seq
 import HTML as hl
 
+htmlbegin ="""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <title>PyPHLAWD results</title>
+</head>
+<body>
+<main role="main" class="container">
+"""
+
+htmlend ="""
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+</main>
+
+
+</body>
+</html>
+"""
+
 def make_cluster_table(cld, idn,idd, outfile):
     cli = {}
     clns = []
@@ -21,18 +44,18 @@ def make_cluster_table(cld, idn,idd, outfile):
         avl = avl/float(num)
         cli[i] = sps
         if len(sps) > 2:
-            clns.append([hl.link(i,"clusters/"+i),len(sps),avl,firstdef])
+            clns.append([hl.link(i,"clusters/"+i),len(sps),format(avl,'.4f'),firstdef])
     
     clns = sorted(clns, key=lambda x: x[1], reverse=True)
-    clns.insert(0,["<b>name</b>","<b>num_species</b>","<b>avg unaln len</b>","<b>defline</b>"])
+    #clns.insert(0,["<b>name</b>","<b>num_species</b>","<b>avg unaln len</b>","<b>defline</b>"])
     
     htmlf = open(outfile,"w")
-    links = []
+    fhr = None
     if os.path.isfile(cld+"/../../info.html"):
-        #htmlc = hl.link('back','../info.html')
-        links.append([hl.link('back','../info.html')])
-        #htmlf.write(htmlc)
-    
+        fhr = [hl.link('back','../info.html')]
+    else:
+        fhr = [""]   
+    links = []
     for i in os.listdir(cld+"/../"):
         if os.path.isdir(cld+"/../"+i) and "clusters" not in i:
             #htmlc = hl.link("  "+i+"  ",i+"/info.html")
@@ -40,14 +63,17 @@ def make_cluster_table(cld, idn,idd, outfile):
             #htmlf.write(htmlc)
     
     name = cld.split("/")[-2]
-    htmlf.write("<h1>"+name+"</h1>")
-    htmlf.write("<div style=\"float: left\">\n")
-    htmlc = hl.table(links,style="border: 2px solid #000000; border-collapse: collapse;")
+    htmlf.write(htmlbegin)
+    htmlf.write('<div class="row"><div class="col">\n<pre>\n     ___       ___  __ ____   ___ _      _____ \n    / _ \__ __/ _ \/ // / /  / _ | | /| / / _ \ \n   / ___/ // / ___/ _  / /__/ __ | |/ |/ / // /\n  /_/   \_, /_/  /_//_/____/_/ |_|__/|__/____/ \n       /___/                                  </pre></div>\n')
+    htmlf.write('<div class="col"><br><h1>'+name+'</h1></div>\n</div>\n')
+    htmlf.write("<div class=\"row\">\n<div class=\"col-sm-2\">\n")
+    htmlc = hl.table(links,style=None,border=None,cellpadding=None,classs="table",header_row=fhr)
     htmlf.write(htmlc)
-    htmlf.write("</div>\n<div style=\"float: left\">\n")
-    htmlc = hl.table(clns,width=600,style="border: 2px solid #000000; border-collapse: collapse;")
+    htmlf.write("</div>\n<div class=\"col\">\n")
+    htmlc = hl.table(clns,style=None,border=None,cellpadding=None,classs="table",header_row=['name','num_species','avg len','defline'])
     htmlf.write(htmlc)
-    htmlf.write("</div>\n")
+    htmlf.write("</div>\n</div>\n")
+    htmlf.write(htmlend)
     htmlf.close()
 
 #table file should be in the maindir 

@@ -242,12 +242,12 @@ class Table (object):
     def __init__(self, rows=None, border='1', style=None, width=None,
                 cellspacing=None, cellpadding=4, attribs=None, header_row=None,
                 col_width=None, col_align=None, col_valign=None,
-                col_char=None, col_charoff=None, col_styles=None):
+                col_char=None, col_charoff=None, col_styles=None, classs=None):
         """TableCell constructor"""
         self.border = border
         self.style = style
         # style for thin borders by default
-        if style == None: self.style = TABLE_STYLE_THINBORDER
+        #if style == None: self.style = TABLE_STYLE_THINBORDER
         self.width       = width
         self.cellspacing = cellspacing
         self.cellpadding = cellpadding
@@ -262,6 +262,8 @@ class Table (object):
         self.col_charoff = col_charoff
         self.col_valign  = col_valign
         self.col_styles  = col_styles
+        # added by SAS
+        self.classs      = classs
 
     def __str__(self):
         """return the HTML code for the table as a string"""
@@ -273,6 +275,7 @@ class Table (object):
         if self.cellpadding:  self.attribs['cellpadding'] = self.cellpadding
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
+        if self.classs: attribs_str += " class=\""+self.classs+"\""
         result = '<TABLE%s>\n' % attribs_str
         # insert column tags and attributes if specified:
         if self.col_width:
