@@ -10,12 +10,16 @@ this version of the file is updated to take into account the change from gi to a
 
 """
 
+# if outfilen and outfile_tbln are None, the results will be returned
 def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
-    outfile = open(outfilen,"w")
-    outfileg = None
-    if remove_genomes:
-        outfileg = open(outfilen+".genomes","w")
-    outfile_tbl = open(outfile_tbln,"w")
+    if outfilen != None and outfile_tbln != None:
+        outfile = open(outfilen,"w")
+        outfileg = None
+        if remove_genomes:
+            outfileg = open(outfilen+".genomes","w")
+        outfile_tbl = open(outfile_tbln,"w")
+    retseqs = [] # return if filenames aren't given
+    rettbs = [] # returning if filenames aren't given
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     species = []
@@ -67,34 +71,48 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
-            if remove_genomes:
-                if len(str(j[7])) > 10000:
-                    outfileg.write(">"+str(j[3])+"\n")
-                    outfileg.write(str(j[7])+"\n")
+            # we are writing
+            seqst = ">"+str(j[3]+"\n"+str(j[7]))
+            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+            if outfilen != None and outfile_tbln != None:
+                if remove_genomes:
+                    if len(str(j[7])) > 10000:
+                        outfileg.write(seqst+"\n")
+                    else:
+                        outfile.write(seqst+"\n")
                 else:
-                    outfile.write(">"+str(j[3])+"\n")
-                    outfile.write(str(j[7])+"\n")
+                    outfile.write(seqst+"\n")
+                outfile_tbl.write(tblst+"\n")
+            # we are returning
             else:
-                outfile.write(">"+str(j[3])+"\n")
-                outfile.write(str(j[7])+"\n")
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
+                retseqs.append(seqst)
+                rettbs.append(tblst)
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
         for j in l:
             childs.append(str(j[0]))
             stack.append(str(j[0]))
-    outfile.close()
-    if remove_genomes:
-        outfileg.close()
-    outfile_tbl.close()
+    # we are writing
+    if outfilen != None and outfile_tbln != None:
+        outfile.close()
+        if remove_genomes:
+            outfileg.close()
+        outfile_tbl.close()
+    # we are returning
+    else:
+        return retseqs,rettbs
 
+# if outfilen and outfile_tbln are None, the results will be returned
 def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
-    outfile = open(outfilen,"w")
-    outfileg = None
-    if remove_genomes:
-        outfileg = open(outfilen+".genomes","w")
-    outfile_tbl = open(outfile_tbln,"w")
+    if outfilen != None and outfile_tbln != None:
+        outfile = open(outfilen,"w")
+        outfileg = None
+        if remove_genomes:
+            outfileg = open(outfilen+".genomes","w")
+        outfile_tbl = open(outfile_tbln,"w")
+    retseqs = [] # return if filenames aren't given
+    rettbs = [] # returning if filenames aren't given
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     #only get the ones that are this specific taxon
@@ -137,16 +155,23 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
             continue
         if limitlist != None and str(j[1]) not in limitlist:
             continue
-        if remove_genomes:
-            if len(str(j[7])) > 10000:
-                outfileg.write(">"+str(j[3])+"\n")
-                outfileg.write(str(j[7])+"\n")
+        seqst = ">"+str(j[3]+"\n"+str(j[7]))
+        tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+        # we are writing
+        if outfilen != None and outfile_tbln != None:
+            if remove_genomes:
+                if len(str(j[7])) > 10000:
+                    outfileg.write(seqst+"\n")
+                else:
+                    outfile.write(seqst+"\n")
             else:
-                outfile.write(">"+str(j[3])+"\n")
-                outfile.write(str(j[7])+"\n")
+                outfile.write(seqst+"\n")
+            outfile_tbl.write(tblst+"\n")
+        # we are returning
         else:
-            outfile.write(">"+str(j[3])+"\n")
-            outfile.write(str(j[7])+"\n")
+            if len(str(j[7])) < 10000:
+                retseqs.append(seqst)
+                rettbs.append(tblst)
     # get the children of the taxon that have no children (and so the sequences would go here)
     keepers = []
     c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(str(taxonid),))
@@ -201,31 +226,46 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
-            if str(j[1]) in keepers:
-                if len(str(j[7])) > 10000:
-                    outfileg.write(">"+str(j[3])+"\n")
-                    outfileg.write(str(j[7])+"\n")
-                else:
-                    outfile.write(">"+str(j[3])+"\n")
-                    outfile.write(str(j[7])+"\n")
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
+            # we are writing
+            seqst = ">"+str(j[3]+"\n"+str(j[7]))
+            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+            if outfilen != None and outfile_tbln != None:
+                if str(j[1]) in keepers:
+                    if len(str(j[7])) > 10000:
+                        outfileg.write(seqst+"\n")
+                    else:
+                        outfile.write(seqst+"\n")
+                outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
+            # we are returning
+            else:
+                if str(j[1]) in keepers and len(str(j[7])) < 10000:
+                    retseqs.append(seqst)
+                    rettbs.append(tblst)
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
         for j in l:
             childs.append(str(j[0]))
             stack.append(str(j[0]))
-    outfile.close()
-    if remove_genomes:
-        outfileg.close()
-    outfile_tbl.close()
+    # we are writing
+    if outfilen != None and outfile_tbln != None:
+        outfile.close()
+        if remove_genomes:
+            outfileg.close()
+        outfile_tbl.close()
+    # we are returning
+    else:
+        return retseqs,rettbs
 
+# if you send outfile_tbln as None, it will return the results
 def make_files_with_id_justtable(taxonid, DB,outfile_tbln):
-    outfile_tbl = open(outfile_tbln,"w")
+    if outfile_tbln != None:
+        outfile_tbl = open(outfile_tbln,"w")
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     species = []
     stack = []
+    tbl = []
     stack.append(str(taxonid))
     while len(stack) > 0:
         id = stack.pop()
@@ -240,14 +280,21 @@ def make_files_with_id_justtable(taxonid, DB,outfile_tbln):
         c.execute("select * from sequence where ncbi_id = ?",(id,))
         l = c.fetchall()
         for j in l:
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
+            tbls = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+            if outfile_tbln != None:
+                outfile_tbl.write(tbls+"\n")
+            else:
+                tbl.append(tbls)
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
         for j in l:
             childs.append(str(j[0]))
             stack.append(str(j[0]))
-    outfile_tbl.close()
+    if outfile_tbln != None:
+        outfile_tbl.close()
+    else:
+        return tbl
 
 def make_files(taxon, DB,outfilen,outfile_tbln):
     outfile = open(outfilen,"w")
