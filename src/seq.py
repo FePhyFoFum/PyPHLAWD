@@ -83,6 +83,28 @@ def read_fasta_file(filename):
         seqlist.append(Sequence(templab,tempseq))
     return seqlist
 
+def read_fasta_file_return_dict(filename):
+    """given the path to a fasta file, retern a list of seq objects"""
+    fl = open(filename,"r")
+    seqdict = {} #dict of sequence objects
+    templab = ""
+    tempseq = ""
+    first = True
+    for i in fl:
+        if i[0] == ">":
+            if first == True:
+                first = False
+            else:#if not first store lastseq read
+                seqdict[templab] = Sequence(templab,tempseq)
+            templab = i.strip()[1:]
+            tempseq = ""
+        else:
+            tempseq = tempseq + i.strip()
+    fl.close()
+    if len(templab) > 0 and len(tempseq) > 0:
+        seqdict[templab] = Sequence(templab,tempseq)
+    return seqdict
+
 def read_fasta_file_iter(filename):
     """given the path to a fasta file, retern a list of seq objects"""
     fl = open(filename,"r")
