@@ -103,9 +103,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     taxalist = None
-    if args.taxalist:
-        taxalist = args.taxalist
+    if args.taxlistfile:
+        taxalist = args.taxlistfile
     
-    tree = construct_tree(args.roottaxon, args.database, args.includespecies, taxalist)
-    print tree.get_newick_repr(False)+";"
+    tree = construct_tree(args.taxon, args.database, args.includespecies, taxalist)
+    
+    if args.outfile:
+        outfile = open(args.outfile,"w")
+        outfile.write(tree.get_newick_repr(False)+";\n")
+    else:
+        print tree.get_newick_repr(False)+";"
 
