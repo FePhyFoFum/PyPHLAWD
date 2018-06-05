@@ -8,12 +8,17 @@ def which_program(program):
     if filepath:
         if is_exe(program):
             return program
+        if is_exe(program.tolower()):
+            return program.tolower()
     else:
         for path in os.environ["PATH"].split(os.pathsep):
             exe_file = os.path.join(path, program)
             if is_exe(exe_file):
                 return exe_file
-
+            prog = program.lower()
+            exe_file = os.path.join(path, prog)
+            if is_exe(exe_file):
+                return exe_file
     return None
 
 if __name__ == "__main__":
