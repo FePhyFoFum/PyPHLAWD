@@ -72,13 +72,17 @@ def check_info_table(tree):
     return
 
 def make_trim_trees(alignments):
+    fasttreename = "FastTree"
     if check_for_programs.which_program("FastTree") == None:
-        print colored.red("FastTree NOT IN PATH"),colored.red(emoticons.get_ran_emot("sad"))
-        sys.exit(1)
+        if check_for_programs.which_program("fasttree") != None:
+            fasttreename = "fasttree"
+        else:
+            print colored.red("FastTree NOT IN PATH"),colored.red(emoticons.get_ran_emot("sad"))
+            sys.exit(1)
     newalns = {}
     for i in alignments:
         print "making tree for",i
-        cmd = "FastTree -nt -gtr "+i+" > "+i.replace(".aln",".tre")+" 2> /dev/null"
+        cmd = fasttreename+" -nt -gtr "+i+" > "+i.replace(".aln",".tre")+" 2> /dev/null"
         os.system(cmd)
         cmd = "python "+DI+"trim_tips.py "+i.replace(".aln",".tre")+" "+str(relcut)+" "+str(abscut)
         #print cmd
