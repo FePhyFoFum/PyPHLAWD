@@ -1,11 +1,12 @@
 import sys
 import os
+from clint.textui import colored
+import subprocess
+
 from conf import DI
 from conf import takeouttaxondups
-from clint.textui import colored
 from logger import Logger
 import emoticons
-import subprocess
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:

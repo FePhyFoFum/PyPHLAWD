@@ -5,9 +5,10 @@ import math
 import networkx as nx
 from clint.textui import colored
 from shutil import copyfile,move
-from logger import Logger
 import platform
 plat = platform.platform()
+
+from logger import Logger
 from conf import tempname
 from conf import dosamp
 from conf import nthread

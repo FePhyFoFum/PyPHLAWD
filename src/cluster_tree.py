@@ -1,13 +1,14 @@
 import os
 import sys
 import random
-import tree_reader
 from clint.textui import colored
-from logger import Logger
+import subprocess
+
 from conf import DI
 from conf import treemake
-import subprocess
 import emoticons
+from logger import Logger
+import tree_reader
 
 def run_tree(infile,outfile):
     cmd = "FastTree -nt -gtr "+infile+" 2>fasttree.out > "+outfile

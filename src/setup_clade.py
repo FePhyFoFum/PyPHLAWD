@@ -1,10 +1,11 @@
 import os
 import sys
-import tree_reader
 from clint.textui import colored
+from datetime import datetime
+
 from conf import DI
 import emoticons
-from datetime import datetime
+import tree_reader
 
 if __name__ == "__main__":
     if len(sys.argv) != 5 and len(sys.argv) != 6:
