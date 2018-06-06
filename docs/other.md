@@ -9,6 +9,7 @@ Topics
 
 - [Finding good clusters](#finding-good-clusters)
 - [Excluding taxa or sequences](#excluding-taxa-or-sequences)
+- [Adding outgroups](#adding-outgroups)
 - [Tip-to-root clustering](#tip-to-root-clustering)
 - [Using your own sequences](#using-your-own-sequences)
 
@@ -21,6 +22,8 @@ There is a script that can be useful for finding good clusters to use for concat
 ## Excluding taxa or sequences
 
 PyPHLAWD allows you to exclude bad sequences or patterns that can be found in the sequence name or description. For example, in the `bad_taxa.py` users can place NCBI taxon ids and in `bad_seqs.py` users can place NCBI GenBank ids. IDs found in these files will be excluded during the analysis. There are already some placed in there that the user can delete or add to. In addition to these, there are also the files `exclude_patterns.py` and `exclude_desc_patterns.py`. In `exclude_patterns.py` you will find text that if found in the species name, it will be skipped. In `exclude_desc_patterns.py` you will find text that if found in the sequence description it will be skipped. The user can edit these as they like. 
+
+## Adding outgroups
 
 ## Tip-to-root clustering
 
