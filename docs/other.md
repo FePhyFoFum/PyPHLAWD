@@ -26,7 +26,47 @@ PyPHLAWD allows you to exclude bad sequences or patterns that can be found in th
 
 ## Adding outgroups
 
+A script is included in the `src/` directory called `add_outgroup_to_matrix.py`. You can run this either like `python src/add_outgroup_to_matrix.py` or just directly `src/add_outgroup_to_matrix.py`. If you do not do it directly, autocomplete may not work (feel free to post an issue if this is a problem as there are some simple solutions). This has specific arguments including:
+
+```
+usage: add_outgroup_to_matrix.py [-h] -b DATABASE -m MATRIX -p PARTS -t TAXON
+                                 -o OUTPREFIX [-mn MINOVERLAP] [-mx MAXTAXA]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -b DATABASE, --database DATABASE
+                        Database with sequences. (default: None)
+  -m MATRIX, --matrix MATRIX
+                        Concatenated matrix probably from
+                        find_good_clusters_for_concat.py (default: None)
+  -p PARTS, --parts PARTS
+                        The partition file probably from
+                        find_good_clusters_for_concat.py (default: None)
+  -t TAXON, --taxon TAXON
+                        The taxon (use the NCBI taxon id) to add. (default:
+                        None)
+  -o OUTPREFIX, --outprefix OUTPREFIX
+                        The output file prefix. (default: None)
+  -mn MINOVERLAP, --minoverlap MINOVERLAP
+  -mx MAXTAXA, --maxtaxa MAXTAXA
+```
+
+The `-b` is just the regular database. The `-m` would be the matrix from `find_good_clusters_for_concat.py` (or actually any matirx will work as long as it is in fasta aligned format). The `-p` would be the partition file formatted for RAxML. The `-t` should be the NCBI taxon id. The `-o` will be the outfile prefix. `-mn` is the minimum number of genes that are required to overlap. This will always favor those with more genes represented per taxon. The `mx` is the maximum number of taxa to add. You can run the script as many times as you like to add more outgroups like this
+
+```
+src/add_outgroup_to_matrix.py -b pln.05292018.db -m Adoxaceae_4206/Adoxaceae_4206_outaln -p Adoxaceae_4206/Adoxaceae_4206_outpart -t 49606 -o AdoxOut1 -mx 5 -mn 2
+src/add_outgroup_to_matrix.py -b pln.05292018.db -m AdoxOut1.outaln -p AdoxOut1.outpart -t 19952 -o AdoxOut2 -mx 5 -mn 2
+```
+
+In each case, a file called `AdoxOut1.table` and `AdoxOut2.table` will be produced that have the sequences that were included. 
+
 ## Changing names on a tree
+
+There are several ways to change names on the tree from ncbi to real names. The one that I find the most convenient is using the script `change_ncbi_to_name_tre_fromurl.py`. This uses a webservice and I happen to have one running. You can use it as below where the tip names are taxon ids from ncbi.
+
+```
+python src/change_ncbi_to_name_tre_fromurl.py http://141.211.236.35:10999 RAxML_bestTree.AdoxOut2 > RAxML_bestTree.AdoxOut2.cn
+```
 
 ## Tip-to-root clustering
 
