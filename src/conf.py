@@ -35,6 +35,7 @@ perc_identity = 20
 #cutoffs for trim tips
 relcut = 0.25
 abscut = 0.7
+abscutint = 1.5
 
 #cutoffs for qjpost
 qjfreqcut = 0.3

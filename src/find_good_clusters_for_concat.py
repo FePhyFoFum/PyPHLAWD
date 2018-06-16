@@ -6,6 +6,7 @@ import check_for_programs
 from conf import DI
 from conf import relcut
 from conf import abscut
+from conf import abscutint
 from conf import usecython
 from conf import smallest_cluster
 from conf import cluster_prop
@@ -89,16 +90,28 @@ def make_trim_trees(alignments):
         p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
         outtre = p.stdout.read().strip()
         outrem = p.stderr.read().strip()
+        removetax = set()
         if len(outrem) > 0:
             print "  removing",len(outrem.split("\n")),"tips"
-            removetax = []
             for j in outrem.split("\n"):
                 taxon = j.split(" ")[1]
-                removetax.append(taxon)
-            cmd = "pxrms -s "+i+" -n "+",".join(removetax)+" -o "+i.replace(".aln",".aln.ed")
+                removetax.add(taxon)
+        cmd = "python "+DI+"trim_internal_edges.py "+i.replace(".aln",".tre")+" "+str(abscutint)
+        #print cmd
+        p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
+        outtre = p.stdout.read().strip()
+        outrem = p.stderr.read().strip()
+        if len(outrem) > 0:
+            print "  removing",len(outrem.split("\n")),"tips"
+            for j in outrem.split("\n"):
+                taxon = j.split(" ")[1]
+                removetax.add(taxon)
+        if len(removetax) > 0:
+            cmd = "pxrms -s "+i+" -n "+",".join(list(removetax))+" -o "+i.replace(".aln",".aln.ed")
             newalns[i] = i.replace(".aln",".aln.ed")
             #print cmd
             os.system(cmd)
+        
     return newalns
 
 if __name__ == "__main__":
