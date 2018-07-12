@@ -48,7 +48,7 @@ Clustering runs use both `blast` and `mcl` to cluster sequences. They can also b
 In addition to the clustering runs (that will look at all the available data, you can also look at only the gene regions you're interest in (as the old PHLAWD).
 
 #### Bait files
-Bait files need to be in a directory and need to have the file ending `.fa` or `.fas` or `.fasta` and need to be fasta files. This requirement is necessary in order to recognize which files are intended to be the bait in the directory (so you can have other files in the directory).
+Bait files need to be in a directory and need to have the file ending `.fa` and need to be fasta files. This requirement is necessary in order to recognize which files are intended to be the bait in the directory (so you can have other files in the directory).
 
 ### Subsetting taxa
 With either of the above runs types, you can limit what taxa are considered. For this, you will need a file that has an ncbi id on each line. These will be the only ones considered. Then you run like:
