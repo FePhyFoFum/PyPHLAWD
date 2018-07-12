@@ -24,7 +24,8 @@ if __name__ == "__main__":
         sys.exit(0)
     
     url = sys.argv[1]
-    nw = tree_reader.read_tree_file_iter(sys.argv[2]).next()
-    ne = nw.get_newick_repr(True)+";"
-    ne,unmatached = rename_tree(url,ne)
-    print ne
+    for i in tree_reader.read_tree_file_iter(sys.argv[2]):
+        nw = i
+        ne = nw.get_newick_repr(True)+";"
+        ne,unmatached = rename_tree(url,ne)
+        print ne

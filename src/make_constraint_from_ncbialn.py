@@ -11,6 +11,8 @@ from get_ncbi_tax_tree_no_species import get_all_included,clean_name
 
 noinclude = False
 stopat = "genus"
+useonly = False
+useonlylist = ["family","subfamily"]
 
 def construct_tree_only_ids(baseid,c,ids):
     species = []
@@ -41,6 +43,7 @@ def construct_tree_only_ids(baseid,c,ids):
                 nn = node.Node()
                 nn.label = str(tid)
                 nn.data["id"] = tid
+                nn.data["rank"] = str(j[3])
                 nodes[tid] = nn
                 # node_ids[tid] = id
                 if id in ids or "incertae" in str(j[2]) or "unidentified" in str(j[2]) or "unplaced" in str(j[2]):
@@ -56,6 +59,23 @@ def construct_tree_only_ids(baseid,c,ids):
                     nodes[tid] = nodes[id].parent
                 else:
                     nodes[tid] = nodes[id]
+    if useonly: #remove any constraint that insn't in the list
+        toremove = set()
+        for i in rt.iternodes():
+            if len(i.children) == 0 or i == rt:
+                continue
+            else:
+                if i.data["rank"] not in useonlylist:
+                    toremove.add(i)
+        for i in toremove:
+            p = i.parent
+            if p == None:
+                continue
+            p.remove_child(i)
+            i.parent = None
+            for j in i.children:
+                p.add_child(j)
+                j.parent = p
     for i in rt.iternodes():
         if len(i.children) == 0:
             continue
