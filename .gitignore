@@ -98,3 +98,7 @@ ENV/
 _site
 .sass-cache
 .jekyll-metadata
+
+# PyCharm project files
+.idea
+
