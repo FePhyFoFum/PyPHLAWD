@@ -38,12 +38,20 @@ if __name__ == "__main__":
                 ncbis.append(j.label)
 
     idn = get_ott_names_for_ncbi(sys.argv[1], ncbis)
+    invalidchars = ":;[](),"
 
     outf = open(sys.argv[3],"w")
     for i in tree_reader.read_tree_file_iter(sys.argv[2]):
         for j in i.iternodes():
             if j.label in idn:
-                j.label = idn[j.label].replace(" ","_")
+                lab = idn[j.label]
+                # check if quotes are required bc of invalid chars
+                if any(elem in lab for elem in invalidchars):
+                    #print "gotta quote this sucka: " + lab
+                    lab = "\"" + lab + "\""
+                else:
+                    lab = lab.replace(" ","_")
+                j.label = lab
         outf.write(i.get_newick_repr(True)+";")
     outf.close()
    
