@@ -1,6 +1,7 @@
 import sys
 import tree_reader
 import os
+from utils import newick_name
 
 def get_ott_names_for_ncbi(taxfile, ncbilist):
     tab = open(sys.argv[1],"r")
@@ -43,7 +44,7 @@ if __name__ == "__main__":
     for i in tree_reader.read_tree_file_iter(sys.argv[2]):
         for j in i.iternodes():
             if j.label in idn:
-                j.label = idn[j.label].replace(" ","_")
+                j.label = newick_name(idn[j.label])
         outf.write(i.get_newick_repr(True)+";")
     outf.close()
    
