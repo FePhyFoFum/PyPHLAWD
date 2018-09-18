@@ -4,6 +4,7 @@ from bad_taxa import taxonids
 from exclude_patterns import patterns
 from exclude_desc_patterns import desc_patterns
 from conf import smallest_size
+from conf import filternamemismatch
 
 """
 this version of the file is updated to take into account the change from gi to acc
@@ -51,11 +52,12 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
         for j in l:
             #if the title sequence name is not the same as the id name (first part)
             #  then we skip it. sorry sequence! you are outta here
-            try:
-                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+            if filternamemismatch:
+                try:
+                    if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+                        continue
+                except:
                     continue
-            except:
-                continue
             #catch bad seqs
             if str(j[3]) in gids or str(j[2]) in gids:
                 continue
@@ -125,11 +127,12 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
     for j in l:
         #if the title sequence name is not the same as the id name (first part)
         #  then we skip it. sorry sequence! you are outta here
-        try:
-            if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+        if filternamemismatch:
+            try:
+                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+                    continue
+            except:
                 continue
-        except:
-            continue
         #catch bad seqs
         if str(j[3]) in gids or str(j[2]) in gids:
             continue
@@ -216,11 +219,12 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
         for j in l:
             #if the title sequence name is not the same as the id name (first part)
             #  then we skip it. sorry sequence! you are outta here
-            try:
-                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+            if filternamemismatch:
+                try:
+                    if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+                        continue
+                except:
                     continue
-            except:
-                continue
             #catch bad seqs
             if str(j[3]) in gids or str(j[2]) in gids:
                 continue
