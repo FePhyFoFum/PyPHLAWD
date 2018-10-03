@@ -80,7 +80,10 @@ def read_tree_string(instr):
             nextchar = instr[index]
         else: # this is an external named node
             newnode = Node()
-            curnode.add_child(newnode)
+            if curnode != None:
+                curnode.add_child(newnode)
+            else:
+                root = newnode
             curnode = newnode
             curnode.istip = True
             name = ""
