@@ -85,7 +85,7 @@ def make_trim_trees(alignments):
         print("making tree for",i)
         cmd = fasttreename+" -nt -gtr "+i+" > "+i.replace(".aln",".tre")+" 2> /dev/null"
         os.system(cmd)
-        cmd = "python "+DI+"trim_tips.py "+i.replace(".aln",".tre")+" "+str(relcut)+" "+str(abscut)
+        cmd = py+" "+DI+"trim_tips.py "+i.replace(".aln",".tre")+" "+str(relcut)+" "+str(abscut)
         #print cmd
         p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
         outtre = p.stdout.read().strip()
@@ -96,7 +96,7 @@ def make_trim_trees(alignments):
             for j in outrem.split("\n"):
                 taxon = j.split(" ")[1]
                 removetax.add(taxon)
-        cmd = "python "+DI+"trim_internal_edges.py "+i.replace(".aln",".tre")+" "+str(abscutint)
+        cmd = py+" "+DI+"trim_internal_edges.py "+i.replace(".aln",".tre")+" "+str(abscutint)
         #print cmd
         p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
         outtre = p.stdout.read().strip()
@@ -180,7 +180,7 @@ if __name__ == "__main__":
                     keeps.append(newalns[i])
         tab = cld+"/"+cld.split("/")[-1]+".table"
         rtn = cld.split("/")[-1]
-        cmd = "python "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join(keeps)
+        cmd = py+" "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join(keeps)
         #print cmd
         os.system(cmd)
         concat = input("Do you want to concat? y/n ")
@@ -194,7 +194,7 @@ if __name__ == "__main__":
             #baseid = raw_input("What is the baseid? ")
             baseid = cld.split("_")[-1]
             if len(dbname) > 2 and len(baseid) > 2:
-                cmd = "python "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+cld+"/"+rtn+"_outaln > "+cld+"/"+rtn+"_outaln.constraint.tre"
+                cmd = py+" "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+cld+"/"+rtn+"_outaln > "+cld+"/"+rtn+"_outaln.constraint.tre"
                 os.system(cmd)
             print("line for get_min")
             print("python "+DI+"get_min_overlap_multiple_seqs.py "+cld+"/"+rtn+"_outaln.constraint.tre "+" ".join([i+".rn" for i in keeps]))

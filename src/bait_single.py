@@ -9,6 +9,7 @@ from conf import nthread
 from conf import takeouttaxondups
 from conf import bait_cut
 from conf import bait_cut_smallest_size
+from conf import py
 import math
 import seq
 from conf import tempname
@@ -111,10 +112,10 @@ if __name__ == "__main__":
     else:
         make_files_bait_cut(clus,bait_cuts,INFILE+".fas",sys.argv[1]+"/clusters")
     
-    cmd = "python "+DI+"align_tip_clusters.py "+sys.argv[1]+"/clusters "+LOGFILE
+    cmd = py+" "+DI+"align_tip_clusters.py "+sys.argv[1]+"/clusters "+LOGFILE
     log.wac("RUNNING "+cmd)
     os.system(cmd)
     if takeouttaxondups:
-        cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+INFILE+".table "+sys.argv[1]+"/clusters .fa+.aln "+LOGFILE
+        cmd = py+" "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+INFILE+".table "+sys.argv[1]+"/clusters .fa+.aln "+LOGFILE
         log.wac("RUNNING "+cmd)
         os.system(cmd)

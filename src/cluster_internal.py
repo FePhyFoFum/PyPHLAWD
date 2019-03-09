@@ -5,6 +5,7 @@ import subprocess
 
 from conf import DI
 from conf import takeouttaxondups
+from conf import py
 from logger import Logger
 import emoticons
 
@@ -35,18 +36,18 @@ if __name__ == "__main__":
             continue
         print(colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh")))
         cur =  c+"/clusters"
-        cmd = "python "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE+" "+TEMPDIR
+        cmd = py+" "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE+" "+TEMPDIR
         rc = subprocess.call(cmd, shell=True)
         if rc != 0:
             print(colored.red("  PROBLEM ADDING CLADE"),colored.red(emoticons.get_ran_emot("sad")))
             sys.exit(1)
         if takeouttaxondups:
-            cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
+            cmd = py+" "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
             os.system(cmd)
         # NEED TO DO SOMETHING ABOUT THE ALIGNMENT FILES
     print(colored.green("   ADDING INTERNAL SEQS"),d,colored.green(emoticons.get_ran_emot("meh")))
-    cmd = "python "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE
+    cmd = py+" "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE
     os.system(cmd)
-    cmd = "python "+DI+"add_internal_seqs_to_clusters.py "+d+" "+outclu+" "+LOGFILE+" "+TEMPDIR
+    cmd = py+" "+DI+"add_internal_seqs_to_clusters.py "+d+" "+outclu+" "+LOGFILE+" "+TEMPDIR
     os.system(cmd)
     

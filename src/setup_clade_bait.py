@@ -3,6 +3,7 @@ import sys
 import tree_reader
 from clint.textui import colored
 from conf import DI
+from conf import py
 import emoticons
 from datetime import datetime
 
@@ -32,14 +33,14 @@ if __name__ == "__main__":
 
 
     tname = dirl+"/"+taxon+".tre"
-    cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
+    cmd = py+" "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
     print(colored.yellow("MAKING TREE"),taxon)
     os.system(cmd)
-    trn = tree_reader.read_tree_file_iter(tname).next().label
-    cmd = "python "+DI+"make_dirs.py "+tname+" "+dirl
+    trn = tree_reader.read_tree_file_iter(tname).__next__().label
+    cmd = py+" "+DI+"make_dirs.py "+tname+" "+dirl
     print(colored.yellow("MAKING DIRS IN"),dirl)
     os.system(cmd)
-    cmd = "python "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db
+    cmd = py+" "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db
     if taxalistf != None:
         cmd += " "+taxalistf
     print(colored.yellow("POPULATING DIRS"),dirl)
@@ -47,7 +48,7 @@ if __name__ == "__main__":
     
     if os.path.isfile("log.md.gz"):
         os.remove("log.md.gz")
-    cmd = "python "+DI+"bait_tree.py "+dirl+"/"+trn+"/ "+baitdir+" "+logfile
+    cmd = py+" "+DI+"bait_tree.py "+dirl+"/"+trn+"/ "+baitdir+" "+logfile
     os.system(cmd)
     
     print(colored.blue("PYPHLAWD DONE "+emoticons.get_ran_emot("excited")))

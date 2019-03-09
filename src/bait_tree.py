@@ -7,6 +7,7 @@ import emoticons
 from clint.textui import colored
 from logger import Logger
 from conf import DI
+from conf import py
 from add_clade_clusters import make_blast_db_from_cluster
 
 if __name__ == "__main__":
@@ -34,7 +35,7 @@ if __name__ == "__main__":
                 print(colored.yellow("BAIT SINGLE"),root,colored.yellow(emoticons.get_ran_emot("meh")))
                 log.wac("BAIT SINGLE "+root)
                 tablename = [x for x in files if ".table" in x][0]
-                cmd = "python "+DI+"bait_single.py "+root+" "+logfile+" "+rantempdir
+                cmd = py+" "+DI+"bait_single.py "+root+" "+logfile+" "+rantempdir
                 os.system(cmd)
             else:
                 print(colored.blue("BAIT INTERNAL"),root,colored.blue(emoticons.get_ran_emot("meh")))
@@ -42,13 +43,13 @@ if __name__ == "__main__":
                 tablename = [x for x in files if ".table" in x][0]
                 if root[-1] != "/":
                     root = root+"/"
-                cmd = "python "+DI+"bait_clade.py "+root+ " "+root+tablename+" "+logfile+" "+rantempdir
+                cmd = py+" "+DI+"bait_clade.py "+root+ " "+root+tablename+" "+logfile+" "+rantempdir
                 rc = subprocess.call(cmd,shell=True)
                 if rc != 0:
                     print(colored.red("PROBLEM WITH CLUSTERING INTERNAL"),colored.red(emoticons.get_ran_emot("sad")))
                     sys.exit(1)
-    cmd = "python "+DI+"annotate_clusters.py "+sys.argv[1]
+    cmd = py+" "+DI+"annotate_clusters.py "+sys.argv[1]
     os.system(cmd)
-    cmd = "python "+DI+"post_process_cluster_info.py "+sys.argv[1]
+    cmd = py+" "+DI+"post_process_cluster_info.py "+sys.argv[1]
     os.system(cmd)
     

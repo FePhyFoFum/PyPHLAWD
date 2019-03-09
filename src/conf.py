@@ -4,6 +4,8 @@ DI = "~/Dropbox/programming/PyPHLAWD/src/"
 if DI[-1] != "/":
     DI += "/"
 
+py = "python3"
+
 #just a temporary name for the fasta files
 tempname = "temp.fas"
 

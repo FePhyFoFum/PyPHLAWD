@@ -4,6 +4,7 @@ from clint.textui import colored
 from datetime import datetime
 
 from conf import DI
+from conf import py
 import emoticons
 import tree_reader
 
@@ -32,16 +33,16 @@ if __name__ == "__main__":
 
     tname = dirl+"/"+taxon+".tre"
     if taxalistf != None:
-        cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" "+taxalistf+" > "+tname
+        cmd = py+" "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" "+taxalistf+" > "+tname
     else:
-        cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
+        cmd = py+" "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
     print(colored.yellow("MAKING TREE"),taxon,colored.yellow(emoticons.get_ran_emot("excited")))
     os.system(cmd)
-    trn = tree_reader.read_tree_file_iter(tname).next().label
-    cmd = "python "+DI+"make_dirs.py "+tname+" "+dirl
+    trn = tree_reader.read_tree_file_iter(tname).__next__().label
+    cmd = py+" "+DI+"make_dirs.py "+tname+" "+dirl
     print(colored.yellow("MAKING DIRS IN"),dirl,colored.yellow(emoticons.get_ran_emot("excited")))
     os.system(cmd)
-    cmd = "python "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db
+    cmd = py+" "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db
     if taxalistf != None:
         cmd += " "+taxalistf
     print(colored.yellow("POPULATING DIRS"),dirl,colored.yellow(emoticons.get_ran_emot("excited")))
@@ -49,7 +50,7 @@ if __name__ == "__main__":
     
     if os.path.isfile("log.md.gz"):
         os.remove("log.md.gz")
-    cmd = "python "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ "+logfile
+    cmd = py+" "+DI+"cluster_tree.py "+dirl+"/"+trn+"/ "+logfile
     os.system(cmd)
     
     print(colored.blue("PYPHLAWD DONE "+emoticons.get_ran_emot("excited")))

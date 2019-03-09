@@ -3,8 +3,8 @@ this does the cluster single for the tips
 """
 import sys
 import os
-
-DI = "~/Dropbox/programming/python/pyphlawd/"
+from conf import py
+from conf import DI
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -15,5 +15,5 @@ if __name__ == "__main__":
         if len(subdl) == 1:
             if subdl[0] == "clusters":
                 print("clustering",dirn)
-                cmd = "python "+DI+"cluster_single.py "+dirn
+                cmd = py+" "+DI+"cluster_single.py "+dirn
                 os.system(cmd)

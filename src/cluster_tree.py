@@ -6,6 +6,7 @@ import subprocess
 
 from conf import DI
 from conf import treemake
+from conf import py
 import emoticons
 from logger import Logger
 import tree_reader
@@ -35,7 +36,7 @@ if __name__ == "__main__":
                 print(colored.yellow("CLUSTERING SINGLE"),root,colored.yellow(emoticons.get_ran_emot("meh")))
                 log.wac("CLUSTERING SINGLE "+root)
                 tablename = [x for x in files if ".table" in x][0]
-                cmd = "python "+DI+"cluster_single.py "+root+" "+logfile
+                cmd = py+" "+DI+"cluster_single.py "+root+" "+logfile
                 os.system(cmd)
             else:
                 print(colored.blue("CLUSTERING INTERNAL"),root,colored.blue(emoticons.get_ran_emot("meh")))
@@ -43,13 +44,13 @@ if __name__ == "__main__":
                 tablename = [x for x in files if ".table" in x][0]
                 if root[-1] != "/":
                     root = root+"/"
-                cmd = "python "+DI+"cluster_internal.py "+root+ " "+root+tablename+" "+logfile+" "+rantempdir
+                cmd = py+" "+DI+"cluster_internal.py "+root+ " "+root+tablename+" "+logfile+" "+rantempdir
                 rc = subprocess.call(cmd,shell=True)
                 if rc != 0:
                     print(colored.red("PROBLEM WITH CLUSTERING INTERNAL"),colored.red(emoticons.get_ran_emot("sad")))
                     sys.exit(1)
-    cmd = "python "+DI+"annotate_clusters.py "+sys.argv[1]
+    cmd = py+" "+DI+"annotate_clusters.py "+sys.argv[1]
     os.system(cmd)
-    cmd = "python "+DI+"post_process_cluster_info.py "+sys.argv[1]
+    cmd = py+" "+DI+"post_process_cluster_info.py "+sys.argv[1]
     os.system(cmd)
     

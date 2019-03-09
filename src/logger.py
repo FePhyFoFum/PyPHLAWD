@@ -9,10 +9,10 @@ class Logger:
         self.fl = None
     
     def a(self):
-        self.fl = gzip.open(self.filename,"a")
+        self.fl = gzip.open(self.filename,"at")
 
     def whac(self,string):
-        self.fl = gzip.open(self.filename,"a")
+        self.fl = gzip.open(self.filename,"at")
         self.fl.write("\n# "+string+"\n")
         self.c()
 
@@ -21,7 +21,7 @@ class Logger:
         self.fl.write(stt+" || "+string+"\n")
 
     def wac(self,string):
-        self.fl = gzip.open(self.filename,"a")
+        self.fl = gzip.open(self.filename,"at")
         self.w(string)
         self.c()
 
