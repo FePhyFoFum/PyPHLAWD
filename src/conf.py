@@ -8,7 +8,7 @@ if DI[-1] != "/":
 tempname = "temp.fas"
 
 #smallest seq size
-smallest_size = 500
+smallest_size = 300
 
 #sample size for blast and comps
 dosamp = True
@@ -31,6 +31,10 @@ length_limit = 0.55
 evalue_limit = 10e-10
 evalue_limit_lc = 10e-20
 perc_identity = 20
+
+#bait cut
+bait_cut = True
+bait_cut_smallest_size = 300
 
 #cutoffs for trim tips
 relcut = 0.25
