@@ -32,7 +32,7 @@ def process_second_result(fl):
         spls = i.strip().split(",")
         nms[spls[0]] = float(spls[3])
     f.close()
-    sorted_x = sorted(nms.items(), key=operator.itemgetter(1))
+    sorted_x = sorted(list(nms.items()), key=operator.itemgetter(1))
     below01 = []
     for i in sorted_x:
         if i[1] < qjsmallcut:
@@ -49,9 +49,9 @@ taking out the part for now because it doesn't help that much and greatly increa
 """
 if __name__ == "__main__":
     if len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" constrainttre calculatedtree alnfile outfile"
+        print("python "+sys.argv[0]+" constrainttre calculatedtree alnfile outfile")
         sys.exit(0)
-    tree = read_tree_file_iter(sys.argv[1]).next()
+    tree = next(read_tree_file_iter(sys.argv[1]))
     treefile = sys.argv[2]
     alnfile = sys.argv[3]
     lose = set()
@@ -65,16 +65,16 @@ if __name__ == "__main__":
             os.system(cmd)
             firstres = process_first_result("RESULT.node_scores.csv")
             if firstres < qjfreqcut:
-                print "lose constraint"
+                print("lose constraint")
                 if i.label == "":
-                    print firstres,",".join(nms)
+                    print(firstres,",".join(nms))
                 else:
-                    print firstres,i.label
+                    print(firstres,i.label)
                 cmd = "python "+DI+"/quartet_sampling.py -t "+treefile+" -n "+alnfile+" -# 500 -T "+str(nthread)+" -C "+",".join(nms)+" -P -m > /dev/null 2>&1"
                 os.system(cmd)
                 secondres = process_second_result("RESULT.node_scores.csv.clade")
                 if secondres != None:
-                    print "would remove ",secondres
+                    print("would remove ",secondres)
                     for j in secondres:
                         remove_taxa.add(j)
                 else:

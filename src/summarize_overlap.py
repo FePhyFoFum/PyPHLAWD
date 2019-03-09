@@ -4,10 +4,10 @@ import seq
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" aln tre"
+        print("python "+sys.argv[0]+" aln tre")
         sys.exit(0)
     seqs = seq.read_fasta_file(sys.argv[1])
-    tre = tree_reader.read_tree_file_iter(sys.argv[2]).next()
+    tre = next(tree_reader.read_tree_file_iter(sys.argv[2]))
     seqsd = {}
     for i in seqs:
         x = i.seq.lower().replace("a","1").replace("c","1").replace("g","1").replace("t","1")
@@ -29,4 +29,4 @@ if __name__ == "__main__":
         i.data["i"] = len(x.intersection(y))
         i.data["s"] = x.union(y)
         i.label = str(i.data["i"])+".1"
-    print tre.get_newick_repr(True)+";"
+    print(tre.get_newick_repr(True)+";")

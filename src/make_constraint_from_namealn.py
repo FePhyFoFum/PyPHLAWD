@@ -72,7 +72,7 @@ def construct_tree_only_ids(baseid,c,ids):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" dbname baseid alnfile"
+        print("python "+sys.argv[0]+" dbname baseid alnfile")
         sys.exit(0)
 
     dbname = sys.argv[1]
@@ -83,4 +83,4 @@ if __name__ == "__main__":
     for i in seq.read_fasta_file_iter(sys.argv[3]):
         ids.add(get_taxid_for_name(c,i.name.replace("_"," ")))
     t = construct_tree_only_ids(baseid,c,ids)
-    print t.get_newick_repr(False)+";"
+    print(t.get_newick_repr(False)+";")

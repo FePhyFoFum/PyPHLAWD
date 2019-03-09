@@ -27,7 +27,7 @@ def get_all_included(taxalist,c):
                     going = False
                     break
             if count == 0:
-                print "delete "+i
+                print("delete "+i)
     return inc
 
 def construct_tree(taxon, db, taxalist = None):
@@ -87,7 +87,7 @@ def construct_tree(taxon, db, taxalist = None):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3 and len(sys.argv) != 4:
-        print "usage: python "+sys.argv[0]+" taxon db [taxalist]"
+        print("usage: python "+sys.argv[0]+" taxon db [taxalist]")
         sys.exit(0)
     taxon = sys.argv[1]
     DB = sys.argv[2]
@@ -95,4 +95,4 @@ if __name__ == "__main__":
     if len(sys.argv) == 4:
         taxalist = sys.argv[3]
     tree = construct_tree(taxon, DB, taxalist)
-    print tree.get_newick_repr(False)+";"
+    print(tree.get_newick_repr(False)+";")

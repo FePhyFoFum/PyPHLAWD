@@ -453,8 +453,8 @@ def get_ran_emot(emotion):
     return random.sample(emotions[emotion],1)[0]
 
 if __name__ == "__main__":
-    print get_ran_emot("excited")
-    print get_ran_emot("sad")
-    print get_ran_emot("meh")
-    print get_ran_emot("huh")
+    print(get_ran_emot("excited"))
+    print(get_ran_emot("sad"))
+    print(get_ran_emot("meh"))
+    print(get_ran_emot("huh"))
     

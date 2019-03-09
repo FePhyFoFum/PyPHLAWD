@@ -334,7 +334,7 @@ def make_files(taxon, DB,outfilen,outfile_tbln):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print "usage: python "+sys.argv[0]+" tid db outfile"
+        print("usage: python "+sys.argv[0]+" tid db outfile")
         sys.exit(0)
     tid = sys.argv[1]
     DB = sys.argv[2]

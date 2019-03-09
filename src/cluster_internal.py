@@ -10,7 +10,7 @@ import emoticons
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" startdir tablefile logfile [tempdir]"
+        print("python "+sys.argv[0]+" startdir tablefile logfile [tempdir]")
         sys.exit(0)
     d = sys.argv[1]
     tablefile=sys.argv[2]
@@ -33,18 +33,18 @@ if __name__ == "__main__":
     for c in dirs:
         if "environmental" in c or "clusters" in c:
             continue
-        print colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh"))
+        print(colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh")))
         cur =  c+"/clusters"
         cmd = "python "+DI+"add_clade_clusters.py "+cur+" "+outclu+" "+LOGFILE+" "+TEMPDIR
         rc = subprocess.call(cmd, shell=True)
         if rc != 0:
-            print colored.red("  PROBLEM ADDING CLADE"),colored.red(emoticons.get_ran_emot("sad"))
+            print(colored.red("  PROBLEM ADDING CLADE"),colored.red(emoticons.get_ran_emot("sad")))
             sys.exit(1)
         if takeouttaxondups:
             cmd = "python "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
             os.system(cmd)
         # NEED TO DO SOMETHING ABOUT THE ALIGNMENT FILES
-    print colored.green("   ADDING INTERNAL SEQS"),d,colored.green(emoticons.get_ran_emot("meh"))
+    print(colored.green("   ADDING INTERNAL SEQS"),d,colored.green(emoticons.get_ran_emot("meh")))
     cmd = "python "+DI+"get_internal_seqs_unrepresented_in_tips.py "+d+" "+LOGFILE
     os.system(cmd)
     cmd = "python "+DI+"add_internal_seqs_to_clusters.py "+d+" "+outclu+" "+LOGFILE+" "+TEMPDIR

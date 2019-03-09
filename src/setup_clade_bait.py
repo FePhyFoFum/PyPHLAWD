@@ -8,10 +8,10 @@ from datetime import datetime
 
 if __name__ == "__main__":
     if len(sys.argv) != 6 and len(sys.argv) != 7:
-        print "python "+sys.argv[0]+" taxon baitdir db outdir logfile [taxalist]"
+        print("python "+sys.argv[0]+" taxon baitdir db outdir logfile [taxalist]")
         sys.exit(0)
     
-    print colored.blue("STARTING PYPHLAWD (baited) "+emoticons.get_ran_emot("excited"))
+    print(colored.blue("STARTING PYPHLAWD (baited) "+emoticons.get_ran_emot("excited")))
     start = datetime.now()
     dirl = sys.argv[4]
     if dirl[-1] == "/":
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     taxalistf = None
     if len(sys.argv) == 7:
         taxalistf = sys.argv[6]
-        print colored.yellow("LIMITING TO TAXA IN"),sys.argv[6]
+        print(colored.yellow("LIMITING TO TAXA IN"),sys.argv[6])
 
     # Log file
     logfile = sys.argv[5]
@@ -33,16 +33,16 @@ if __name__ == "__main__":
 
     tname = dirl+"/"+taxon+".tre"
     cmd = "python "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" > "+tname
-    print colored.yellow("MAKING TREE"),taxon
+    print(colored.yellow("MAKING TREE"),taxon)
     os.system(cmd)
     trn = tree_reader.read_tree_file_iter(tname).next().label
     cmd = "python "+DI+"make_dirs.py "+tname+" "+dirl
-    print colored.yellow("MAKING DIRS IN"),dirl
+    print(colored.yellow("MAKING DIRS IN"),dirl)
     os.system(cmd)
     cmd = "python "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db
     if taxalistf != None:
         cmd += " "+taxalistf
-    print colored.yellow("POPULATING DIRS"),dirl
+    print(colored.yellow("POPULATING DIRS"),dirl)
     os.system(cmd)
     
     if os.path.isfile("log.md.gz"):
@@ -50,10 +50,10 @@ if __name__ == "__main__":
     cmd = "python "+DI+"bait_tree.py "+dirl+"/"+trn+"/ "+baitdir+" "+logfile
     os.system(cmd)
     
-    print colored.blue("PYPHLAWD DONE "+emoticons.get_ran_emot("excited"))
+    print(colored.blue("PYPHLAWD DONE "+emoticons.get_ran_emot("excited")))
     end = datetime.now()
-    print colored.blue("Total time (H:M:S): "+str(end-start)+" "+emoticons.get_ran_emot("excited"))
+    print(colored.blue("Total time (H:M:S): "+str(end-start)+" "+emoticons.get_ran_emot("excited")))
     from utils import bcolors
-    print bcolors.HEADER,
+    print(bcolors.HEADER, end=' ')
     emoticons.animate(emoticons.glasses_animated)
-    print bcolors.ENDC
+    print(bcolors.ENDC)

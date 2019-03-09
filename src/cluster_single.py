@@ -10,7 +10,7 @@ from conf import takeouttaxondups
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" indir logfile"
+        print("python "+sys.argv[0]+" indir logfile")
         sys.exit(0)
     if sys.argv[1][-1] == "/":
         sys.argv[1]=sys.argv[1][:-1]

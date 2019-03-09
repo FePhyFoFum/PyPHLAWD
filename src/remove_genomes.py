@@ -3,7 +3,7 @@ import sys
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print "python "+sys.argv[0]+" infile.fas"
+        print("python "+sys.argv[0]+" infile.fas")
         sys.exit(0)
     outfg = open(sys.argv[1]+".genomes","w")
     outfng = open(sys.argv[1]+".nogenomes","w")

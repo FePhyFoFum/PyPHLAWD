@@ -90,12 +90,12 @@ def main(treefile,relative_cut,absolute_cut):
     with open(treefile,"r") as infile:
         intree = tree_reader.read_tree_string(infile.readline())
     outtree,removed = trim(intree,float(relative_cut),float(absolute_cut))
-    print outtree.get_newick_repr(True)+";"
+    print(outtree.get_newick_repr(True)+";")
     return outtree,removed
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" file.tre relative_cutoff absolute_cutoff"
+        print("python "+sys.argv[0]+" file.tre relative_cutoff absolute_cutoff")
         sys.exit(0)
 
     treefile = sys.argv[1]

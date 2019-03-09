@@ -30,7 +30,7 @@ def get_all_included(taxalist,c):
                     going = False
                     break
             if count == 0:
-                print "delete "+i
+                print("delete "+i)
     return inc
 
 def construct_tree(taxon, db, includespecies, taxalist = None):
@@ -112,5 +112,5 @@ if __name__ == "__main__":
         outfile = open(args.outfile,"w")
         outfile.write(tree.get_newick_repr(False)+";\n")
     else:
-        print tree.get_newick_repr(False)+";"
+        print(tree.get_newick_repr(False)+";")
 

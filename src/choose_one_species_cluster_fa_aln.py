@@ -11,7 +11,7 @@ BEWARE, this writes over the file
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" table clusterdir fending+alnending [logfile]"
+        print("python "+sys.argv[0]+" table clusterdir fending+alnending [logfile]")
         sys.exit(0)
     ends = sys.argv[3].split("+")
     fend = ends[0]

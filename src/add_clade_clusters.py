@@ -112,11 +112,11 @@ def merge_alignments(outfile,tempdir="./"):
     cmd = "mafft --thread "+nthread+" --quiet --adjustdirection --merge "+tempdir+"subMSAtable "+tempdir+"temp.mergealn 2> "+tempdir+"mafft.out > "+outfile
     os.system(cmd)
     if os.path.exists(outfile) == False:
-        print colored.red("ALIGNMENT DOESN'T EXIST"+" "+emoticons.get_ran_emot("sad"))
+        print(colored.red("ALIGNMENT DOESN'T EXIST"+" "+emoticons.get_ran_emot("sad")))
         sys.exit(1)
     #for some buggy reason these can be unaligned, so realigning here
     if check_unaligned(outfile) == False:
-        print colored.red("PROBLEM REDOING ALIGNMENT ("+outfile+")"+" "+emoticons.get_ran_emot("sad"))
+        print(colored.red("PROBLEM REDOING ALIGNMENT ("+outfile+")"+" "+emoticons.get_ran_emot("sad")))
 
         #log.w("PROBLEM REDOING ALIGNMENT")
         copyfile(tempdir+"subMSAtable","problem_subMSAtable")
@@ -132,7 +132,7 @@ def merge_alignments(outfile,tempdir="./"):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" fromclusterdir tooutdir logfile [TEMPDIR]"
+        print("python "+sys.argv[0]+" fromclusterdir tooutdir logfile [TEMPDIR]")
         sys.exit(0)
     dir1 = sys.argv[1]
     diro = sys.argv[2]

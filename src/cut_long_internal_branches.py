@@ -25,9 +25,9 @@ def cut_long_internal_branches(curroot,cutoff,min_taxa):
             if node.istip or node == curroot: continue
             child0,child1 = node.children[0],node.children[1]
             if node.length > cutoff:
-                print node.length
+                print(node.length)
                 if not child0.istip and not child1.istip and child0.length+child1.length>cutoff:
-                    print child0.length + child1.length
+                    print(child0.length + child1.length)
                     if len(child0.leaves()) >= min_taxa:
                         subtrees.append(child0)
                     if len(child1.leaves()) >= min_taxa:
@@ -50,7 +50,7 @@ def main(inDIR,file_ending,branch_len_cutoff,min_taxa,outDIR,log):
     min_taxa = int(min_taxa)
     filecount = 0
     cutoff = float(branch_len_cutoff)
-    print "cutting branches longer than",cutoff
+    print("cutting branches longer than",cutoff)
     for i in os.listdir(inDIR):
         if not i.endswith(file_ending): continue
         #print i
@@ -64,12 +64,12 @@ def main(inDIR,file_ending,branch_len_cutoff,min_taxa,outDIR,log):
             raw_tree_size = len(get_front_labels(intree))
         num_taxa = len(intree.leaves())
         if num_taxa < min_taxa:
-            print "Tree has",num_taxa,"less than", min_taxa,"taxa"
+            print("Tree has",num_taxa,"less than", min_taxa,"taxa")
         else:
             #print ".tre:",raw_tree_size,"tips; "+file_ending+": "+str(len(get_front_labels(intree)))+" tips"
             subtrees = cut_long_internal_branches(intree,cutoff,min_taxa)
             if len(subtrees) == 0:
-                print "No tree with at least", min_taxa, "taxa"
+                print("No tree with at least", min_taxa, "taxa")
             else:
                 count = 0
                 outsizes = ""
@@ -79,16 +79,16 @@ def main(inDIR,file_ending,branch_len_cutoff,min_taxa,outDIR,log):
                             temp,subtree = remove_kink(subtree,subtree)
                         count += 1
                         outname = outDIR+"/"+i.split(".")[0]+"_"+str(count)+".subtree"
-                        print outname
+                        print(outname)
                         with open(outname,"w") as outfile:
                             outfile.write(subtree.get_newick_repr(True)+";\n")
                         outsizes += str(len(subtree.leaves()))+", "
-                print count,"tree(s) written. Sizes:",outsizes
+                print(count,"tree(s) written. Sizes:",outsizes)
             
         
 if __name__ == "__main__":
     if len(sys.argv) != 6 and len(sys.argv) != 7:
-        print "python cut_long_internal_branches.py inDIR tree_file_ending internal_branch_length_cutoff minimal_taxa outDIR [logfile]"
+        print("python cut_long_internal_branches.py inDIR tree_file_ending internal_branch_length_cutoff minimal_taxa outDIR [logfile]")
         sys.exit(0)
     LOGFILE = "pyphlawd.log"
     if len(sys.argv) == 7:

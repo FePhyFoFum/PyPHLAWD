@@ -3,9 +3,9 @@ import sys
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" infile outfile"
+        print("python "+sys.argv[0]+" infile outfile")
         sys.exit()
-    tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[1]))
     for i in tree.iternodes():
         if len(i.children) == 0:
             continue

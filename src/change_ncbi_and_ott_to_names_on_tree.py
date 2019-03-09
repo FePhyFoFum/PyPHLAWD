@@ -26,7 +26,7 @@ def get_ott_names(taxfile, ottlist):
     count = 0
     for i in tab:
         if count % 1000000 == 0:
-            print count
+            print(count)
         count += 1
         spls = i.split("\t|\t")
         try:
@@ -38,7 +38,7 @@ def get_ott_names(taxfile, ottlist):
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" ott_taxonomy.tsv db infile outfile"
+        print("python "+sys.argv[0]+" ott_taxonomy.tsv db infile outfile")
         sys.exit(0)
     ottids = []
     ncbis = []
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     names_done = set()
 
     #first we do NCBI
-    tree = tree_reader.read_tree_file_iter(sys.argv[3]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[3]))
     for j in tree.iternodes():
         if j.label in nidn:
             j.label = phyname(nidn[j.label])
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     outf.close()
     
     cmd = "pxrmt -t "+sys.argv[-1]+" -n "+",".join(list(prune))+" > "+sys.argv[-1]+".pr.tre"
-    print cmd
+    print(cmd)
     os.system(cmd)
     """
     outf = open(sys.argv[4],"w")

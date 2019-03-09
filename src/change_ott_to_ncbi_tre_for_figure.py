@@ -8,7 +8,7 @@ def get_ncbi_names_for_ott(taxfile, ottlist):
     count = 0
     for i in tab:
         if count % 1000000 == 0:
-            print count
+            print(count)
         count += 1
         spls = i.split("\t|\t")
         try:
@@ -33,7 +33,7 @@ def get_ncbi_names_for_ott(taxfile, ottlist):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" ott_taxonomy.tsv infile outfile"
+        print("python "+sys.argv[0]+" ott_taxonomy.tsv infile outfile")
         sys.exit(0)
     otts = {}
     for i in tree_reader.read_tree_file_iter(sys.argv[2]):
@@ -43,7 +43,7 @@ if __name__ == "__main__":
                     otts[j.label[3:]] = ""
 
     idn = get_ncbi_names_for_ott(sys.argv[1], otts)
-    print len(idn)
+    print(len(idn))
 
     outf = open(sys.argv[3],"w")
     for i in tree_reader.read_tree_file_iter(sys.argv[2]):

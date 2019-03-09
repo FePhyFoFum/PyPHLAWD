@@ -20,7 +20,7 @@ def rename_tree(inurl,ts):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" url filename"
+        print("python "+sys.argv[0]+" url filename")
         sys.exit(0)
     
     url = sys.argv[1]
@@ -28,4 +28,4 @@ if __name__ == "__main__":
         nw = i
         ne = nw.get_newick_repr(True)+";"
         ne,unmatached = rename_tree(url,ne)
-        print ne
+        print(ne)

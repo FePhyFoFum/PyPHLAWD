@@ -4,7 +4,7 @@ import seq
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" curdir logfile"
+        print("python "+sys.argv[0]+" curdir logfile")
         sys.exit(0)
     curd = sys.argv[1]
     LOGFILE = sys.argv[2]

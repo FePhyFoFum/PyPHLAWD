@@ -80,7 +80,7 @@ def make_cluster_table(cld, idn,idd, outfile):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print "python "+sys.argv[0]+" maindir"
+        print("python "+sys.argv[0]+" maindir")
         sys.exit(0)
     cld = sys.argv[1]
     #take off the trailing slash if there is one

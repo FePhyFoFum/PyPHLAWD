@@ -13,10 +13,10 @@ given some tree (probably taxonomy) and a set of genes
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print "python "+sys.argv[0]+" tree files..."
+        print("python "+sys.argv[0]+" tree files...")
         sys.exit(0)
     
-    tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[1]))
     genes = {}
     seqfiles = []
     badseqs = []
@@ -31,8 +31,8 @@ if __name__ == "__main__":
         for j in seq.read_fasta_file_iter(i):
             genes[i].append(j.name)
 
-    print seqfiles
-    print goodseqs
+    print(seqfiles)
+    print(goodseqs)
     filt = set()
 
     for i in tree.iternodes(order="POSTORDER"):
@@ -74,15 +74,15 @@ if __name__ == "__main__":
                 if j != largestin:
                     for k in x[j]:
                         filt.add(k)
-            print x,len(lvsnmsin)
+            print(x,len(lvsnmsin))
     
     if len(filt) > 0:
-        alnfile = raw_input("Concat aln filename: ")
+        alnfile = input("Concat aln filename: ")
         treefile = sys.argv[1]
         if len(alnfile) > 2 and len(treefile) > 2:
             cmd = "pxrmt -t "+treefile+" -n "+",".join(list(filt))+" > "+treefile+".filt"
-            print cmd
+            print(cmd)
             os.system(cmd)
             cmd = "pxrms -s "+alnfile+" -n "+",".join(list(filt))+" > "+alnfile+".filt"
-            print cmd
+            print(cmd)
             os.system(cmd)

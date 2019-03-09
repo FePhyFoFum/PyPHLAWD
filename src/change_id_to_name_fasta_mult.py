@@ -4,7 +4,7 @@ import os
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print "python "+sys.argv[0]+" table infile..."
+        print("python "+sys.argv[0]+" table infile...")
         sys.exit(0)
 
     tab = open(sys.argv[1],"r")

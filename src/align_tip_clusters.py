@@ -25,7 +25,7 @@ trf = "FastTree -nt -gtr INFILE 2>fasttree.out > OUTFILE"
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 and len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" startdir [logfile]"
+        print("python "+sys.argv[0]+" startdir [logfile]")
         sys.exit(0)
     dirr = sys.argv[1]
     LOGFILE = "pyphlawd.log"

@@ -7,10 +7,10 @@ from get_subset_genbank import make_files_with_id_justtable as mfid_justtable
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" tree dir DB [limitlist]"
+        print("python "+sys.argv[0]+" tree dir DB [limitlist]")
         sys.exit(0)
     
-    tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[1]))
     dirl = sys.argv[2]
     if dirl[-1] != "/":
         dirl = dirl + "/"

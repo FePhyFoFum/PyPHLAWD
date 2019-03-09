@@ -5,7 +5,7 @@ import seq
 
 if __name__ == "__main__":
     if len(sys.argv) != 7:
-        print "python "+sys.argv[0]+" file.tre aln relative_cutoff absolute_cutoff outtre outaln"
+        print("python "+sys.argv[0]+" file.tre aln relative_cutoff absolute_cutoff outtre outaln")
         sys.exit(0)
 
     treefile = sys.argv[1]

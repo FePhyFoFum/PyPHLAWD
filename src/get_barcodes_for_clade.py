@@ -82,7 +82,7 @@ def make_files_with_id(taxonid, DB,outfilen,outfilebc,outfile_tbln,outfile_bctbl
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" db clade_id"
+        print("python "+sys.argv[0]+" db clade_id")
         sys.exit()
     tid = sys.argv[2]
     DB = sys.argv[1]

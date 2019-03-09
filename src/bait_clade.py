@@ -18,7 +18,7 @@ def write_fasta_file(files,outfilen):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" startdir tablefile logfile [TEMPDIR]"
+        print("python "+sys.argv[0]+" startdir tablefile logfile [TEMPDIR]")
         sys.exit(0)
     d = sys.argv[1]
     tablefile=sys.argv[2]
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     for c in dirs:
         if "environmental" in c or "clusters" in c:
             continue
-        print colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh"))
+        print(colored.green("  ADDING"),c,colored.green(emoticons.get_ran_emot("meh")))
         cur =  c+"/clusters"
         for i in os.listdir(cur):
             if i[-3:] == ".fa":
@@ -51,7 +51,7 @@ if __name__ == "__main__":
                     joinseqs[i] = []
                 joinseqs[i].append(cur+"/"+i)
     for i in joinseqs:
-        print colored.green("    MERGING"),i,colored.green(emoticons.get_ran_emot("meh"))
+        print(colored.green("    MERGING"),i,colored.green(emoticons.get_ran_emot("meh")))
         write_fasta_file(joinseqs[i],outclu+i)
         wmtt([j.replace(".fa",".aln") for j in joinseqs[i]],TEMPDIR)
         merge_alignments(outclu+i.replace(".fa",".aln"),TEMPDIR)

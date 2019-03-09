@@ -53,13 +53,13 @@ if __name__ == "__main__":
         outfile = open(args.outfile,"w")
         outfile.write("id\t|\tpid\t|\tname\t|\tclean name\t|\trank\t|\t\n")
     else:
-        print "id\t|\tpid\t|\tname\t|\tclean name\t|\trank\t|\t"
+        print("id\t|\tpid\t|\tname\t|\tclean name\t|\trank\t|\t")
     while len(stack) > 0:
         tempid = stack.pop()
         if args.outfile:
             outfile.write(tempid+"\t|\t"+pid[tempid]+"\t|\t"+nid[tempid]+"\t|\t"+clean_name(nid[tempid])+"\t|\t"+nrank[tempid]+"\t|\t\n")
         else:
-            print tempid+"\t|\t"+pid[tempid]+"\t|\t"+nid[tempid]+"\t|\t"+clean_name(nid[tempid])+"\t|\t"+nrank[tempid]+"\t|\t"
+            print(tempid+"\t|\t"+pid[tempid]+"\t|\t"+nid[tempid]+"\t|\t"+clean_name(nid[tempid])+"\t|\t"+nrank[tempid]+"\t|\t")
         if tempid in cid:
             for i in cid[tempid]:
                 stack.append(i)

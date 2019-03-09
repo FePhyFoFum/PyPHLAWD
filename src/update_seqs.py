@@ -12,7 +12,7 @@ that the taxonomy has not changed so radically to render the folder useless
 """
 # outfilehead is going to be a date,time stamp, tid is the id of the taxon, dirl is the directory, internal is whether it is internal
 def add_updated_seqs_to_dir(dirl,tid,DB,outfilehead,internal = False):
-    print dirl
+    print(dirl)
     oldids = set()
     maintablename = None
     for i in os.listdir(dirl):
@@ -21,7 +21,7 @@ def add_updated_seqs_to_dir(dirl,tid,DB,outfilehead,internal = False):
             maintablename = i
         # read all the tables
         if ".table" in i:
-            print >> sys.stderr, "reading:",i
+            print("reading:",i, file=sys.stderr)
             fl = open(dirl+i,"r")
             for j in fl:
                 spls = j.strip().split("\t")
@@ -46,8 +46,8 @@ def add_updated_seqs_to_dir(dirl,tid,DB,outfilehead,internal = False):
     if len(diff) > 0:    
         newtable = dirl+maintablename+"."+outfilehead
         newseqfn = dirl+maintablename.replace(".table",".fas")+"."+outfilehead
-        print >> sys.stderr, "writing:",newtable
-        print >> sys.stderr, "writing:",newseqfn
+        print("writing:",newtable, file=sys.stderr)
+        print("writing:",newseqfn, file=sys.stderr)
         newtablef = open(newtable,"w")
         newseqf = open(newseqfn,"w")
         for i in diff:
@@ -56,7 +56,7 @@ def add_updated_seqs_to_dir(dirl,tid,DB,outfilehead,internal = False):
         newtablef.close()
         newseqf.close()
     else:
-        print >> sys.stderr,"no update"
+        print("no update", file=sys.stderr)
 
 # outfilehead is the part after the taxon that you want to distinguish the update. 
 # I would base this on time with this command time.strftime("%m_%d_%Y_%H_%M_%S")
@@ -64,7 +64,7 @@ def add_updated_seqs_to_dir(dirl,tid,DB,outfilehead,internal = False):
 # if you do this from main it will do the whole tree
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" base_dir DB"
+        print("python "+sys.argv[0]+" base_dir DB")
         sys.exit(0)
     
     dirl = sys.argv[1]
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     
     for n in rootnd.iternodes(order="POSTORDER"):
         tid,dirl = n.data["tid"],n.data["dir"]
-        print >> sys.stderr, tid,dirl
+        print(tid,dirl, file=sys.stderr)
         internal = False
         if len(n.children) > 0:
             internal = True

@@ -17,7 +17,7 @@ def escape_space(ins):
 def newick_name(lab):
     invalidchars = ":;[](),'"
     if any(elem in lab for elem in invalidchars):
-        print "gotta quote this sucka: " + lab
+        print("gotta quote this sucka: " + lab)
         lab = "'" + lab + "'"
     else:
         lab = lab.replace(" ","_")

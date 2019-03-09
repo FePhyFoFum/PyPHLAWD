@@ -7,9 +7,9 @@ this is going to remove one degree nodes
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" infile.tre outfile.tre"
+        print("python "+sys.argv[0]+" infile.tre outfile.tre")
         sys.exit(0)
-    tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[1]))
     going = True
     while going:
         going = False

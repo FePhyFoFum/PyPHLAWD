@@ -11,7 +11,7 @@ BEWARE, this writes over the file
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" table clusterdir fending [logfile]"
+        print("python "+sys.argv[0]+" table clusterdir fending [logfile]")
         sys.exit(0)
     fend = sys.argv[3]
     LOGFILE = "pyphlawd.log"

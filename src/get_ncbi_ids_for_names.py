@@ -11,7 +11,7 @@ def get_taxid_for_name(cursor, name):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" infile database"
+        print("python "+sys.argv[0]+" infile database")
         sys.exit(0)
     inf = open(sys.argv[1],"r")
     dbname = sys.argv[2]
@@ -24,7 +24,7 @@ if __name__ == "__main__":
             continue
         tt = get_taxid_for_name(c,nm)
         if tt is not None:
-            print tt
+            print(tt)
         else:
             outfile.write(nm+"\n")
     outfile.close()

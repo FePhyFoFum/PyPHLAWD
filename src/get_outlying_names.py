@@ -9,7 +9,7 @@ else:
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" basedir .table rooted_tree"
+        print("python "+sys.argv[0]+" basedir .table rooted_tree")
         sys.exit(0)
 
     tab = open(sys.argv[2],"r")
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             count += 1
 
 
-    intree = tree_reader.read_tree_file_iter(sys.argv[3]).next()
+    intree = next(tree_reader.read_tree_file_iter(sys.argv[3]))
     for i in intree.iternodes(order="POSTORDER"):
         lvsnms = set(i.lvsnms())
         for j in tree.iternodes(order="POSTORDER"):
@@ -74,10 +74,10 @@ if __name__ == "__main__":
         if len(i.children) > 0:
             try:
                 if max(i.children[0].data["h"],i.children[1].data["h"]) - min(i.children[0].data["h"],i.children[1].data["h"]) > 1:
-                    print "error in ",i.get_newick_repr(False)
+                    print("error in ",i.get_newick_repr(False))
                     #sys.exit(0)
             except:
                 continue
-    print intree.get_newick_repr(False)+";"
+    print(intree.get_newick_repr(False)+";")
 
         

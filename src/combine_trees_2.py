@@ -33,12 +33,12 @@ def remove_int_ext_nodes(nms,tre):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+ " addtree bigtre"
+        print("python "+sys.argv[0]+ " addtree bigtre")
         sys.exit(0)
 
-    tree1 = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree1 = next(tree_reader.read_tree_file_iter(sys.argv[1]))
     tree_utils.set_heights(tree1)
-    bigtree = tree_reader.read_tree_file_iter(sys.argv[2]).next()
+    bigtree = next(tree_reader.read_tree_file_iter(sys.argv[2]))
     tree_utils.set_heights(bigtree)
 
     rootnms = set(tree1.lvsnms())
@@ -129,7 +129,7 @@ if __name__ == "__main__":
             break
 
     if EXTRACT:
-        print tree1.get_newick_repr(True)+";"
+        print(tree1.get_newick_repr(True)+";")
     else:
-        print bigtree.get_newick_repr(True)+";"
+        print(bigtree.get_newick_repr(True)+";")
 

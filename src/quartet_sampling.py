@@ -206,7 +206,7 @@ def process_replicate(replicate):
 
         result["raxml_args"] = " ".join(raxml_args)
         if args.verbose:
-             print('\ncalling:\n\n' + result["raxml_args"] + '\n')
+             print(('\ncalling:\n\n' + result["raxml_args"] + '\n'))
 
         p = subprocess.Popen(raxml_args, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
@@ -253,7 +253,7 @@ def process_replicate(replicate):
             raxml_args += ["-q", temp_part_fname]
         result["raxml_args"] = " ".join(raxml_args)
         if args.verbose:
-             print('\ncalling:\n\n' + result["raxml_args"] + '\n')
+             print(('\ncalling:\n\n' + result["raxml_args"] + '\n'))
         p = subprocess.Popen(raxml_args, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         ts, tse = p.communicate()
@@ -332,7 +332,7 @@ def process_replicate_paup(replicate):
     p = subprocess.Popen(paup_args, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
     if args.verbose:
-        print(result['raxml_args'])
+        print((result['raxml_args']))
 
     ts, tse = p.communicate()
     result["raxml_stdout"] = ts.decode("utf-8")
@@ -401,9 +401,9 @@ def process_raxml_info_2lk(raxml_info_file_path, verbose):
         print("---")
         print(name)
         print(treelike)
-        print(smallest_int, smallest_b)
-        print(test_trees[smallest_int])
-        print(correct, next_best, correct-next_best)
+        print((smallest_int, smallest_b))
+        print((test_trees[smallest_int]))
+        print((correct, next_best, correct-next_best))
     return smallest_b, smallest_int, correct-next_best
 
 
@@ -422,7 +422,7 @@ def process_raxml_info_ML(raxml_tree_file_path, verbose):
         smallest_int = 2
     if verbose:
         print("---")
-        print(smallest_int, l1, l2)
+        print((smallest_int, l1, l2))
     return True, smallest_int, 0
 
 
@@ -463,8 +463,8 @@ def process_paup_info(outfilepath, verbose):
         print("---")
         print(outfilepath)
         print(treelike)
-        print(smallest_int, test_trees[smallest_int])
-        print(correct, next_best, correct-next_best)
+        print((smallest_int, test_trees[smallest_int]))
+        print((correct, next_best, correct-next_best))
     return smallest_b, smallest_int, correct-next_best
 
 
@@ -550,8 +550,8 @@ def set_leaf_sets(nd, root_bipart_label, bifurcating = True):
                 else:
                     leafsets["L1"] = set(sib.lvsnms())
                     leafsets["L2"] = set(sib.lvsnms())
-                    print("Node %s does not have exactly 2 children. \
-                            It will be skipped." % sib.label )
+                    print(("Node %s does not have exactly 2 children. \
+                            It will be skipped." % sib.label ))
                     #continue
                 # remember that we've already done the root,
                 # so we can skip it when we hit the other side
@@ -572,7 +572,7 @@ def set_leaf_sets(nd, root_bipart_label, bifurcating = True):
 
 def n_quartets(leafsets):
     x = 1
-    for t in leafsets.values():
+    for t in list(leafsets.values()):
         x *= len(t)
     return x
 
@@ -597,7 +597,7 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
     # need to make sure we don't repeat
 
     if args.verbose:
-        print('number of possible quartets: ' + str(N))
+        print(('number of possible quartets: ' + str(N)))
 
     if (N * MAX_QUARTET_ENUMERATION_THRESHOLD) < nreps and bifurcating:
         if args.verbose:
@@ -621,7 +621,7 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
             if check_overlap and not check_overlap_aln(proposed_quartet):
                 nonoverlapping_count += 1
                 if args.verbose:
-                    print('non-overlap count: ' + str(nonoverlapping_count))
+                    print(('non-overlap count: ' + str(nonoverlapping_count)))
                 continue
 
             # if we made it here then the proposed rep is acceptable
@@ -634,14 +634,14 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
             replicates.append(rep)
 
         if len(replicates) < 1:
-            print('WARNING: generated all possible quartets ' +
+            print(('WARNING: generated all possible quartets ' +
                   'and did not find a suitable one! If you have the -O ' +
                   'flag enabled, alignment may not have enough data at ' +
-                  'this edge (i.e. low partial decisiveness).')
+                  'this edge (i.e. low partial decisiveness).'))
 
         elif len(replicates) < nreps:
-            print('WARNING: only ' + str(len(replicates)) + ' suitable ' +
-                  'replicates for this node.')
+            print(('WARNING: only ' + str(len(replicates)) + ' suitable ' +
+                  'replicates for this node.'))
 
     else:
         if args.verbose:
@@ -650,7 +650,7 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
         observed_quartets = set([])
         for j in range(nreps):
             if args.verbose:
-                print('looking for unique replicate ' + str(j))
+                print(('looking for unique replicate ' + str(j)))
 
             rep = None
             duplicate_count = 0
@@ -664,16 +664,16 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
 
                 # generate a random replicate
                 if bifurcating:
-                    for subtree_name, leaf_names in leafsets.items():
+                    for subtree_name, leaf_names in list(leafsets.items()):
                         r = random.sample(leaf_names, 1)[0]
 
                         # should really be doing this check when loading files
                         if r not in aln:
-                            print('\nFATAL ERROR: name ' + r + ' not in alignment')
+                            print(('\nFATAL ERROR: name ' + r + ' not in alignment'))
                             sys.exit(1)
 
                         if args.verbose:
-                            print(" " + subtree_name + ' = ' + r)
+                            print((" " + subtree_name + ' = ' + r))
 
                         proposed_rep['seqs'][subtree_name] = aln[r]
                         proposed_rep['seqs_names'][subtree_name] = r
@@ -690,10 +690,10 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
                     r = [r1,r2,r3,r4]
                     for k,nm in zip(r,["L1","L2","R1","R2"]):
                         if k not in aln:
-                            print('\nFATAL ERROR: name ' + r + ' not in alignment')
+                            print(('\nFATAL ERROR: name ' + r + ' not in alignment'))
                             sys.exit(1)
                         if args.verbose:
-                            print(" " + nm + ' = ' + k)
+                            print((" " + nm + ' = ' + k))
                         proposed_rep['seqs'][nm] = aln[k]
                         proposed_rep['seqs_names'][nm] = k
                         proposed_quartet.add(k)
@@ -701,7 +701,7 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
                 if proposed_quartet in observed_quartets:
                     duplicate_count += 1
                     if args.verbose:
-                        print('duplicate count: ' + str(duplicate_count))
+                        print(('duplicate count: ' + str(duplicate_count)))
                     continue
 
                 # quartet is unique, remember that we tried it
@@ -710,26 +710,26 @@ def get_replicates(n_completed, results_queue, leafsets, bifurcating = True):
                 if check_overlap and not check_overlap_aln(proposed_quartet):
                     nonoverlapping_count += 1
                     if args.verbose:
-                        print('non-overlap count:' +
-                              str(nonoverlapping_count))
+                        print(('non-overlap count:' +
+                              str(nonoverlapping_count)))
                     continue
 
                 # if we made it here then the proposed rep is acceptable
                 rep = proposed_rep
                 if args.verbose:
-                    print("passed taxa", ",".join(list(proposed_quartet)))
+                    print(("passed taxa", ",".join(list(proposed_quartet))))
                 break
 
             if rep is None: # if there is no rep, then we hit the max number of attempts
-                print(('WARNING: generated ~%0.0f%% of possible quartets ' +
+                print((('WARNING: generated ~%0.0f%% of possible quartets ' +
                       'and did not find a suitable one! If you have the -O ' +
                       'flag enabled, alignment may not have enough data at ' +
                       'this edge (i.e. low partial decisiveness).') %
-                      (max_random_sample_proportion * 100))
+                      (max_random_sample_proportion * 100)))
                 break
 
             elif args.verbose:
-                print('constructed replicate ' + str(j) + '\n')
+                print(('constructed replicate ' + str(j) + '\n'))
 
             replicates.append(rep)
 
@@ -885,21 +885,21 @@ if __name__ == "__main__":
 
     if args.max_random_sample_proportion:
         max_random_sample_proportion = args.max_random_sample_proportion
-        print('setting the maximum proportion of possible quartets to be explored \
-              to: ' + str(max_random_sample_proportion))
+        print(('setting the maximum proportion of possible quartets to be explored \
+              to: ' + str(max_random_sample_proportion)))
         if (max_random_sample_proportion >
            DEFAULT_MAX_RANDOM_SAMPLE_PROPORTION):
-            print('WARNING: for some alignments, the quartet randomization \
+            print(('WARNING: for some alignments, the quartet randomization \
                    procedure may take a long time to finish (or fail) when \
                    max proportion of quartets to sample is greater than \
-                   ' + str(DEFAULT_MAX_RANDOM_SAMPLE_PROPORTION))
+                   ' + str(DEFAULT_MAX_RANDOM_SAMPLE_PROPORTION)))
 
     if args.paup:
         PAUP = True
 
     if args.lnlike_thresh:
         LNLIKETHRESH = args.lnlike_thresh[0]
-        print("setting the minimum lnlike thresh to be " + str(LNLIKETHRESH))
+        print(("setting the minimum lnlike thresh to be " + str(LNLIKETHRESH)))
 
     results_dir = os.path.abspath(args.results_dir[0]) \
         if args.results_dir is not None else os.path.abspath(".")
@@ -919,9 +919,9 @@ if __name__ == "__main__":
 
     if args.temp_dir is not None:
         temp_wd = args.temp_dir[0]
-        print("setting the temp working dir to " + temp_wd)
+        print(("setting the temp working dir to " + temp_wd))
     if not os.path.exists(temp_wd):
-        print("creating " + temp_wd)
+        print(("creating " + temp_wd))
         os.mkdir(temp_wd)
 
     calc_start_k = args.start_node_number[0] if args.start_node_number is not \
@@ -945,7 +945,7 @@ if __name__ == "__main__":
     #  unbroken on lines
     aln = {}
     alnfile = args.alignment[0]
-    print("reading alignment from " + alnfile.name)
+    print(("reading alignment from " + alnfile.name))
     firstline = True
     aln_length = 0
     for i in seq.read_fasta_file_iter(alnfile.name):
@@ -957,17 +957,17 @@ if __name__ == "__main__":
     if args.min_overlap:
         check_overlap = True
         if aln_length < args.min_overlap:
-            print('WARNING: the alignment length is less than the minimum \
+            print(('WARNING: the alignment length is less than the minimum \
                    overlap. The minimum overlap required will be \
-                   ' + str(DEFAULT_MIN_OVERLAP))
+                   ' + str(DEFAULT_MIN_OVERLAP)))
         else:
             min_overlap = args.min_overlap
-            print("setting the minimum overlap to be " + str(min_overlap))
+            print(("setting the minimum overlap to be " + str(min_overlap)))
 
     # get the tree to subsample
     tree = None
     treefile = args.tree[0]
-    print("reading tree from " + treefile.name)
+    print(("reading tree from " + treefile.name))
     tree = tree_reader.read_tree_string(treefile.readline())
     if tree is None:
         sys.exit("Could not find a tree in the treefile: " + treefile.name)
@@ -990,7 +990,7 @@ if __name__ == "__main__":
         names = args.clade.split(",")
         nodes = []
         just_clade = True
-        print "Just calculating for clade ", names
+        print("Just calculating for clade ", names)
         for i in names:
             found = False
             for j in tree.leaves():
@@ -999,7 +999,7 @@ if __name__ == "__main__":
                     found = True
                     break
             if found is False:
-                print(i, "not found. Exiting.")
+                print((i, "not found. Exiting."))
                 sys.exit()
         clade = tree_utils.get_mrca(nodes, tree)
         clade_names = clade.lvsnms()
@@ -1014,10 +1014,10 @@ if __name__ == "__main__":
                 nnd.istip = True
                 nnd.label = i
                 clade.add_child(nnd)
-        print clade.get_newick_repr(False)
+        print(clade.get_newick_repr(False))
 
     if args.verbose:
-        print("tree has " + str(len(leaves)) + " leaves")
+        print(("tree has " + str(len(leaves)) + " leaves"))
 
     # k is the node counter
     k = 1
@@ -1080,14 +1080,14 @@ if __name__ == "__main__":
                 time_string = user_feedback_time(k, leaves, root_bipart_label)
             else:
                 time_string = ""
-            print("\nprocessing node " + str(k) + "/" + numnodes + time_string)
+            print(("\nprocessing node " + str(k) + "/" + numnodes + time_string))
 
         #  require a bifurcating tree
         #  assert(len(node.children) == 2)
         bifurc = True
         if len(nd.children) != 2:
-            print("Node %s does not have exactly 2 children. \
-                  It will be skipped." % k)
+            print(("Node %s does not have exactly 2 children. \
+                  It will be skipped." % k))
             bifurc = False
             #continue
         
@@ -1104,21 +1104,21 @@ if __name__ == "__main__":
         k += 1
 
         if skip_tip_child_of_root:
-            print("not calculating ica for tip child '" + tip_child_label +
-                  "' of the root (ica is 1.0, as for all tips).")
+            print(("not calculating ica for tip child '" + tip_child_label +
+                  "' of the root (ica is 1.0, as for all tips)."))
             continue
 
         # if we already processed bipart at root and this is other side of that
         if is_other_side_of_root:
-            print("\nskipping second instance of root-adjacent bipartition" +
+            print(("\nskipping second instance of root-adjacent bipartition" +
                   "(it was already processed at node " +
-                  root_bipart_label + ").")
+                  root_bipart_label + ")."))
             nd.label = root_bipart_label
             continue
 
         # sanity check
         t = set()
-        for leafset in leafsets.values():
+        for leafset in list(leafsets.values()):
             assert len(leafset) > 0
             t.update(leafset)
         assert len(t) == len(leaves)
@@ -1245,10 +1245,10 @@ if __name__ == "__main__":
     with open(tree_result_file_path+".ica", "w") as tree_file_path:
         tree_file_path.write(tree.get_newick_repr(True)+";")
 
-    print("\ndone.\nscores written to: " + score_result_file_path +
+    print(("\ndone.\nscores written to: " + score_result_file_path +
           "\nlabeled tree written to: " + tree_result_file_path +
           "\ntotal time {0:.2f}".format((time.time() - starttime) / 60 / 60) +
-          " hours")
+          " hours"))
 
     if args.verbout:
         verbout.close()

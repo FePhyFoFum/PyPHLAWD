@@ -104,7 +104,7 @@ def create_new_matrix(finaldict,seqsdict,genesn,outprefix,minover,maxtax):
     for i in finaldict:
         taxongenes[i] = len(finaldict[i])
     ordereddict = []
-    for key, value in sorted(taxongenes.iteritems(), key=lambda (k,v): (v,k)):
+    for key, value in sorted(iter(taxongenes.items()), key=lambda k_v: (k_v[1],k_v[0])):
         ordereddict.append(key)
     ordereddict = ordereddict[::-1]
     keep = []
@@ -114,7 +114,7 @@ def create_new_matrix(finaldict,seqsdict,genesn,outprefix,minover,maxtax):
         if len(keep) == maxtax:
             break
         keep.append(i)
-    print "found ",len(keep),"to add"
+    print("found ",len(keep),"to add")
     concats = {} # filename,partname
     temps = set() # files that are created that we want to delete later
     n = 0 # the tempfile counter
@@ -144,7 +144,7 @@ def create_new_matrix(finaldict,seqsdict,genesn,outprefix,minover,maxtax):
         concats[gn] = i
     savedseqstable.close()
     os.remove(outprefix+".tempadd")
-    cmd = "pxcat -s "+" ".join(concats.keys())+" -o "+outprefix+".outaln -p "+outprefix+".tempparts"
+    cmd = "pxcat -s "+" ".join(list(concats.keys()))+" -o "+outprefix+".outaln -p "+outprefix+".tempparts"
     #print cmd
     os.system(cmd)
     #write the old parts file
@@ -187,15 +187,15 @@ def main():
     args = parser.parse_args(sys.argv[1:])
     DB = args.database
     outprefix = args.outprefix
-    print >> sys.stderr, "constructing a database of "+str(args.taxon)
+    print("constructing a database of "+str(args.taxon), file=sys.stderr)
     filen,filentable,seq_taxon_dict,taxon_seqs_dict,seqsdict = construct_db_of_sister(args.taxon,DB,outprefix)
-    print >> sys.stderr, "constructing a database of the matrix"
+    print("constructing a database of the matrix", file=sys.stderr)
     blastdb,parts,genesfn = construct_db_of_parts(args.matrix,args.parts,outprefix)
-    print >> sys.stderr, "running blast"
+    print("running blast", file=sys.stderr)
     blastoutput = run_blast(blastdb,filen)
-    print >> sys.stderr, "processing blast"
+    print("processing blast", file=sys.stderr)
     finaldict = process_blast(blastoutput,seq_taxon_dict,taxon_seqs_dict,parts)
-    print >> sys.stderr,"constructing the new matrix"
+    print("constructing the new matrix", file=sys.stderr)
     create_new_matrix(finaldict,seqsdict,genesfn,outprefix,args.minoverlap,args.maxtaxa)
     
     #cleaning things

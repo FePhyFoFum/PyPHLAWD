@@ -62,13 +62,13 @@ def check_info_table(tree):
                 pinter = set(i.parent.data["names"]).intersection(set(mat_nms[j]))
                 if len(inter) > 0 and len(pinter) == len(inter) and len(inter) == len(mat_nms[j]):
                     if len(inter) / float(len(i.data["names"])) > cluster_prop and len(inter) > smallest_cluster:
-                        print i.label,clusterind[j],len(inter),len(i.data["names"])
+                        print(i.label,clusterind[j],len(inter),len(i.data["names"]))
                         keepers.add(clusterind[j].replace(".fa",".aln"))
         else:
             for j in clusterind:
                 inter = set(i.data["names"]).intersection(set(mat_nms[j]))
                 if len(inter)/float(len(i.data["names"])) > cluster_prop and len(inter) > smallest_cluster:
-                    print clusterind[j],len(inter),len(i.data["names"])
+                    print(clusterind[j],len(inter),len(i.data["names"]))
                     keepers.add(clusterind[j].replace(".fa",".aln"))
     return
 
@@ -78,11 +78,11 @@ def make_trim_trees(alignments):
         if check_for_programs.which_program("fasttree") != None:
             fasttreename = "fasttree"
         else:
-            print colored.red("FastTree NOT IN PATH"),colored.red(emoticons.get_ran_emot("sad"))
+            print(colored.red("FastTree NOT IN PATH"),colored.red(emoticons.get_ran_emot("sad")))
             sys.exit(1)
     newalns = {}
     for i in alignments:
-        print "making tree for",i
+        print("making tree for",i)
         cmd = fasttreename+" -nt -gtr "+i+" > "+i.replace(".aln",".tre")+" 2> /dev/null"
         os.system(cmd)
         cmd = "python "+DI+"trim_tips.py "+i.replace(".aln",".tre")+" "+str(relcut)+" "+str(abscut)
@@ -92,7 +92,7 @@ def make_trim_trees(alignments):
         outrem = p.stderr.read().strip()
         removetax = set()
         if len(outrem) > 0:
-            print "  removing",len(outrem.split("\n")),"tips"
+            print("  removing",len(outrem.split("\n")),"tips")
             for j in outrem.split("\n"):
                 taxon = j.split(" ")[1]
                 removetax.add(taxon)
@@ -102,7 +102,7 @@ def make_trim_trees(alignments):
         outtre = p.stdout.read().strip()
         outrem = p.stderr.read().strip()
         if len(outrem) > 0:
-            print "  removing",len(outrem.split("\n")),"tips"
+            print("  removing",len(outrem.split("\n")),"tips")
             for j in outrem.split("\n"):
                 taxon = j.split(" ")[1]
                 removetax.add(taxon)
@@ -116,7 +116,7 @@ def make_trim_trees(alignments):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print "python "+sys.argv[0]+" startdir"
+        print("python "+sys.argv[0]+" startdir")
         sys.exit(0)
 
     cld = sys.argv[1]
@@ -158,20 +158,20 @@ if __name__ == "__main__":
     record_info_table(cld+"/info.csv")
 
     check_info_table(tree)
-    print len(keepers)
+    print(len(keepers))
 
 
     # do you want to rename these ones?
-    rename = raw_input("Do you want to rename these clusters? y/n/# ")
+    rename = input("Do you want to rename these clusters? y/n/# ")
     if rename == 'y' or rename == '#':
         keeps = None
         if rename == '#':
-            nums = raw_input("List cluster numbers separated by spaces: ")
+            nums = input("List cluster numbers separated by spaces: ")
             keeps = [cld+"/clusters/cluster"+i+".aln" for i in nums.split(" ")]
         else:
             keeps = [cld+"/clusters/"+i for i in keepers]
         # do you want to make trees and trim tips?
-        maketrees = raw_input("Do you want to make trees and trim tips for these gene regions? y/n ")
+        maketrees = input("Do you want to make trees and trim tips for these gene regions? y/n ")
         if maketrees == 'y':
             newalns = make_trim_trees(keeps)
             if len(newalns) > 0:
@@ -183,19 +183,19 @@ if __name__ == "__main__":
         cmd = "python "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join(keeps)
         #print cmd
         os.system(cmd)
-        concat = raw_input("Do you want to concat? y/n ")
+        concat = input("Do you want to concat? y/n ")
         if concat == 'y':
             cmd = "pxcat -s "+" ".join([i+".rn" for i in keeps])+" -o "+cld+"/"+rtn+"_outaln -p "+cld+"/"+rtn+"_outpart"
             #print cmd
             os.system(cmd)
-        constraint = raw_input("Do you want to make a constraint? y/n ")
+        constraint = input("Do you want to make a constraint? y/n ")
         if constraint == 'y':
-            dbname = raw_input("Where is the DB? ")
+            dbname = input("Where is the DB? ")
             #baseid = raw_input("What is the baseid? ")
             baseid = cld.split("_")[-1]
             if len(dbname) > 2 and len(baseid) > 2:
                 cmd = "python "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+cld+"/"+rtn+"_outaln > "+cld+"/"+rtn+"_outaln.constraint.tre"
                 os.system(cmd)
-            print "line for get_min"
-            print "python "+DI+"get_min_overlap_multiple_seqs.py "+cld+"/"+rtn+"_outaln.constraint.tre "+" ".join([i+".rn" for i in keeps])
+            print("line for get_min")
+            print("python "+DI+"get_min_overlap_multiple_seqs.py "+cld+"/"+rtn+"_outaln.constraint.tre "+" ".join([i+".rn" for i in keeps]))
 

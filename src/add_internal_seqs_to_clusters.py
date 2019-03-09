@@ -36,7 +36,7 @@ def add_ind_mafft(inseq,cl_file, merge,tempdir="./"):
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" indir outclu logfile [TEMPDIR]"
+        print("python "+sys.argv[0]+" indir outclu logfile [TEMPDIR]")
         sys.exit(0)
     curfas = sys.argv[1]+"/notinchildren.fas"
     if os.path.isfile(curfas) == False:

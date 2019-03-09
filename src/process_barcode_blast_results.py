@@ -2,7 +2,7 @@ import sys
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        print "python "+sys.argv[0]+" blasttable barcodetable seqtable"
+        print("python "+sys.argv[0]+" blasttable barcodetable seqtable")
         sys.exit(0)
     inf = open(sys.argv[1],"r")
     
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     barcf.close()
 
     for i in barc:
-        print i,barcodes_name[i]
+        print(i,barcodes_name[i])
         count = 0
         for j in barc[i]:
             e = barce[i][count]
@@ -88,6 +88,6 @@ if __name__ == "__main__":
             l = barcl[i][count]
             count += 1
             if j in barcodes:
-                print "\t==",j,allcodes_name[j],e,_i,l
+                print("\t==",j,allcodes_name[j],e,_i,l)
             else:
-                print "\t",j,allcodes_name[j],e,_i,l
+                print("\t",j,allcodes_name[j],e,_i,l)

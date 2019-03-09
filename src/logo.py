@@ -16,5 +16,5 @@ def version():
     return "current git hash: "+p.communicate()[0]
 
 if __name__ == "__main__":
-    print logo
-    print version()
+    print(logo)
+    print(version())

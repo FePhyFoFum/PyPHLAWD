@@ -4,7 +4,7 @@ from get_ncbi_tax_tree_no_species import clean_name
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" DB outfile"
+        print("python "+sys.argv[0]+" DB outfile")
         sys.exit()
     DB = sys.argv[1]
     conn = sqlite3.connect(DB)

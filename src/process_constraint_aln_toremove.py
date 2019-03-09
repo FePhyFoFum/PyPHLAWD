@@ -15,7 +15,7 @@ parent. tree needs to be rooted
 
 if __name__ == "__main__":
     if len(sys.argv) != 4 and len(sys.argv) != 5:
-        print "python "+sys.argv[0]+" toremove constrainttre aln [MLTREE.rooted]"
+        print("python "+sys.argv[0]+" toremove constrainttre aln [MLTREE.rooted]")
         sys.exit(0)
 
     removetaxa = set()
@@ -36,7 +36,7 @@ if __name__ == "__main__":
             tr.write(i.get_fasta())
     tr.close()
 
-    tree = tree_reader.read_tree_file_iter(sys.argv[2]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[2]))
     nodes = {}
     mrca_pars = [] #vector of the parents of each remove constraint
     child_constraints = [] #vector of child_constraints for each remove constraint
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     tr.close()
 
     if len(sys.argv) == 5:
-        mtree = tree_reader.read_tree_file_iter(sys.argv[4]).next()
+        mtree = next(tree_reader.read_tree_file_iter(sys.argv[4]))
         mnodes = {}
         for i in mtree.leaves():
             mnodes[i.label] = i

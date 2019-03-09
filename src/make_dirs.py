@@ -6,10 +6,10 @@ from clint.textui import colored
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" in.tre location"
+        print("python "+sys.argv[0]+" in.tre location")
         sys.exit(0)
 
-    tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[1]))
     dirl = sys.argv[2]+"/"
 
     didntmake = set()
@@ -29,11 +29,11 @@ if __name__ == "__main__":
         try:
             os.mkdir(dirl+i.label)
         except:
-            print colored.red("PROBLEM CREATING"),dirl+i.label,colored.red(emoticons.get_ran_emot("sad"))
+            print(colored.red("PROBLEM CREATING"),dirl+i.label,colored.red(emoticons.get_ran_emot("sad")))
             sys.exit(1)
         try:
             os.mkdir(dirl+i.label+"/clusters")
         except:
-            print colored.red("PROBLEM CREATING"),dirl+i.label+"/clusters",colored.red(emoticons.get_ran_emot("sad"))
+            print(colored.red("PROBLEM CREATING"),dirl+i.label+"/clusters",colored.red(emoticons.get_ran_emot("sad")))
             sys.exit(1)
     

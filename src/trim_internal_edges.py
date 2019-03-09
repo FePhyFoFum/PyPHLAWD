@@ -3,10 +3,10 @@ import tree_reader
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" infile.tre cutoff"
+        print("python "+sys.argv[0]+" infile.tre cutoff")
         sys.exit(0)
     cutoff = float(sys.argv[2])
-    tree = tree_reader.read_tree_file_iter(sys.argv[1]).next()
+    tree = next(tree_reader.read_tree_file_iter(sys.argv[1]))
     remove = set()
     rootlvs = set(tree.lvsnms())
     for i in tree.iternodes():
@@ -20,4 +20,4 @@ if __name__ == "__main__":
                 for j in list(tips):
                     remove.add(j)
     for i in remove:
-        print >> sys.stderr,"removing:",i
+        print("removing:",i, file=sys.stderr)

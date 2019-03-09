@@ -102,7 +102,7 @@ def pass_boot_filter(node,min_ave_boot):
     if count == 0: #extracted clades with only two tips
         return True
     boot_average = total / float(count)
-    print boot_average
+    print(boot_average)
     return boot_average >= float(min_ave_boot)
 
 def get_ortho_from_rooted_inclade(inclade):

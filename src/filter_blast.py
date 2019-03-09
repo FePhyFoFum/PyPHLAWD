@@ -60,6 +60,6 @@ def process_blast_out_lce(infile, outfile = None):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "python "+sys.argv[0]+" infile.rawblast outfile.mclin"
+        print("python "+sys.argv[0]+" infile.rawblast outfile.mclin")
         sys.exit(0)
     process_blast_out(sys.argv[1],sys.argv[2])

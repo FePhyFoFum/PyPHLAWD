@@ -32,7 +32,7 @@ def mcl_to_fasta(all_fasta,mcl_outfile,minimal_taxa,outdir):
 
 if __name__ =="__main__":
     if len(sys.argv) != 5:
-        print "usage: write_fasta_files_from_mcl.py all_fasta mcl_outfile minimal_taxa outDIR"
+        print("usage: write_fasta_files_from_mcl.py all_fasta mcl_outfile minimal_taxa outDIR")
         sys.exit()
     
     mcl_to_fasta(all_fasta=sys.argv[1],mcl_outfile=sys.argv[2],\
