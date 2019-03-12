@@ -35,7 +35,7 @@ evalue_limit_lc = 10e-20
 perc_identity = 20
 
 #bait cut
-bait_cut = True
+bait_cut = False
 bait_cut_smallest_size = 300
 
 #cutoffs for trim tips

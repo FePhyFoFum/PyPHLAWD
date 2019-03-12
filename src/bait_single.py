@@ -82,8 +82,6 @@ if __name__ == "__main__":
                 continue
         ## cutting based on baits
         else:
-            if float(spls[3]) < bait_cut_smallest_size:
-                continue
             # get cuts
             ltcut = int(spls[10])
             rtcut = int(spls[11])
@@ -91,6 +89,8 @@ if __name__ == "__main__":
                 tcut = ltcut
                 ltcut = rtcut
                 rtcut = tcut
+            if  (rtcut-ltcut) < bait_cut_smallest_size:
+                continue
             if spls[0] not in bait_cuts:
                 bait_cuts[spls[0]] = [ltcut,rtcut]
             else:
