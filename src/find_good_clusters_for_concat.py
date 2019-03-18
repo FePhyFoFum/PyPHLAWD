@@ -93,8 +93,8 @@ def make_trim_trees(alignments):
         outrem = p.stderr.read().strip()
         removetax = set()
         if len(outrem) > 0:
-            print("  removing",len(outrem.split("\n")),"tips")
-            for j in outrem.split("\n"):
+            print("  removing",len(str(outrem).split("\n")),"tips")
+            for j in str(outrem).split("\n"):
                 taxon = j.split(" ")[1]
                 removetax.add(taxon)
         cmd = py+" "+DI+"trim_internal_edges.py "+i.replace(".aln",".tre")+" "+str(abscutint)
@@ -103,8 +103,8 @@ def make_trim_trees(alignments):
         outtre = p.stdout.read().strip()
         outrem = p.stderr.read().strip()
         if len(outrem) > 0:
-            print("  removing",len(outrem.split("\n")),"tips")
-            for j in outrem.split("\n"):
+            print("  removing",len(str(outrem).split("\n")),"tips")
+            for j in str(outrem).split("\n"):
                 taxon = j.split(" ")[1]
                 removetax.add(taxon)
         if len(removetax) > 0:
