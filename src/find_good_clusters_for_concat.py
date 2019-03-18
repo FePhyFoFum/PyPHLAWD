@@ -10,6 +10,7 @@ from conf import abscutint
 from conf import usecython
 from conf import smallest_cluster
 from conf import cluster_prop
+from conf import py
 import emoticons
 from clint.textui import colored
 if usecython:
