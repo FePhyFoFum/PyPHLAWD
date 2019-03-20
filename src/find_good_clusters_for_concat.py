@@ -93,6 +93,7 @@ def make_trim_trees(alignments):
         outrem = p.stderr.read().strip()
         removetax = set()
         if len(outrem) > 0:
+            outrem = outrem.decode("utf-8")
             print("  removing",len(str(outrem).split("\n")),"tips")
             for j in str(outrem).split("\n"):
                 taxon = j.split(" ")[1]
@@ -103,6 +104,7 @@ def make_trim_trees(alignments):
         outtre = p.stdout.read().strip()
         outrem = p.stderr.read().strip()
         if len(outrem) > 0:
+            outrem = outrem.decode("utf-8")
             print("  removing",len(str(outrem).split("\n")),"tips")
             for j in str(outrem).split("\n"):
                 taxon = j.split(" ")[1]
