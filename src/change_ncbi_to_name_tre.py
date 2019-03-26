@@ -19,14 +19,14 @@ if __name__ == "__main__":
         sys.argv.append("-h")
     args = parser.parse_args(sys.argv[1:])
     
-    tab = open(sys.argv[1],"r")
+    tab = open(args.table,"r")
     idn = {}
     for i in tab:
         spls = i.strip().split("\t")
         idn[spls[1]] = spls[4]
     tab.close()
-    outf = open(sys.argv[3],"w")
-    for i in tree_reader.read_tree_file_iter(sys.argv[2]):
+    outf = open(args.outfile,"w")
+    for i in tree_reader.read_tree_file_iter(args.infile):
         for j in i.iternodes():
             if j.label in idn:
                 j.label = newick_name(idn[j.label])
