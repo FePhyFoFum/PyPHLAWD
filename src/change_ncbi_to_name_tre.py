@@ -5,7 +5,7 @@ from utils import newick_name
 import argparse as ap
 
 def generate_argparser():
-    parser = ap.ArgumentParser(prog="change_ncbi_to_name_fasta.py",
+    parser = ap.ArgumentParser(prog="change_ncbi_to_name_tre.py",
         formatter_class=ap.ArgumentDefaultsHelpFormatter)
     parser = ap.ArgumentParser()
     parser.add_argument("-t", "--table", type=str, help="NCBI translation table", required=True)
