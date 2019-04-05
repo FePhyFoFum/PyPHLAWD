@@ -9,8 +9,8 @@ def generate_argparser():
         formatter_class=ap.ArgumentDefaultsHelpFormatter)
     parser = ap.ArgumentParser()
     parser.add_argument("-t", "--table", type=str, help="NCBI translation table", required=True)
-    parser.add_argument("-i", "--infile", type=str, help="Input fasta alignment", required=True)
-    parser.add_argument("-o", "--outfile", type=str, help="Output fasta alignment", required=True)
+    parser.add_argument("-i", "--infile", type=str, help="Input tree", required=True)
+    parser.add_argument("-o", "--outfile", type=str, help="Output tree", required=True)
     return parser
 
 if __name__ == "__main__":
