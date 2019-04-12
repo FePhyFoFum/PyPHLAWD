@@ -17,6 +17,7 @@ if usecython:
     import cnode as node
 else:
     import node
+import argparse as ap
 
 """
 this assumes that you have already run 
@@ -26,6 +27,18 @@ post_process_cluster_info.py startdir
 mat_nms = []
 clusterind = {}
 keepers = set()#node
+
+def generate_argparser():
+    parser = ap.ArgumentParser(prog="find_good_clusters_for_concat.py",
+        formatter_class=ap.ArgumentDefaultsHelpFormatter)
+    parser = ap.ArgumentParser()
+    parser.add_argument("-d", "--dir", type=str, required=True,
+        help=("Starting directory."))
+    parser.add_argument("-b","--database",type=str,required=True,
+        help=("Database with sequences."))
+    parser.add_argument("-i", "--includetrivial", action="store_true", required=False,
+        default=False, help=("Include trivial clusters (default = False)"))
+    return parser
 
 def record_info_table(infilecsv):
     tf = open(infilecsv,"r")
@@ -53,7 +66,10 @@ def record_info_table(infilecsv):
                 count += 1
     tf.close()
 
-def check_info_table(tree):
+# where default clusters are selected
+# picked by coverage (conditioned on minimum size of 3 (rooted) or 4 (unrooted)) and smallest size defined
+# if trivial is True, and=y cluster > cluster_prop is retained
+def check_info_table(tree, trivial):
     for i in tree.iternodes(order="POSTORDER"):
         if "names" not in i.data:
             continue
@@ -62,16 +78,29 @@ def check_info_table(tree):
                 inter = set(i.data["names"]).intersection(set(mat_nms[j]))
                 pinter = set(i.parent.data["names"]).intersection(set(mat_nms[j]))
                 if len(inter) > 0 and len(pinter) == len(inter) and len(inter) == len(mat_nms[j]):
-                    if len(inter) / float(len(i.data["names"])) > cluster_prop and len(inter) > smallest_cluster:
-                        print(i.label,clusterind[j],len(inter),len(i.data["names"]))
-                        keepers.add(clusterind[j].replace(".fa",".aln"))
+                    # whether the `and` below should be `or` (like for the root).
+                    if len(inter) / float(len(i.data["names"])) > cluster_prop or len(inter) > smallest_cluster:
+                        if not trivial:
+                            if (len(inter) > 3):
+                                print(i.label,clusterind[j],len(inter),len(i.data["names"]))
+                                keepers.add(clusterind[j].replace(".fa",".aln"))
+                        else:
+                            print(i.label,clusterind[j],len(inter),len(i.data["names"]))
+                            keepers.add(clusterind[j].replace(".fa",".aln"))
         else:
-            for j in clusterind:
+            for j in clusterind: # root
                 inter = set(i.data["names"]).intersection(set(mat_nms[j]))
-                if len(inter)/float(len(i.data["names"])) > cluster_prop and len(inter) > smallest_cluster:
-                    print(clusterind[j],len(inter),len(i.data["names"]))
-                    keepers.add(clusterind[j].replace(".fa",".aln"))
+                if len(inter)/float(len(i.data["names"])) > cluster_prop or len(inter) > smallest_cluster:
+                    if not trivial: # default: require a phylogenetically minimum size of at least 4
+                        if (len(inter) > 3):
+                            print(clusterind[j],len(inter),len(i.data["names"]))
+                            keepers.add(clusterind[j].replace(".fa",".aln"))
+                    else:
+                        print(clusterind[j],len(inter),len(i.data["names"]))
+                        keepers.add(clusterind[j].replace(".fa",".aln"))
+                        
     return
+
 
 def make_trim_trees(alignments):
     fasttreename = "FastTree"
@@ -118,15 +147,17 @@ def make_trim_trees(alignments):
     return newalns
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("python "+sys.argv[0]+" startdir")
-        sys.exit(0)
-
-    cld = sys.argv[1]
+    parser = generate_argparser()
+    if len(sys.argv[1:]) == 0:
+        sys.argv.append("-h")
+    args = parser.parse_args(sys.argv[1:])
+    dbname = args.database
+    cld = args.dir
     #take off the trailing slash if there is one
     if cld[-1] == "/":
         cld = cld[0:-1]
-
+    
+    trivial = args.includetrivial
     count = 0
     tree = node.Node()
     nodes = {}
@@ -159,10 +190,9 @@ if __name__ == "__main__":
             count += 1
 
     record_info_table(cld+"/info.csv")
-
-    check_info_table(tree)
+    #print(tree.get_newick_repr()+";")
+    check_info_table(tree, trivial)
     print(len(keepers))
-
 
     # do you want to rename these ones?
     rename = input("Do you want to rename these clusters? y/n/# ")
@@ -193,8 +223,6 @@ if __name__ == "__main__":
             os.system(cmd)
         constraint = input("Do you want to make a constraint? y/n ")
         if constraint == 'y':
-            dbname = input("Where is the DB? ")
-            #baseid = raw_input("What is the baseid? ")
             baseid = cld.split("_")[-1]
             if len(dbname) > 2 and len(baseid) > 2:
                 cmd = py+" "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+cld+"/"+rtn+"_outaln > "+cld+"/"+rtn+"_outaln.constraint.tre"
