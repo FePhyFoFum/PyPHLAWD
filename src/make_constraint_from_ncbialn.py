@@ -95,6 +95,8 @@ def construct_tree_only_ids(baseid,c,ids):
         if found == False:
             going = False
             break
+    if len(rt.children) == 1:
+        rt = rt.children[0]
     return rt
 
 
