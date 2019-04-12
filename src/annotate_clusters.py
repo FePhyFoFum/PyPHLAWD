@@ -41,7 +41,10 @@ def make_cluster_table(cld, idn,idd, outfile):
             firstdef = idd[j.name]
             avl += len(j.seq)
             num += 1
-        avl = avl/float(num)
+        try:
+            avl = avl/float(num)
+        except:
+            avl = 0.0
         cli[i] = sps
         if len(sps) > 2:
             clns.append([hl.link(i,"clusters/"+i),len(sps),format(avl,'.4f'),firstdef])
