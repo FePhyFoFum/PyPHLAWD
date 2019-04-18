@@ -100,6 +100,9 @@ if __name__ == "__main__":
     parser.add_argument("-l", "--taxlistfile", help="File listing taxa to include (one per line)", required=False)
     parser.add_argument("-o", "--outfile", help="Output tree file", required=False)
     
+    if len(sys.argv[1:]) == 0:
+        sys.argv.append("-h")
+    
     args = parser.parse_args()
     
     taxalist = None
