@@ -60,9 +60,24 @@ if __name__ == "__main__":
             seqd[i.name] = i
         log.w("UNCLUSTERED SEQS IN "+sys.argv[1])
         #make blastdb of the cluster dir
-        make_blast_db_from_cluster(outclu,tempdir)
-        blast_file_against_db(sys.argv[1],"notinchildren.fas",tempdir)
-        dclus,clus = filter_blast.process_blast_out(tempdir+tempname+".rawblastn")
-        for i in dclus:
-            add_ind_mafft(seqd[i],outclu+"/"+dclus[i],merge,tempdir)
+        # see if there are clusters yet, if so
+        numfiles = 0
+        for i in os.listdir(outclu):
+            numfiles += 1
+            break
+        if numfiles > 0:
+            make_blast_db_from_cluster(outclu,tempdir)
+            blast_file_against_db(sys.argv[1],"notinchildren.fas",tempdir)
+            dclus,clus = filter_blast.process_blast_out(tempdir+tempname+".rawblastn")
+            for i in dclus:
+                add_ind_mafft(seqd[i],outclu+"/"+dclus[i],merge,tempdir)
+        # if not, treat like cluster single
+        else:
+            import cluster_single
+            tablefile = None
+            for i in os.listdir(sys.argv[1]):
+                if ".table" == i[-6:]:
+                    tablefile = sys.argv[1]+i
+                    break
+            cluster_single.cluster_single(sys.argv[1]+"/notinchildren",LOGFILE,log,tablefile,outclu)
     log.c()
