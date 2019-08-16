@@ -20,7 +20,7 @@ def cluster_single(INFILE,LOGFILE,log,TABLE,ODIR):
     cmd = "makeblastdb -in "+INFILE+".fas -out "+INFILE+".db -dbtype nucl > /dev/null 2>&1"
     log.wac("RUNNING "+cmd)
     os.system(cmd)
-    cmd = "blastn -db "+INFILE+".db -query "+INFILE+".fas -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+INFILE+".fasta.rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+    cmd = "blastn -task blastn -db "+INFILE+".db -query "+INFILE+".fas -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+INFILE+".fasta.rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     log.wac("RUNNING "+cmd)
     os.system(cmd)
     cmd = py+" "+DI+"filter_blast.py "+INFILE+".fasta.rawblastn "+INFILE+".fasta.rawblastn.mclin"

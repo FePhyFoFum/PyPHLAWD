@@ -66,7 +66,7 @@ def construct_db_of_parts(infile,infileparts,outprefix):
     return dbfn,genes,genesfn
 
 def run_blast(blastdb,filen):
-    cmd = "blastn -db "+blastdb+".db -query "+filen+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+filen+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+    cmd = "blastn -task blastn -db "+blastdb+".db -query "+filen+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+filen+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     os.system(cmd)
     os.remove(blastdb+".db.nhr")
     os.remove(blastdb+".db.nin")

@@ -56,7 +56,7 @@ def make_blast_db_from_cluster_samp(indir,tempdir="./"):
     os.system(cmd)
 
 def blast_file_against_db(indir,filename,tempdir="./"):
-    cmd = "blastn -db "+tempdir+tempname+".db -query "+indir+"/"+filename+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempdir+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+    cmd = "blastn -task blastn -db "+tempdir+tempname+".db -query "+indir+"/"+filename+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+nthread+" -max_target_seqs 10000000 -out "+tempdir+tempname+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     os.system(cmd)
 
 def add_file(fromfile,tofile):

@@ -62,7 +62,7 @@ if __name__ == "__main__":
         if TEMPDIR[-1] != "/":
             TEMPDIR += "/"
 
-    cmd = "blastn -db "+TEMPDIR+tempname+".db -query "+INFILE+".fas -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+INFILE+".fasta.rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+    cmd = "blastn -task blastn -db "+TEMPDIR+tempname+".db -query "+INFILE+".fas -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+INFILE+".fasta.rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     log.wac("RUNNING "+cmd)
     os.system(cmd)
 

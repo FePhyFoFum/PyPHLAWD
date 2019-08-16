@@ -30,5 +30,5 @@ if __name__ == "__main__":
         for j in i.iternodes():
             if j.label in idn:
                 j.label = newick_name(idn[j.label])
-        outf.write(i.get_newick_repr(False)+";")
+        outf.write(i.get_newick_repr(True)+";")
     outf.close()
