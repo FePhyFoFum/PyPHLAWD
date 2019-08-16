@@ -228,5 +228,5 @@ if __name__ == "__main__":
                 cmd = py+" "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+cld+"/"+rtn+"_outaln > "+cld+"/"+rtn+"_outaln.constraint.tre"
                 os.system(cmd)
             print("line for get_min")
-            print("python "+DI+"get_min_overlap_multiple_seqs.py "+cld+"/"+rtn+"_outaln.constraint.tre "+" ".join([i+".rn" for i in keeps]))
+            print("python3 "+DI+"get_min_overlap_multiple_seqs.py "+cld+"/"+rtn+"_outaln.constraint.tre "+" ".join([i+".rn" for i in keeps]))
 
