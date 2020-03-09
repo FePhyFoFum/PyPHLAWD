@@ -234,7 +234,7 @@ if __name__ == "__main__":
     print(cmd)
     os.system(cmd)
     # seqs
-    cmd = py+" "+DI+"change_ncbi_to_name_fasta.py -t "+tab+" -i "+outaln+" -o "+outaln+"_renamed"
+    cmd = py+" "+DI+"change_ncbi_to_name_fasta.py -t "+tab+" -i "+outaln+" -o "+outaln+".rn"
     print("rename taxa in concatenated alignment:")
     print(cmd)
     os.system(cmd)
