@@ -1,5 +1,5 @@
 #directory that houses the scripts for pyphlawd
-DI = "~/Dropbox/programming/PyPHLAWD/src/"
+DI = "~/Dropbox/programming/pyphlawd/src/"
 #don't edit, just adding a trailing / if it isn't there
 if DI[-1] != "/":
     DI += "/"
@@ -10,7 +10,7 @@ py = "python3"
 tempname = "temp.fas"
 
 #smallest seq size
-smallest_size = 600
+smallest_size = 450
 
 #sample size for blast and comps
 dosamp = True
@@ -61,4 +61,4 @@ smallest_cluster = 20
 cluster_prop = 0.2
 
 #filter name mismatch
-filternamemismatch = True
+filternamemismatch = False

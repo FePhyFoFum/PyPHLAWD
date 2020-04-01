@@ -41,4 +41,5 @@ gids = ["705923695", #KM258478, mislabeled Lonicera
         "1143726",
         "2294036",
         "KP110084", #mislabeled Hypodiscus
+        "MG886842" #mislabeled Calamus vitiensis
         ]
