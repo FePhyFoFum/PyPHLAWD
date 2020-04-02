@@ -27,15 +27,20 @@ def get_all_included_wc(taxalist,c):
                 c.execute("select ncbi_id, parent_ncbi_id from taxonomy where ncbi_id = ?", (cur, ))
             count = 0
             for j in c:
+                #print(j)
                 count += 1
                 if len(j) > 2:
                     if j[2] != None:
                         inc.add(str(j[2]))
+                    else:
+                        inc.add(str(j[0]))
                 else:
                     inc.add(str(j[0]))
                 if len(j) > 2:
                     if j[3] != None:
                         par = str(j[3])
+                    else:
+                        par = str(j[1])
                 else:
                     par = str(j[1])
                 if par != "1" and par not in inc:
@@ -74,11 +79,11 @@ def construct_tree_only_ids(baseid,c,ids):
             tid = str(j[0])
             if j[4] != None:
                 tid = str(j[4])
+            #print(j,tid in includelist)
             if includelist != None and tid not in includelist:
                 continue
             if tid in nodes:
                 continue
-            #print(j)
             stack.append(tid)
             if str(j[1]) == "scientific name" and (noinclude == False or str(j[3]) != stopat):
                 nn = node.Node()
