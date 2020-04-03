@@ -7,7 +7,7 @@ else:
     import node
 
 def clean_name(name):
-    return name.replace(" ", "_").replace("&","_")
+    return name.replace(" ", "_").replace("&","_").replace(":","_")
 
 def get_all_included(taxalist,c):
     inc = set()
