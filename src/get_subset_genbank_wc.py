@@ -261,6 +261,8 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
                     continue
                 if limitlist != None and str(j[1]) not in limitlist:
                     continue
+                if len(str(j[7])) < smallest_size:
+                    continue
                 # we are writing
                 seqst = ">"+str(j[3]+"\n"+str(j[7]))
                 tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\t"+str(custom_id)+"\t"+str(custom_parent_id)+"\t"+str(custom_name)
