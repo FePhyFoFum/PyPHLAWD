@@ -1,3 +1,4 @@
+#cython: language_level=3
 
 cdef class Node:
     cdef public dict data
