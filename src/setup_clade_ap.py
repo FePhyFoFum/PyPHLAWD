@@ -15,6 +15,8 @@ def generate_argparser ():
         help=("The id or name of the taxon to be processes."), metavar=("ID/NAME"))
     parser.add_argument("-b", "--database", type=str, nargs=1, required=True,
         help=("Location of database."))
+    parser.add_argument("-s", "--seqgzfolder", type=str,nargs=1,required=True,
+        help=("Location of the gzseqs directory"))
     parser.add_argument("-o", "--outdir", type=str, nargs=1, required=True,
         help=("Location of the output directory (must already exist)."))
     parser.add_argument("-l", "--logfile", type=str, nargs=1, required=True,
@@ -48,6 +50,10 @@ if __name__ == "__main__":
     if logfile[-len(".md.gz"):] != ".md.gz":
         logfile += ".md.gz"
 
+    gzfiles = args.seqgzfolder[0]
+    if gzfiles[-1] != "/":
+        gzfiles += "/"
+
     tname = dirl+"/"+taxon+".tre"
     if taxalistf != None:
         cmd = py+" "+DI+"get_ncbi_tax_tree_no_species.py "+taxon+" "+db+" "+taxalistf+" > "+tname
@@ -59,7 +65,7 @@ if __name__ == "__main__":
     cmd = py+" "+DI+"make_dirs.py "+tname+" "+dirl
     print(colored.yellow("MAKING DIRS IN"),dirl,colored.yellow(emoticons.get_ran_emot("excited")))
     os.system(cmd)
-    cmd = py+" "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db
+    cmd = py+" "+DI+"populate_dirs_first.py "+tname+" "+dirl+" "+db+" "+gzfiles
     if taxalistf != None:
         cmd += " "+taxalistf
     print(colored.yellow("POPULATING DIRS"),dirl,colored.yellow(emoticons.get_ran_emot("excited")))

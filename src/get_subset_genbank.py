@@ -1,4 +1,5 @@
 import sys,os,sqlite3
+import gzip
 from bad_seqs import gids
 from bad_taxa import taxonids
 from exclude_patterns import patterns
@@ -11,8 +12,19 @@ this version of the file is updated to take into account the change from gi to a
 
 """
 
+def get_seq_from_gz(gzdir, filename, idtoget):
+    fl = gzip.open(gzdir+"/"+filename,"r")
+    for i in fl:
+        if str(i.decode()).split(" ")[0] == idtoget:
+            return str(i.decode()).split(" ")[1]
+    fl.close()
+    return None
+
+
+
 # if outfilen and outfile_tbln are None, the results will be returned
-def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
+def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
+    remove_genomes=False, limitlist = None):
     if outfilen != None and outfile_tbln != None:
         outfile = open(outfilen,"w")
         outfileg = None
@@ -47,14 +59,14 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
                 break
         if badpattern:
             continue
-        c.execute("select * from sequence where ncbi_id = ?",(id,))
+        c.execute("select * from sequence where ncbi_id = ?",(id,)) # this will give the filename in the folder
         l = c.fetchall()
         for j in l:
             #if the title sequence name is not the same as the id name (first part)
             #  then we skip it. sorry sequence! you are outta here
             if filternamemismatch:
                 try:
-                    if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+                    if tname.split(" ")[0]+tname.split(" ")[1] != str(j[4]).split(" ")[0]+str(j[4]).split(" ")[1]:
                         continue
                 except:
                     continue
@@ -64,21 +76,26 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
             #bad description
             bad_desc = False
             for k in desc_patterns:
-                if k in str(j[5]):
+                if k in str(j[4]):
                     bad_desc = True
                     break
             if bad_desc:
                 continue
-            if len(str(j[7])) < smallest_size:
+            # str(j[7]) is the seq but now it is the seq file
+            # now str(j[5]) is the file
+            seqstr = get_seq_from_gz(gzfileloc,"seqs."+str(j[5]),str(j[2]))
+            if seqstr == None: # too big
+                continue
+            if len(seqstr) < smallest_size:
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
             # we are writing
-            seqst = ">"+str(j[3]+"\n"+str(j[7]))
-            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+            seqst = ">"+str(j[3]+"\n"+seqstr)
+            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])
             if outfilen != None and outfile_tbln != None:
                 if remove_genomes:
-                    if len(str(j[7])) > 10000:
+                    if len(seqstr) > 10000:
                         outfileg.write(seqst+"\n")
                     else:
                         outfile.write(seqst+"\n")
@@ -106,7 +123,8 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, l
         return retseqs,rettbs
 
 # if outfilen and outfile_tbln are None, the results will be returned
-def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes=False, limitlist = None):
+def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,gzfileloc,
+    remove_genomes=False, limitlist = None):
     if outfilen != None and outfile_tbln != None:
         outfile = open(outfilen,"w")
         outfileg = None
@@ -129,7 +147,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
         #  then we skip it. sorry sequence! you are outta here
         if filternamemismatch:
             try:
-                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+                if tname.split(" ")[0]+tname.split(" ")[1] != str(j[4]).split(" ")[0]+str(j[4]).split(" ")[1]:
                     continue
             except:
                 continue
@@ -139,12 +157,15 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
         #bad description
         bad_desc = False
         for k in desc_patterns:
-            if k in str(j[5]):
+            if k in str(j[4]):
                 bad_desc = True
                 break
         if bad_desc:
             continue
-        if len(str(j[7])) < smallest_size:
+        seqstr = get_seq_from_gz(gzfileloc,"seqs."+str(j[5]),str(j[2]))
+        if seqstr == None:
+            continue
+        if len(seqstr) < smallest_size:
             continue
         #exclude bad taxa
         if str(j[1]) in taxonids:
@@ -158,12 +179,12 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
             continue
         if limitlist != None and str(j[1]) not in limitlist:
             continue
-        seqst = ">"+str(j[3]+"\n"+str(j[7]))
-        tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+        seqst = ">"+str(j[3]+"\n"+seqstr)
+        tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\t"+str(j[5])
         # we are writing
         if outfilen != None and outfile_tbln != None:
             if remove_genomes:
-                if len(str(j[7])) > 10000:
+                if len(seqstr) > 10000:
                     outfileg.write(seqst+"\n")
                 else:
                     outfile.write(seqst+"\n")
@@ -172,7 +193,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
             outfile_tbl.write(tblst+"\n")
         # we are returning
         else:
-            if len(str(j[7])) < 10000:
+            if len(seqstr) < 10000:
                 retseqs.append(seqst)
                 rettbs.append(tblst)
     # get the children of the taxon that have no children (and so the sequences would go here)
@@ -221,7 +242,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
             #  then we skip it. sorry sequence! you are outta here
             if filternamemismatch:
                 try:
-                    if tname.split(" ")[0]+tname.split(" ")[1] != str(j[5]).split(" ")[0]+str(j[5]).split(" ")[1]:
+                    if tname.split(" ")[0]+tname.split(" ")[1] != str(j[4]).split(" ")[0]+str(j[4]).split(" ")[1]:
                         continue
                 except:
                     continue
@@ -230,21 +251,24 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,remove_genomes
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
-            if len(str(j[7])) < smallest_size:
+            seqstr = get_seq_from_gz(gzfileloc,"seqs."+str(j[5]),str(j[2]))
+            if seqstr == None:
+                continue
+            if len(seqstr) < smallest_size:
                 continue
             # we are writing
-            seqst = ">"+str(j[3]+"\n"+str(j[7]))
-            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+            seqst = ">"+str(j[3]+"\n"+seqstr)
+            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\t"+str(j[5])
             if outfilen != None and outfile_tbln != None:
                 if str(j[1]) in keepers:
-                    if len(str(j[7])) > 10000:
+                    if len(seqstr) > 10000:
                         outfileg.write(seqst+"\n")
                     else:
                         outfile.write(seqst+"\n")
-                outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])+"\n")
+                outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\t"+str(j[5])+"\n")
             # we are returning
             else:
-                if str(j[1]) in keepers and len(str(j[7])) < 10000:
+                if str(j[1]) in keepers and len(seqstr) < 10000:
                     retseqs.append(seqst)
                     rettbs.append(tblst)
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
