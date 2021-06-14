@@ -43,6 +43,7 @@ names.dmp             readme.txt
 division.dmp          gencode.dmp           
 nodes.dmp
 """
+parent_ncbi_map = {}
 def read_tax_file(filename,db):
     conn = sqlite3.connect(db)
     c = conn.cursor()
@@ -84,10 +85,40 @@ def read_tax_file(filename,db):
         count += 1
     f.close()
     conn.commit()
+    try:
+        c.execute("select ncbi_id,parent_ncbi_id from taxonomy where name_class = 'scientific name';");
+    except:
+        print("uh oh")
+    for j in c:
+        nc = int(str(j[0]))
+        pc = int(str(j[1]))
+        if pc in parent_ncbi_map:
+            parent_ncbi_map[pc].append(nc);
+        else:
+            tv = []
+            tv.append(nc);
+            parent_ncbi_map[pc] = tv
+    rebuild_tax_tree(1,1,c)
+    conn.commit()
     conn.close()
     files = ['citations.dmp','merged.dmp','delnodes.dmp','gc.prt','names.dmp','readme.txt','division.dmp','gencode.dmp','nodes.dmp']
     for i in files:
         os.remove(i)
+
+def rebuild_tax_tree(gid, lft, conn):
+    rgt = lft + 1
+    res = []
+    if gid in parent_ncbi_map:
+        res = parent_ncbi_map[gid]
+    for i in range(len(res)):
+        if res[i] == gid:
+            continue
+        else:
+            rgt = rebuild_tax_tree(res[i],rgt,conn)
+    updcmd = "update taxonomy set left_value = "+str(lft)+", right_value = "+str(rgt)+" where ncbi_id = "+str(gid)+";"
+    conn.execute(updcmd)
+    return rgt + 1
+
 
 def read_gb_flat_file(filename,db,storeseqs=False,maxsize=None):
     conn = sqlite3.connect(db)
@@ -174,6 +205,7 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--gzfilesdir",help="Where are the gzfiles",required=True)
     parser.add_argument("-m", "--maxsize",help="Don't keep seqs with length great than ",default=0,required=False)
     parser.add_argument("-a", "--addnew",help="Just add new files from dir",default=False)
+    parser.add_argument("-t", "--justtax",help="Just load the taxonomy",default=False,action='store_true')
 
     if len(sys.argv[1:]) == 0:
         sys.argv.append("-h")
@@ -201,6 +233,10 @@ if __name__ == "__main__":
         ftp.close()
         read_tax_file(std+tf,dbn)
         os.remove(std+tf)
+
+    if args.justtax:
+        print("just loading the tax")
+        sys.exit(0)
 
     fd = args.gzfilesdir
     if fd[-1] != "/":
