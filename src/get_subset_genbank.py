@@ -20,7 +20,15 @@ def get_seq_from_gz(gzdir, filename, idtoget):
     fl.close()
     return None
 
-
+def get_seqs_from_gz(gzdir,filename,idstoget):
+    fl = gzip.open(gzdir+"/"+filename,"r")
+    retd = {}#key is id , value is seq
+    idstoget = set(idstoget)
+    for i in fl:
+        if str(i.decode()).split(" ")[0] in idstoget:
+            retd[str(i.decode()).split(" ")[0]] = str(i.decode()).split(" ")[1]
+    fl.close()
+    return retd
 
 # if outfilen and outfile_tbln are None, the results will be returned
 def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
@@ -112,6 +120,7 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
         for j in l:
             childs.append(str(j[0]))
             stack.append(str(j[0]))
+    # do the actual writing of the sequence
     # we are writing
     if outfilen != None and outfile_tbln != None:
         outfile.close()
