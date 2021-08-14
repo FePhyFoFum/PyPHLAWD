@@ -213,13 +213,20 @@ if __name__ == "__main__":
     # table
     tab = cld+"/"+cld.split("/")[-1]+".table"
     rtn = cld.split("/")[-1]
+    
     # change ids to NCBIids
     cmd = py+" "+DI+"change_id_to_ncbi_fasta_mult.py "+tab+" "+ " ".join(keeps)
+    print("change ids to NCBIids:")
+    print(cmd)
     os.system(cmd)
+    
     # concatenate and switch to uppercase
     outaln = cld+"/"+rtn+"_outaln"
     cmd = "pxcat -u -s "+" ".join([i+".rn" for i in keeps])+" -o "+outaln+" -p "+cld+"/"+rtn+"_outpart"
+    print("make concatenated alignment:")
+    print(cmd)
     os.system(cmd)
+    
     # make constraint tree
     ctree = cld+"/"+rtn+"_outaln.constraint.tre"
     cmd = py+" "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+outaln+" > "+ctree
