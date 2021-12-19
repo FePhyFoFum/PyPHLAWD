@@ -31,7 +31,7 @@ if __name__ == "__main__":
     idn = {}
     for i in tab:
         spls = i.strip().split("\t")
-        idn[spls[3]] = spls[4]
+        idn[spls[2]] = spls[1]
     tab.close()
     dirr = sys.argv[2]
     for o in os.listdir(dirr):

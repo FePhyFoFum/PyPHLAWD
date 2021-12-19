@@ -20,15 +20,17 @@ def get_seq_from_gz(gzdir, filename, idtoget):
     fl.close()
     return None
 
-def get_seqs_from_gz(gzdir,filename,idstoget):
+def get_seqs_from_gz(gzdir, filename, idstoget):
     fl = gzip.open(gzdir+"/"+filename,"r")
-    retd = {}#key is id , value is seq
+    idtoseq = {}
+    for i in idstoget:
+        idtoseq[i] = None
     idstoget = set(idstoget)
     for i in fl:
         if str(i.decode()).split(" ")[0] in idstoget:
-            retd[str(i.decode()).split(" ")[0]] = str(i.decode()).split(" ")[1]
+            idtoseq[str(i.decode()).split(" ")[0]]= str(i.decode()).split(" ")[1]
     fl.close()
-    return retd
+    return idtoseq
 
 # if outfilen and outfile_tbln are None, the results will be returned
 def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
@@ -46,6 +48,8 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
     species = []
     stack = []
     stack.append(str(taxonid))
+    files_ids = {}# key is the file, value is a list of ids
+    ids_props = {}# key is id, value is list of properties
     while len(stack) > 0:
         id = stack.pop()
         if id in species:
@@ -91,16 +95,41 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
                 continue
             # str(j[7]) is the seq but now it is the seq file
             # now str(j[5]) is the file
-            seqstr = get_seq_from_gz(gzfileloc,"seqs."+str(j[5]),str(j[2]))
+            tfilen = "seqs."+str(j[5])
+            if tfilen not in files_ids:
+                files_ids[tfilen] = []
+            files_ids[tfilen].append(str(j[2]))
+            ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(tname),str(j[5])]
+        c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
+        childs = []
+        l = c.fetchall()
+        for j in l:
+            childs.append(str(j[0]))
+            stack.append(str(j[0]))
+    # get all the seqs from the file at once
+    for fn in files_ids:
+        idstoseq = get_seqs_from_gz(gzfileloc,fn,files_ids[fn])
+        for tid in idstoseq:
+            seqstr = idstoseq[tid]
             if seqstr == None: # too big
                 continue
             if len(seqstr) < smallest_size:
                 continue
-            if limitlist != None and str(j[1]) not in limitlist:
+            #exclude bad taxa
+            if ids_props[tid][1] in taxonids:
+                continue
+            badpattern = False
+            for i in patterns:
+                if i in tname:
+                    badpattern = True
+                    break
+            if badpattern:
+                continue
+            if limitlist != None and ids_props[tid][1] not in limitlist:
                 continue
             # we are writing
-            seqst = ">"+str(j[3]+"\n"+seqstr)
-            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])
+            seqst = ">"+str(ids_props[tid][3]+"\n"+seqstr)
+            tblst = "\t".join(ids_props[tid])
             if outfilen != None and outfile_tbln != None:
                 if remove_genomes:
                     if len(seqstr) > 10000:
@@ -112,15 +141,9 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
                 outfile_tbl.write(tblst+"\n")
             # we are returning
             else:
-                retseqs.append(seqst)
-                rettbs.append(tblst)
-        c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
-        childs = []
-        l = c.fetchall()
-        for j in l:
-            childs.append(str(j[0]))
-            stack.append(str(j[0]))
-    # do the actual writing of the sequence
+                if len(seqstr) < 10000:
+                    retseqs.append(seqst)
+                    rettbs.append(tblst)
     # we are writing
     if outfilen != None and outfile_tbln != None:
         outfile.close()
@@ -142,6 +165,8 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,gzfileloc,
         outfile_tbl = open(outfile_tbln,"w")
     retseqs = [] # return if filenames aren't given
     rettbs = [] # returning if filenames aren't given
+    files_ids = {}# key is the file, value is a list of ids
+    ids_props = {}# key is id, value is list of properties
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     #only get the ones that are this specific taxon
@@ -171,40 +196,12 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,gzfileloc,
                 break
         if bad_desc:
             continue
-        seqstr = get_seq_from_gz(gzfileloc,"seqs."+str(j[5]),str(j[2]))
-        if seqstr == None:
-            continue
-        if len(seqstr) < smallest_size:
-            continue
-        #exclude bad taxa
-        if str(j[1]) in taxonids:
-            continue
-        badpattern = False
-        for i in patterns:
-            if i in tname:
-                badpattern = True
-                break
-        if badpattern:
-            continue
-        if limitlist != None and str(j[1]) not in limitlist:
-            continue
-        seqst = ">"+str(j[3]+"\n"+seqstr)
-        tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\t"+str(j[5])
-        # we are writing
-        if outfilen != None and outfile_tbln != None:
-            if remove_genomes:
-                if len(seqstr) > 10000:
-                    outfileg.write(seqst+"\n")
-                else:
-                    outfile.write(seqst+"\n")
-            else:
-                outfile.write(seqst+"\n")
-            outfile_tbl.write(tblst+"\n")
-        # we are returning
-        else:
-            if len(seqstr) < 10000:
-                retseqs.append(seqst)
-                rettbs.append(tblst)
+        # now str(j[5]) is the file
+        tfilen = "seqs."+str(j[5])
+        if tfilen not in files_ids:
+            files_ids[tfilen] = []
+        files_ids[tfilen].append(str(j[2]))
+        ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(tname),str(j[5])]
     # get the children of the taxon that have no children (and so the sequences would go here)
     keepers = []
     c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(str(taxonid),))
@@ -260,32 +257,58 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,gzfileloc,
                 continue
             if limitlist != None and str(j[1]) not in limitlist:
                 continue
-            seqstr = get_seq_from_gz(gzfileloc,"seqs."+str(j[5]),str(j[2]))
-            if seqstr == None:
-                continue
-            if len(seqstr) < smallest_size:
-                continue
-            # we are writing
-            seqst = ">"+str(j[3]+"\n"+seqstr)
-            tblst = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\t"+str(j[5])
-            if outfilen != None and outfile_tbln != None:
-                if str(j[1]) in keepers:
-                    if len(seqstr) > 10000:
-                        outfileg.write(seqst+"\n")
-                    else:
-                        outfile.write(seqst+"\n")
-                outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\t"+str(j[5])+"\n")
-            # we are returning
-            else:
-                if str(j[1]) in keepers and len(seqstr) < 10000:
-                    retseqs.append(seqst)
-                    rettbs.append(tblst)
+            tfilen = "seqs."+str(j[5])
+            if tfilen not in files_ids:
+                files_ids[tfilen] = []
+            if str(j[1]) in keepers:
+                files_ids[tfilen].append(str(j[2]))
+            ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(tname),str(j[5])]
+            tblst = "\t".join(ids_props[str(j[2])])
+            outfile_tbl.write(tblst+"\n")
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
         for j in l:
             childs.append(str(j[0]))
             stack.append(str(j[0]))
+    for fn in files_ids:
+        idstoseq = get_seqs_from_gz(gzfileloc,fn,files_ids[fn])
+        for tid in idstoseq:
+            seqstr = idstoseq[tid]
+            if seqstr == None: # too big
+                continue
+            if len(seqstr) < smallest_size:
+                continue
+            #exclude bad taxa
+            if ids_props[tid][1] in taxonids:
+                continue
+            badpattern = False
+            for i in patterns:
+                if i in tname:
+                    badpattern = True
+                    break
+            if badpattern:
+                continue
+            if limitlist != None and ids_props[tid][1] not in limitlist:
+                continue
+            # we are writing
+            seqst = ">"+str(ids_props[tid][3]+"\n"+seqstr)
+            tblst = "\t".join(ids_props[tid])
+            if outfilen != None and outfile_tbln != None:
+#                if ids_props[tid][1] in keepers:
+                if remove_genomes:
+                    if len(seqstr) > 10000:
+                        outfileg.write(seqst+"\n")
+                    else:
+                        outfile.write(seqst+"\n")
+                else:
+                    outfile.write(seqst+"\n")
+                #outfile_tbl.write(tblst+"\n")
+            # we are returning
+            else:
+                if len(seqstr) < 10000:
+                    retseqs.append(seqst)
+                    rettbs.append(tblst)
     # we are writing
     if outfilen != None and outfile_tbln != None:
         outfile.close()
