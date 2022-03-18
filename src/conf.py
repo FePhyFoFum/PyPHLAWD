@@ -54,7 +54,7 @@ qjpropcut = 0.05
 emoticons = True
 
 #cython
-usecython = True
+usecython = False
 
 #find good clusters things
 smallest_cluster = 20
