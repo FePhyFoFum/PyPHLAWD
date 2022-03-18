@@ -241,7 +241,7 @@ if __name__ == "__main__":
     fd = args.gzfilesdir
     if fd[-1] != "/":
         fd += "/"
-    kf = [i for i in os.listdir(fd) if ".seq.gz" in i]
+    kf = [i for i in os.listdir(fd) if ".gz" in i]
     if args.addnew:
         conn = sqlite3.connect(dbn)
         c = conn.cursor()
