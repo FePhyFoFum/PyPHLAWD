@@ -1,5 +1,5 @@
 #directory that houses the scripts for pyphlawd
-DI = "~/Dropbox/programming/pyphlawd/src/"
+DI = "~/apps/PyPHLAWD/src/"
 #don't edit, just adding a trailing / if it isn't there
 if DI[-1] != "/":
     DI += "/"
@@ -54,7 +54,7 @@ qjpropcut = 0.05
 emoticons = True
 
 #cython
-usecython = True
+usecython = False
 
 #find good clusters things
 smallest_cluster = 20
