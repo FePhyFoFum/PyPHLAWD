@@ -271,6 +271,7 @@ GEM
     unicode-display_width (1.8.0)
     zeitwerk (2.5.4)
 
+
 PLATFORMS
   x86_64-linux
 
