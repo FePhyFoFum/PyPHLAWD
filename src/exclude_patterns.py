@@ -1,4 +1,6 @@
-patterns = [" sp.",
+patterns = []
+"""
+[" sp.",
             " aff.",
             " var.",
             " x ",
@@ -6,3 +8,4 @@ patterns = [" sp.",
             " TNS:",
             " SK-",
             " isolate BB"]
+"""

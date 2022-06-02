@@ -33,10 +33,10 @@ def process_seqs(inf, maxsize,outd):
                     if len(seq) > maxsize:
                         continue
                 if length != len(seq):
-                    print(length,len(seq))
-                    sys.exit(0)
-                print(locus+" "+seq,file=outf)
-                added += 1
+                    print("PROBLEM (SKIPPING):",locus+" ",length,len(seq))
+                else:
+                    print(locus+" "+seq,file=outf)
+                    added += 1
             else:
                 seq += "".join(i.strip().split()[1:])
         if "LOCUS" ==  i[0:5]:
