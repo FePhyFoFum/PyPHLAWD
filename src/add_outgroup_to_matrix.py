@@ -60,7 +60,7 @@ def construct_db_of_parts(infile,infileparts,outprefix):
     tempoutf.close()
     for i in genesn:
         genesf[name].close()
-    cmd = "makeblastdb -in "+dbfn+" -out "+dbfn+".db -dbtype nucl > /dev/null 2>&1"
+    cmd = "makeblastdb -in "+dbfn+" -out "+dbfn+".db -dbtype nucl"# > /dev/null 2>&1"
     os.system(cmd)
     os.remove(dbfn)
     return dbfn,genes,genesfn
