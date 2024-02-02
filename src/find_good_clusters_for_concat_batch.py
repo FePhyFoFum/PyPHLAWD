@@ -120,8 +120,9 @@ def make_trim_trees(alignments):
         print("making tree for",i)
         cmd = fasttreename+" -nt -gtr "+i+" > "+i.replace(".aln",".tre")+" 2> /dev/null"
         os.system(cmd)
+        #print(cmd)
         cmd = py+" "+DI+"trim_tips.py "+i.replace(".aln",".tre")+" "+str(relcut)+" "+str(abscut)
-        #print cmd
+        #print(cmd)
         p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
         outtre = p.stdout.read().strip()
         outrem = p.stderr.read().strip()
@@ -133,7 +134,6 @@ def make_trim_trees(alignments):
                 taxon = j.split(" ")[1]
                 removetax.add(taxon)
         cmd = py+" "+DI+"trim_internal_edges.py "+i.replace(".aln",".tre")+" "+str(abscutint)
-        #print cmd
         p = subprocess.Popen(cmd, shell=True,stderr = subprocess.PIPE,stdout = subprocess.PIPE)
         outtre = p.stdout.read().strip()
         outrem = p.stderr.read().strip()
