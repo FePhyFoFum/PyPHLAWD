@@ -140,7 +140,7 @@ def generate_dataset(tips,files,outf):
         i.writefile(outf+str(count))
         ff = outf+str(count)+".aln"
         ffs.append(ff)
-        cmd = "mafft --adjustdirectionaccurately "+outf+str(count)+" > "+ff
+        cmd = "mafft --adjustdirectionaccurately "+outf+str(count)+" | sed 's/_R_//g' > "+ff
         os.system(cmd)
         count += 1
     cmd = "pxcat -s "+" ".join(ffs)+" -o TEMPTEMPCAT -p TEMPTEMPPART"
