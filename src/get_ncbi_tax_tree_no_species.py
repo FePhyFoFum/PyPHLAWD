@@ -6,6 +6,8 @@ if conf.usecython:
 else:
     import node
 
+exclude_un_en = True
+
 def clean_name(name):
     return name.replace(" ", "_").replace("&","_").replace(":","_").replace("(","_").replace(")","_")
 
@@ -70,6 +72,8 @@ def construct_tree(taxon, db, taxalist = None):
                 continue
             childs.append(tid)
             stack.append(tid)
+            if "unclassified" in str(j[1]) or "environmental" in str(j[1]):
+                continue
             if str(j[2]) == "scientific name":
                 name = str(j[1])
                 edname = str(j[3])
