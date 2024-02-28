@@ -85,4 +85,4 @@ if __name__ == "__main__":
         count += 1
         #if count == 100:
         #    break
-    print(tax.get_newick_repr(False))
+    print(tax.get_newick_repr(True)+";")
