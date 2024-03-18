@@ -2,11 +2,32 @@ import sys
 
 import node
 import tree_reader
+import tree_utils
 
 def get_name(nm):
     nm = nm.replace("'","").replace(" ","_")
     nm = "_".join(nm.split("_")[:-1])
     return nm
+
+
+"""
+dealing with non-monophyly
+"""
+def remove_non_mono(t):
+    ky = []
+    rm = []
+    for i in t.leaves():
+        if i.label not in ky:
+            ky.append(i.label)
+        else:
+            rm.append(i)
+    for i in rm:
+        p = i.parent
+        p.remove_child(i)
+        pp = p.parent
+        for j in p.children:
+            pp.add_child(j)
+        pp.remove_child(p)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -45,4 +66,5 @@ if __name__ == "__main__":
                 i.parent = None
                 p.add_child(c)
                 going = True
+    remove_non_mono(t)
     print(t.get_newick_repr(False)+";")

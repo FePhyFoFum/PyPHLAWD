@@ -61,4 +61,4 @@ smallest_cluster = 20
 cluster_prop = 0.2
 
 #filter name mismatch
-filternamemismatch = False
+filternamemismatch = True

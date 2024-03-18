@@ -3,6 +3,7 @@ import sys
 import os
 import os.path
 import ftplib
+from urllib.request import urlretrieve
 import gzip
 import tarfile
 import sqlite3
@@ -223,6 +224,10 @@ if __name__ == "__main__":
     dbn = std + args.outdb
     if args.addnew == False:
         create_db(dbn)
+        tf = "taxdump.tar.gz"
+        wbs = "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/"+tf
+        urlretrieve(wbs,filename=std+tf)
+        """
         GBFTP = "ftp.ncbi.nih.gov"
         ftp = ftplib.FTP(GBFTP)
         ftp.login("anonymous", "anonymous")
@@ -231,6 +236,7 @@ if __name__ == "__main__":
         with open(std+tf,'wb') as f:
             ftp.retrbinary('RETR '+tf,f.write)
         ftp.close()
+        """
         read_tax_file(std+tf,dbn)
         os.remove(std+tf)
 

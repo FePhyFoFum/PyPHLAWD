@@ -79,7 +79,7 @@ if __name__ == "__main__":
             if i.name in keep:
                 seqs.append(i)
                 total += 1
-        #print o,o.replace(fend,aend),len(keep),total
+        #print (o,o.replace(fend,aend),len(keep),total)
         fn = open(dirr+"/"+o.replace(fend,aend),"w")
         for i in seqs:
             fn.write(i.get_fasta())

@@ -50,4 +50,7 @@ if __name__ == "__main__":
     os.system(cmd)
     cmd = py+" "+DI+"add_internal_seqs_to_clusters.py "+d+" "+outclu+" "+LOGFILE+" "+TEMPDIR
     os.system(cmd)
+    if takeouttaxondups:
+        cmd = py+" "+DI+"choose_one_species_cluster_fa_aln_and_samp.py "+tablefile+" "+outclu+" .fa+.aln "+LOGFILE
+        os.system(cmd)
     

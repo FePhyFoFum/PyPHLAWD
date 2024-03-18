@@ -1,11 +1,10 @@
-patterns = []
-"""
-[" sp.",
+patterns = [" sp.",
             " aff.",
             " var.",
             " x ",
             " cf.",
             " TNS:",
             " SK-",
-            " isolate BB"]
-"""
+            " isolate BB",
+            "subsp.",
+            "(nom. inval.)"]

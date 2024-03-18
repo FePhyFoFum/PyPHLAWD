@@ -71,13 +71,35 @@ if __name__ == "__main__":
     for i in paf.leaves():
         i.data["original_name"] = i.label
         i.label = i.label.split("_")[-1]
+    taxnodestodo = {}# label, node
     for i in tax.iternodes():
         i.data["original_name"] = i.label
         i.label = "_".join(i.label.split("_")[0:-1])
+        taxnodestodo[i.label] = i
     for i in taxoriginal.iternodes():
         i.data["original_name"] = i.label
         i.label = "_".join(i.label.split("_")[0:-1])
+
     totaltaxset = set([i.label for i in tax.iternodes()])
+    going = True
+    while going:
+        for i in tax.iternodes():
+            going = False
+            if len(i.children) > 0:
+                x = set(i.lvsnms()).intersection(set(paf.lvsnms()))
+                if len(x) == 0:
+                    continue
+                j = get_mrca_wnms(list(x),paf)
+                y = set(j.lvsnms()).intersection(totaltaxset)
+                if len(y) > len(x):
+                    going = True
+                    print("NON MONO",i.label,file=sys.stderr)
+                    pp = i.parent
+                    for k in i.children:
+                        pp.add_child(k)
+                    pp.remove_child(i)
+                    break
+
     count= 0
     for i in paf.iternodes(order="postorder"):
         l = i.lvsnms()

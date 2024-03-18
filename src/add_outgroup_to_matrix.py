@@ -14,10 +14,10 @@ if "Darwin" in plat:
     mac = True
 
 
-def construct_db_of_sister(taxon,DB,outprefix,seqgzfolder):
+def construct_db_of_sister(taxon,DB,outprefix,seqgzfolder,excludet = None):
     outfile = outprefix+".tempfa"
     outfiletbl = outprefix+".temptable"
-    mfid(taxon,DB,outfile,outfiletbl,seqgzfolder,remove_genomes=True)
+    mfid(taxon,DB,outfile,outfiletbl,seqgzfolder,remove_genomes=True,excludetax=excludet)
     of = open(outfiletbl,"r")
     seq_taxon_dict = {}
     taxon_seqs_dict = {}
@@ -178,6 +178,8 @@ def generate_argparser():
         help=("The output file prefix."))
     parser.add_argument("-s", "--seqgzfolder", type=str,nargs=1,required=True,
         help=("Location of the gzseqs directory"))
+    parser.add_argument("-e","--excludetaxon",type=str,required=False,
+        help=("The taxon (use the NCBI taxon id) to exclude."))
     parser.add_argument("-mn","--minoverlap",type=int,required=False,default=1)
     parser.add_argument("-mx","--maxtaxa",type=int,required=False,default=1)
     return parser
@@ -189,8 +191,11 @@ def main():
     args = parser.parse_args(sys.argv[1:])
     DB = args.database
     outprefix = args.outprefix
+    excludetax = args.excludetaxon
+    if excludetax != None:
+        excludetax = [excludetax]
     print("constructing a database of "+str(args.taxon), file=sys.stderr)
-    filen,filentable,seq_taxon_dict,taxon_seqs_dict,seqsdict = construct_db_of_sister(args.taxon,DB,outprefix, args.seqgzfolder[0])
+    filen,filentable,seq_taxon_dict,taxon_seqs_dict,seqsdict = construct_db_of_sister(args.taxon,DB,outprefix, args.seqgzfolder[0],excludetax)
     print("constructing a database of the matrix", file=sys.stderr)
     blastdb,parts,genesfn = construct_db_of_parts(args.matrix,args.parts,outprefix)
     print("running blast", file=sys.stderr)

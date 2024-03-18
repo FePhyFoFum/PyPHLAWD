@@ -24,6 +24,8 @@ same as find_good_clusters_for_concat.py, except automated.
 - accepts default clusters, builds trees and trims tips, concatenates, renames
 """
 
+tree_trim = False # turn on if you want to make and trim trees
+constraint = False # turn on if you want to make constraints
 
 """
 this assumes that you have already run 
@@ -204,12 +206,13 @@ if __name__ == "__main__":
     baseid = cld.split("_")[-1]
     # clusters to keep
     keeps = [cld+"/clusters/"+i for i in keepers]
-    # make trees and trim tips
-    newalns = make_trim_trees(keeps)
-    if len(newalns) > 0:
-        for i in newalns:
-            keeps.remove(i)
-            keeps.append(newalns[i])
+    if tree_trim:
+        # make trees and trim tips
+        newalns = make_trim_trees(keeps)
+        if len(newalns) > 0:
+            for i in newalns:
+                keeps.remove(i)
+                keeps.append(newalns[i])
     # table
     tab = cld+"/"+cld.split("/")[-1]+".table"
     rtn = cld.split("/")[-1]
@@ -221,18 +224,19 @@ if __name__ == "__main__":
     cmd = "pxcat -u -s "+" ".join([i+".rn" for i in keeps])+" -o "+outaln+" -p "+cld+"/"+rtn+"_outpart"
     os.system(cmd)
     # make constraint tree
-    ctree = cld+"/"+rtn+"_outaln.constraint.tre"
-    cmd = py+" "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+outaln+" > "+ctree
-    print("make constraint tree:")
-    print(cmd)
-    os.system(cmd)
+    if constraint:
+        ctree = cld+"/"+rtn+"_outaln.constraint.tre"
+        cmd = py+" "+DI+"make_constraint_from_ncbialn.py "+dbname+" "+baseid+" "+outaln+" > "+ctree
+        print("make constraint tree:")
+        print(cmd)
+        os.system(cmd)
     
-    # rename NCBIids to names
-    # tree
-    cmd = py+" "+DI+"change_ncbi_to_name_tre.py -t "+tab+" -i "+ctree+" -o "+cld+"/"+rtn+"_outaln.constraint.cn.tre"
-    print("rename taxa in tree:")
-    print(cmd)
-    os.system(cmd)
+        # rename NCBIids to names
+        # tree
+        cmd = py+" "+DI+"change_ncbi_to_name_tre.py -t "+tab+" -i "+ctree+" -o "+cld+"/"+rtn+"_outaln.constraint.cn.tre"
+        print("rename taxa in tree:")
+        print(cmd)
+        os.system(cmd)
     # seqs
     cmd = py+" "+DI+"change_ncbi_to_name_fasta.py -t "+tab+" -i "+outaln+" -o "+outaln+".rn"
     print("rename taxa in concatenated alignment:")

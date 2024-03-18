@@ -34,7 +34,7 @@ def get_seqs_from_gz(gzdir, filename, idstoget):
 
 # if outfilen and outfile_tbln are None, the results will be returned
 def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
-    remove_genomes=False, limitlist = None):
+    remove_genomes=False, limitlist = None,excludetax = None):
     if outfilen != None and outfile_tbln != None:
         outfile = open(outfilen,"w")
         outfileg = None
@@ -59,6 +59,9 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
         #exclude bad taxa
         if str(id) in taxonids:
             continue
+        if excludetax != None:
+            if str(id) in excludetax:
+                continue
         c.execute("select name from taxonomy where ncbi_id = ? and name_class = 'scientific name'",(id,))
         l = c.fetchall()
         for j in l:
@@ -119,12 +122,13 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
             if ids_props[tid][1] in taxonids:
                 continue
             badpattern = False
-            for i in patterns:
-                if i in tname:
-                    badpattern = True
-                    break
-            if badpattern:
-                continue
+            #MAKE SURE THIS IS OK TODO THIS SHOULD BE DONE ABOVE
+            #for i in patterns:
+            #    if i in tname:
+            #        badpattern = True
+            #        break
+            #if badpattern:
+            #    continue
             if limitlist != None and ids_props[tid][1] not in limitlist:
                 continue
             # we are writing
@@ -282,13 +286,14 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,gzfileloc,
             #exclude bad taxa
             if ids_props[tid][1] in taxonids:
                 continue
-            badpattern = False
-            for i in patterns:
-                if i in tname:
-                    badpattern = True
-                    break
-            if badpattern:
-                continue
+            #MAKE SURE THIS IS OK TODO
+            #badpattern = False
+            #for i in patterns:
+            #    if i in tname:
+            #        badpattern = True
+            #        break
+            #if badpattern:
+            #    continue
             if limitlist != None and ids_props[tid][1] not in limitlist:
                 continue
             # we are writing
