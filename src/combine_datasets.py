@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import seq
 from conf import perc_identity,evalue_limit,nthread
 
+USEORIGINALNAMES = True
+
 print(perc_identity,evalue_limit)
 def run_blast(blastdb,filen):
     cmd = "blastn -task blastn -db "+blastdb+".db -query "+filen+" -perc_identity "+str(perc_identity)+" -evalue "+str(evalue_limit)+" -num_threads "+str(nthread)+" -max_target_seqs 10000000 -out "+filen+".rawblastn -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore' 2> NOPE"
@@ -43,7 +45,7 @@ def construct_db_of_parts(infile,infileparts,outprefix):
     tempoutf.close()
     for i in genesn:
         genesf[name].close()
-    cmd = "makeblastdb -in "+dbfn+" -out "+dbfn+".db -dbtype nucl"# > /dev/null 2>&1"
+    cmd = "makeblastdb -in "+dbfn+" -out "+dbfn+".db -dbtype nucl > /dev/null 2>&1"
     os.system(cmd)
     os.remove(dbfn)
     return dbfn,genes,genesfn
@@ -87,9 +89,14 @@ class NewGene:
     def __init__(self):
         self.geneset = set([])
         self.genes = {}
+        self.altnames = {} 
 
-    def addgene(self,la,fl):
+    def addgene(self,la,fl,altname = ""):
         self.genes[la] = fl
+        if altname == "":
+            self.altnames[la] = la
+        else:
+            self.altnames[la] = altname
 
     def issame(self,gene1,gene2):
         if gene1 in self.geneset:
@@ -103,7 +110,7 @@ class NewGene:
     def writefile(self,fn):
         fn = open(fn,"w")
         for i in self.genes:
-            fn.write(">"+i+"\n"+get_seq_from_file(i,self.genes[i])+"\n")
+            fn.write(">"+self.altnames[i]+"\n"+get_seq_from_file(i,self.genes[i])+"\n")
         fn.close()
 
     def __str__(self):
@@ -118,20 +125,29 @@ def generate_dataset(tips,files,outf):
                 n = NewGene()
                 n.geneset.add(lj[0])
                 n.geneset.add(lj[1])
-                n.addgene(i,j['lg'][i])
+                if USEORIGINALNAMES == False:
+                    n.addgene(i,j['lg'][i])
+                else:
+                    n.addgene(i,j['lg'][i],altname=j['lg'][i].split("_")[0])
                 ngs.append(n)
             else:
                 t = False
                 for k in ngs:
                     if k.issame(lj[0],lj[1]):
-                        k.addgene(i,j['lg'][i])
+                        if USEORIGINALNAMES == False:
+                            k.addgene(i,j['lg'][i])
+                        else:
+                            k.addgene(i,j['lg'][i],altname=j['lg'][i].split("_")[0])
                         t = True
                         break
                 if t == False:
                     n = NewGene()
                     n.geneset.add(lj[0])
                     n.geneset.add(lj[1])
-                    n.addgene(i,j['lg'][i])
+                    if USEORIGINALNAMES == False:
+                        n.addgene(i,j['lg'][i])
+                    else:
+                        n.addgene(i,j['lg'][i],altname=j['lg'][i].split("_")[0])
                     ngs.append(n)
     count = 0 
     ffs = []
@@ -145,6 +161,8 @@ def generate_dataset(tips,files,outf):
         count += 1
     cmd = "pxcat -s "+" ".join(ffs)+" -o TEMPTEMPCAT -p TEMPTEMPPART"
     os.system(cmd)
+    for i in ffs:
+        os.remove(i)
     return
 
 if __name__ == "__main__":
@@ -157,16 +175,18 @@ if __name__ == "__main__":
     flp = []
     for i in fls:
         flt.append(get_gene_ids(i))
-        flp.append(open(i.replace("outaln","outpart"),"r"))
+        flp.append(i.replace("outaln","outpart"))
     bdbs = []
     prts = []
     gens = []
     count = 0
     for i,j in zip(fls,flp):
-        blastdb,parts,genesfn = construct_db_of_parts(i,j,"TEST"+str(count)) # this will be based on names
+        jf = open(j,"r")
+        blastdb,parts,genesfn = construct_db_of_parts(i,jf,"TEST"+str(count)) # this will be based on names
         bdbs.append(blastdb)
         prts.append(parts)
         gens.append(genesfn)
+        jf.close()
         count += 1
     biggraph = nx.MultiGraph()
     for i in flt:
@@ -213,8 +233,12 @@ if __name__ == "__main__":
     tips = []
     vals = {}
     for i in potential_tips:
+        if len(i) == 0:
+            continue
         x = random.choice(list(i.keys()))
-        #print(x,i[x])
+        print(x,i[x])
         tips.append(x)
         vals[x]=i[x]
     generate_dataset(tips,vals,"TEMPTEMP.fa")
+    #cleanup
+    os.system("rm TEST*.rn TEST*.rawblastn TEST*.tempdbfa.* TEMPTEMP.fa*")

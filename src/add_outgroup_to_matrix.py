@@ -39,27 +39,54 @@ def construct_db_of_parts(infile,infileparts,outprefix):
     genesfn = {} #key name, value temp name
     genesf = {} #key name, value open file
     dbfn = outprefix+".tempdbfa"
-    tempoutf = open(dbfn,"w")
-    for i in infileparts:
-        spls = i.strip().split(" ")
-        name = spls[1]
-        shortname = name.split("/")[-1]
-        rnges = spls[-1].split("-")
-        beg = int(rnges[0])
-        end = int(rnges[1])
-        genes[name] = [beg,end]
-        genesn.append(name)
-        genesfn[name] = outprefix+"."+shortname #open file should be the shortname
-        genesf[name] = open(genesfn[name],"w")
-    for i in seq.read_fasta_file_iter(infile):
-        for j in genesn:
-            b,e = genes[j]
-            if len(i.seq[b-1:e].replace("-","")) > 100:
-                tempoutf.write(">"+j+"___"+i.name+"\n"+i.seq[b-1:e].replace("-","")+"\n")
-                genesf[j].write(">"+i.name+"\n"+i.seq[b-1:e]+"\n")
-    tempoutf.close()
-    for i in genesn:
-        genesf[name].close()
+    lf = 0 # how many lines
+    for _ in infileparts:
+        lf += 1
+    infileparts.seek(0)
+    if lf < 1000:
+        tempoutf = open(dbfn,"w")
+        for i in infileparts:
+            spls = i.strip().split(" ")
+            name = spls[1]
+            shortname = name.split("/")[-1]
+            rnges = spls[-1].split("-")
+            beg = int(rnges[0])
+            end = int(rnges[1])
+            genes[name] = [beg,end]
+            genesn.append(name)
+            genesfn[name] = outprefix+"."+shortname #open file should be the shortname
+            genesf[name] = open(genesfn[name],"w")
+        for i in seq.read_fasta_file_iter(infile):
+            for j in genesn:
+                b,e = genes[j]
+                if len(i.seq[b-1:e].replace("-","")) > 100:
+                    tempoutf.write(">"+j+"___"+i.name+"\n"+i.seq[b-1:e].replace("-","")+"\n")
+                    genesf[j].write(">"+i.name+"\n"+i.seq[b-1:e]+"\n")
+        tempoutf.close()
+        for i in genesn:
+            genesf[name].close()
+    else:
+        tempoutf = open(dbfn,"w")
+        for i in infileparts:
+            spls = i.strip().split(" ")
+            name = spls[1]
+            shortname = name.split("/")[-1]
+            rnges = spls[-1].split("-")
+            beg = int(rnges[0])
+            end = int(rnges[1])
+            genes[name] = [beg,end]
+            genesn.append(name)
+            genesfn[name] = outprefix+"."+shortname #open file should be the shortname
+            genesf[name] = genesfn[name]
+        for i in seq.read_fasta_file_iter(infile):
+            for j in genesn:
+                gfo = open(genesf[j],"a")
+                b,e = genes[j]
+                if len(i.seq[b-1:e].replace("-","")) > 100:
+                    tempoutf.write(">"+j+"___"+i.name+"\n"+i.seq[b-1:e].replace("-","")+"\n")
+                    gfo.write(">"+i.name+"\n"+i.seq[b-1:e]+"\n")
+                gfo.close()
+        tempoutf.close()
     cmd = "makeblastdb -in "+dbfn+" -out "+dbfn+".db -dbtype nucl"# > /dev/null 2>&1"
     os.system(cmd)
     os.remove(dbfn)

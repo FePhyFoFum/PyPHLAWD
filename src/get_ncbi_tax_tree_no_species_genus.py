@@ -6,6 +6,11 @@ if conf.usecython:
 else:
     import node
 
+"""
+this is specifically for use with the paftol like trees because
+of their focus on genera. 
+"""
+
 exclude_un_en = True
 
 def clean_name(name):
@@ -66,12 +71,18 @@ def construct_tree(taxon, db, taxalist = None):
         done.add(id)
         c.execute("select ncbi_id,name,name_class,edited_name,node_rank from taxonomy where parent_ncbi_id = ? and node_rank != 'species'",(id,))
         childs = []
-        for j in c:
+        testc = [j for j in c]
+        for j in testc:
             nr = str(j[4])
             tid = str(j[0])
             if includelist != None and tid not in includelist:
                 continue
-            if "nom. ined" in str(j[1]) or "x "  == str(j[1][0:2]) or " x " in str(j[1]) or "unclassified" in str(j[1]) or "environmental" in str(j[1]) or "incertae" in str(j[1]):
+            if "nom. ined" in str(j[1]) or "x "  == str(j[1][0:2]) or " x " in str(j[1]) or "unclassified" in str(j[1]) or "environmental" in str(j[1]):# or "incertae" in str(j[1]):
+                continue
+            # check to see if it has children. if not. skip it.
+            c.execute("select ncbi_id from taxonomy where parent_ncbi_id=?",(tid,))
+            tttest = [k for k in c]
+            if len(tttest) == 0:
                 continue
             childs.append(tid)
             if nr != "genus":

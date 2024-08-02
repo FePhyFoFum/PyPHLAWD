@@ -12,6 +12,10 @@ this version of the file is updated to take into account the change from gi to a
 
 """
 
+def clean_name(nm):
+    nm = nm.replace(","," ")
+    return nm
+
 def get_seq_from_gz(gzdir, filename, idtoget):
     fl = gzip.open(gzdir+"/"+filename,"r")
     for i in fl:
@@ -102,7 +106,7 @@ def make_files_with_id(taxonid, DB,outfilen,outfile_tbln, gzfileloc,
             if tfilen not in files_ids:
                 files_ids[tfilen] = []
             files_ids[tfilen].append(str(j[2]))
-            ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(tname),str(j[5])]
+            ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(clean_name(tname)),str(j[5])]
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()
@@ -205,7 +209,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,gzfileloc,
         if tfilen not in files_ids:
             files_ids[tfilen] = []
         files_ids[tfilen].append(str(j[2]))
-        ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(tname),str(j[5])]
+        ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(clean_name(tname)),str(j[5])]
     # get the children of the taxon that have no children (and so the sequences would go here)
     keepers = []
     c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(str(taxonid),))
@@ -266,7 +270,7 @@ def make_files_with_id_internal(taxonid, DB,outfilen,outfile_tbln,gzfileloc,
                 files_ids[tfilen] = []
             if str(j[1]) in keepers:
                 files_ids[tfilen].append(str(j[2]))
-            ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(tname),str(j[5])]
+            ids_props[str(j[2])] = [str(j[0]),str(j[1]),str(j[2]),str(j[3]),str(clean_name(tname)),str(j[5])]
             tblst = "\t".join(ids_props[str(j[2])])
             outfile_tbl.write(tblst+"\n")
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
@@ -347,7 +351,7 @@ def make_files_with_id_justtable(taxonid, DB,outfile_tbln):
         c.execute("select * from sequence where ncbi_id = ?",(id,))
         l = c.fetchall()
         for j in l:
-            tbls = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[5])+"\t"+str(j[6])
+            tbls = str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(clean_name(tname))+"\t"+str(j[5])+"\t"+str(j[6])
             if outfile_tbln != None:
                 outfile_tbl.write(tbls+"\n")
             else:
@@ -384,7 +388,7 @@ def make_files(taxon, DB,outfilen,outfile_tbln):
         for j in l:
             outfile.write(">"+str(j[3])+"\n")
             outfile.write(str(j[7])+"\n")
-            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(tname)+"\t"+str(j[4])+"\n")
+            outfile_tbl.write(str(j[0])+"\t"+str(j[1])+"\t"+str(j[2])+"\t"+str(j[3])+"\t"+str(clean_name(tname))+"\t"+str(j[4])+"\n")
         c.execute("select ncbi_id from taxonomy where parent_ncbi_id = ?",(id,))
         childs = []
         l = c.fetchall()

@@ -63,6 +63,9 @@ def construct_tree(taxon, db, taxalist = None):
         id = stack.pop()
         if id in done:
             continue
+        # added, if some error, remove but add on line 81
+        if id not in nodes:
+            continue
         done.add(id)
         c.execute("select ncbi_id,name,name_class,edited_name from taxonomy where parent_ncbi_id = ? and node_rank != 'species'",(id,))
         childs = []

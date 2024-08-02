@@ -18,7 +18,8 @@ if __name__ == "__main__":
         for i in t1.iternodes():
             if i.label.split("_")[-1] == gn:
                 par = i.parent
+                t2.label = i.label
                 par.remove_child(i)
                 par.add_child(t2)
                 break
-    print(t1.get_newick_repr(False)+";")
+    print(t1.get_newick_repr(True)+";")
