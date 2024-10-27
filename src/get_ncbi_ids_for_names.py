@@ -9,6 +9,13 @@ def get_taxid_for_name(cursor, name):
         ttax_id = str(j[0])
     return ttax_id
 
+def get_taxid_for_name_limit_left_right(cursor, name,left,right):
+    cursor.execute("select ncbi_id from taxonomy where name = '"+name+"' and left_value > "+left+" and right_value < "+right+";")
+    ttax_id = None
+    for j in cursor:
+        ttax_id = str(j[0])
+    return ttax_id
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("python "+sys.argv[0]+" infile database")
